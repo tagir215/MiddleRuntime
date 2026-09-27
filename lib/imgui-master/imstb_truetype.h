@@ -566,7 +566,7 @@ STBTT_DEF void stbtt_GetBakedQuad(const stbtt_bakedchar *chardata, int pw, int p
 //
 // It's inefficient; you might want to c&p it and optimize it.
 
-STBTT_DEF void stbtt_GetScaledFontVMetrics(const unsigned char *fontdata, int id, float size, float *ascent, float *descent, float *lineGap);
+STBTT_DEF void stbtt_GetScaledFontVMetrics(const unsigned char *fontdata, int index, float size, float *ascent, float *descent, float *lineGap);
 // Query the font vertical metrics without having to create a font first.
 
 
@@ -706,7 +706,7 @@ STBTT_DEF int stbtt_GetNumberOfFonts(const unsigned char *data);
 // indexing with the previous function where the index is between zero and one
 // less than the total fonts. If an error occurs, -1 is returned.
 
-STBTT_DEF int stbtt_GetFontOffsetForIndex(const unsigned char *data, int id);
+STBTT_DEF int stbtt_GetFontOffsetForIndex(const unsigned char *data, int index);
 // Each .ttf/.ttc file may have more than one font. Each font has a sequential
 // index number starting from 0. Call this function to get the font offset for
 // a given index; it returns -1 if the index is out of range. A regular .ttf
@@ -886,7 +886,7 @@ STBTT_DEF unsigned char *stbtt_GetCodepointBitmap(const stbtt_fontinfo *info, fl
 // xoff/yoff are the offset it pixel space from the glyph origin to the top-left of the bitmap
 
 STBTT_DEF unsigned char *stbtt_GetCodepointBitmapSubpixel(const stbtt_fontinfo *info, float scale_x, float scale_y, float shift_x, float shift_y, int codepoint, int *width, int *height, int *xoff, int *yoff);
-// the same as stbtt_GetCodepoitnBitmap, but you can specify a subpixel
+// the same as stbtt_GetCodepointBitmap, but you can specify a subpixel
 // shift for the character
 
 STBTT_DEF void stbtt_MakeCodepointBitmap(const stbtt_fontinfo *info, unsigned char *output, int out_w, int out_h, int out_stride, float scale_x, float scale_y, int codepoint);
@@ -1023,7 +1023,7 @@ STBTT_DEF unsigned char * stbtt_GetCodepointSDF(const stbtt_fontinfo *info, floa
 //             You have to have called stbtt_InitFont() first.
 
 
-STBTT_DEF int stbtt_FindMatchingFont(const unsigned char *fontdata, const char *stringValue, int flags);
+STBTT_DEF int stbtt_FindMatchingFont(const unsigned char *fontdata, const char *name, int flags);
 // returns the offset (not index) of the font that matches, or -1 if none
 //   if you use STBTT_MACSTYLE_DONTCARE, use a font name like "Arial Bold".
 //   if you use any other flag, use a font name like "Arial"; this checks
@@ -1321,20 +1321,20 @@ static stbtt_uint32 stbtt__find_table(stbtt_uint8 *data, stbtt_uint32 fontstart,
    return 0;
 }
 
-static int stbtt_GetFontOffsetForIndex_internal(unsigned char *font_collection, int id)
+static int stbtt_GetFontOffsetForIndex_internal(unsigned char *font_collection, int index)
 {
    // if it's just a font, there's only one valid index
    if (stbtt__isfont(font_collection))
-      return id == 0 ? 0 : -1;
+      return index == 0 ? 0 : -1;
 
    // check if it's a TTC
    if (stbtt_tag(font_collection, "ttcf")) {
       // version 1?
       if (ttULONG(font_collection+4) == 0x00010000 || ttULONG(font_collection+4) == 0x00020000) {
          stbtt_int32 n = ttLONG(font_collection+8);
-         if (id >= n)
+         if (index >= n)
             return -1;
-         return ttULONG(font_collection+12+id*4);
+         return ttULONG(font_collection+12+index*4);
       }
    }
    return -1;
@@ -4355,12 +4355,12 @@ STBTT_DEF int stbtt_PackFontRange(stbtt_pack_context *spc, const unsigned char *
    return stbtt_PackFontRanges(spc, fontdata, font_index, &range, 1);
 }
 
-STBTT_DEF void stbtt_GetScaledFontVMetrics(const unsigned char *fontdata, int id, float size, float *ascent, float *descent, float *lineGap)
+STBTT_DEF void stbtt_GetScaledFontVMetrics(const unsigned char *fontdata, int index, float size, float *ascent, float *descent, float *lineGap)
 {
    int i_ascent, i_descent, i_lineGap;
    float scale;
    stbtt_fontinfo info;
-   stbtt_InitFont(&info, fontdata, stbtt_GetFontOffsetForIndex(fontdata, id));
+   stbtt_InitFont(&info, fontdata, stbtt_GetFontOffsetForIndex(fontdata, index));
    scale = size > 0 ? stbtt_ScaleForPixelHeight(&info, size) : stbtt_ScaleForMappingEmToPixels(&info, -size);
    stbtt_GetFontVMetrics(&info, &i_ascent, &i_descent, &i_lineGap);
    *ascent  = (float) i_ascent  * scale;
@@ -4832,7 +4832,7 @@ STBTT_DEF const char *stbtt_GetFontNameString(const stbtt_fontinfo *font, int *l
    stbtt_int32 i,count,stringOffset;
    stbtt_uint8 *fc = font->data;
    stbtt_uint32 offset = font->fontstart;
-   stbtt_uint32 nm = stbtt__find_table(fc, offset, "stringValue");
+   stbtt_uint32 nm = stbtt__find_table(fc, offset, "name");
    if (!nm) return NULL;
 
    count = ttUSHORT(fc+nm+2);
@@ -4848,7 +4848,7 @@ STBTT_DEF const char *stbtt_GetFontNameString(const stbtt_fontinfo *font, int *l
    return NULL;
 }
 
-static int stbtt__matchpair(stbtt_uint8 *fc, stbtt_uint32 nm, stbtt_uint8 *stringValue, stbtt_int32 nlen, stbtt_int32 target_id, stbtt_int32 next_id)
+static int stbtt__matchpair(stbtt_uint8 *fc, stbtt_uint32 nm, stbtt_uint8 *name, stbtt_int32 nlen, stbtt_int32 target_id, stbtt_int32 next_id)
 {
    stbtt_int32 i;
    stbtt_int32 count = ttUSHORT(fc+nm+2);
@@ -4867,7 +4867,7 @@ static int stbtt__matchpair(stbtt_uint8 *fc, stbtt_uint32 nm, stbtt_uint8 *strin
             stbtt_int32 off = ttUSHORT(fc+loc+10);
 
             // check if there's a prefix match
-            stbtt_int32 matchlen = stbtt__CompareUTF8toUTF16_bigendian_prefix(stringValue, nlen, fc+stringOffset+off,slen);
+            stbtt_int32 matchlen = stbtt__CompareUTF8toUTF16_bigendian_prefix(name, nlen, fc+stringOffset+off,slen);
             if (matchlen >= 0) {
                // check for target_id+1 immediately following, with same encoding & language
                if (i+1 < count && ttUSHORT(fc+loc+12+6) == next_id && ttUSHORT(fc+loc+12) == platform && ttUSHORT(fc+loc+12+2) == encoding && ttUSHORT(fc+loc+12+4) == language) {
@@ -4876,9 +4876,9 @@ static int stbtt__matchpair(stbtt_uint8 *fc, stbtt_uint32 nm, stbtt_uint8 *strin
                   if (slen == 0) {
                      if (matchlen == nlen)
                         return 1;
-                  } else if (matchlen < nlen && stringValue[matchlen] == ' ') {
+                  } else if (matchlen < nlen && name[matchlen] == ' ') {
                      ++matchlen;
-                     if (stbtt_CompareUTF8toUTF16_bigendian_internal((char*) (stringValue+matchlen), nlen-matchlen, (char*)(fc+stringOffset+off),slen))
+                     if (stbtt_CompareUTF8toUTF16_bigendian_internal((char*) (name+matchlen), nlen-matchlen, (char*)(fc+stringOffset+off),slen))
                         return 1;
                   }
                } else {
@@ -4895,9 +4895,9 @@ static int stbtt__matchpair(stbtt_uint8 *fc, stbtt_uint32 nm, stbtt_uint8 *strin
    return 0;
 }
 
-static int stbtt__matches(stbtt_uint8 *fc, stbtt_uint32 offset, stbtt_uint8 *stringValue, stbtt_int32 flags)
+static int stbtt__matches(stbtt_uint8 *fc, stbtt_uint32 offset, stbtt_uint8 *name, stbtt_int32 flags)
 {
-   stbtt_int32 nlen = (stbtt_int32) STBTT_strlen((char *) stringValue);
+   stbtt_int32 nlen = (stbtt_int32) STBTT_strlen((char *) name);
    stbtt_uint32 nm,hd;
    if (!stbtt__isfont(fc+offset)) return 0;
 
@@ -4907,18 +4907,18 @@ static int stbtt__matches(stbtt_uint8 *fc, stbtt_uint32 offset, stbtt_uint8 *str
       if ((ttUSHORT(fc+hd+44) & 7) != (flags & 7)) return 0;
    }
 
-   nm = stbtt__find_table(fc, offset, "stringValue");
+   nm = stbtt__find_table(fc, offset, "name");
    if (!nm) return 0;
 
    if (flags) {
       // if we checked the macStyle flags, then just check the family and ignore the subfamily
-      if (stbtt__matchpair(fc, nm, stringValue, nlen, 16, -1))  return 1;
-      if (stbtt__matchpair(fc, nm, stringValue, nlen,  1, -1))  return 1;
-      if (stbtt__matchpair(fc, nm, stringValue, nlen,  3, -1))  return 1;
+      if (stbtt__matchpair(fc, nm, name, nlen, 16, -1))  return 1;
+      if (stbtt__matchpair(fc, nm, name, nlen,  1, -1))  return 1;
+      if (stbtt__matchpair(fc, nm, name, nlen,  3, -1))  return 1;
    } else {
-      if (stbtt__matchpair(fc, nm, stringValue, nlen, 16, 17))  return 1;
-      if (stbtt__matchpair(fc, nm, stringValue, nlen,  1,  2))  return 1;
-      if (stbtt__matchpair(fc, nm, stringValue, nlen,  3, -1))  return 1;
+      if (stbtt__matchpair(fc, nm, name, nlen, 16, 17))  return 1;
+      if (stbtt__matchpair(fc, nm, name, nlen,  1,  2))  return 1;
+      if (stbtt__matchpair(fc, nm, name, nlen,  3, -1))  return 1;
    }
 
    return 0;
@@ -4947,9 +4947,9 @@ STBTT_DEF int stbtt_BakeFontBitmap(const unsigned char *data, int offset,
    return stbtt_BakeFontBitmap_internal((unsigned char *) data, offset, pixel_height, pixels, pw, ph, first_char, num_chars, chardata);
 }
 
-STBTT_DEF int stbtt_GetFontOffsetForIndex(const unsigned char *data, int id)
+STBTT_DEF int stbtt_GetFontOffsetForIndex(const unsigned char *data, int index)
 {
-   return stbtt_GetFontOffsetForIndex_internal((unsigned char *) data, id);
+   return stbtt_GetFontOffsetForIndex_internal((unsigned char *) data, index);
 }
 
 STBTT_DEF int stbtt_GetNumberOfFonts(const unsigned char *data)
@@ -4962,9 +4962,9 @@ STBTT_DEF int stbtt_InitFont(stbtt_fontinfo *info, const unsigned char *data, in
    return stbtt_InitFont_internal(info, (unsigned char *) data, offset);
 }
 
-STBTT_DEF int stbtt_FindMatchingFont(const unsigned char *fontdata, const char *stringValue, int flags)
+STBTT_DEF int stbtt_FindMatchingFont(const unsigned char *fontdata, const char *name, int flags)
 {
-   return stbtt_FindMatchingFont_internal((unsigned char *) fontdata, (char *) stringValue, flags);
+   return stbtt_FindMatchingFont_internal((unsigned char *) fontdata, (char *) name, flags);
 }
 
 STBTT_DEF int stbtt_CompareUTF8toUTF16_bigendian(const char *s1, int len1, const char *s2, int len2)
