@@ -6,6 +6,7 @@
 #include "middle_shape_utils.h"
 #include "MidComp/LoopSociety.h"
 #include "MidComp/EditorConfigs.h"
+#include "abstract_ui.h"
 
 class EditorUiSystem : public middle::MiddleGameplaySystem {
 public:
@@ -30,115 +31,52 @@ public:
 		}
 
 
-		auto ui = [gameState, configs]() {
+		using namespace middleUI;
+		static bool isWindowHovered = false;
+
+		auto ui = UiBuilder(&gameState->middleState);
+		ui.midgui(Begin); ui.label("Control");
+		auto undoButton = ui.midgui(Button); ui.label("undo");
+		if (undoButton && undoButton->boolVal) {
+			if (gameState->editorState.actionHistory.size() > 0) {
+				int lastIndex = gameState->editorState.actionHistory.size() - 1;
+				int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
+				auto actionToUndo = gameState->editorState.actionHistory[targetIndex];
+				gameState->undoQueue.push(actionToUndo);
+				++gameState->editorState.historySinkDepth;
+			}
+		}
+		auto redoButton = ui.midgui(Button); ui.label("redo");
+		if (redoButton && redoButton->boolVal) {
+			if (gameState->editorState.historySinkDepth > 0) {
+				int lastIndex = gameState->editorState.actionHistory.size() - 1;
+				--gameState->editorState.historySinkDepth;
+				int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
+				auto actionToRedo = gameState->editorState.actionHistory[targetIndex];
+				gameState->actionQueue.push(actionToRedo);
+			}
+		}
+		auto resetButton = ui.midgui(Button); ui.label("reset");
+		if (resetButton && resetButton->boolVal) {
+			gameState->reset = true;
+		}
+		auto playButton = ui.midgui(Button); ui.label("play");
+		if (playButton && playButton->boolVal) {
+			gameState->applicationMode = middle::ApplicationMode::GAME_MODE;
+		}
+		ui.midgui(End);
+
+
+
+
+		auto oldUI = [gameState, configs]() {
 			midMath::Vector3 referencePos = { 0,0,0 };
 
-			auto ImGuiDisplayText = [](const char* label, const char* text) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("%s", text);
-				};
 
-			auto ImGuiDisplayBool = [](const char* label, bool b) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("%s", b ? "true" : "false");
-				};
-
-			auto ImGuiDisplayInt = [](const char* label, int i) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("%d", i);
-				};
-
-			auto ImGuiDisplayFloat = [](const char* label, float f) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("%.25f", f);
-				};
-
-			auto ImGuiDisplayVector2 = [](const char* label, midMath::Vector2 v) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("(%.2f, %.2f)", v.x, v.y);
-				};
-
-			auto ImGuiDisplayVector3 = [&referencePos](const char* label, midMath::Vector3 v) {
-				if (ImGui::CollapsingHeader(label)) {
-					ImGui::Text("x: (%.25f)", v.x);
-					ImGui::Text("y: (%.25f)", v.y);
-					ImGui::Text("z: (%.25f)", v.z);
-				}
-				};
 
 			if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
 				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
 			}
-
-			ImGui::Begin("Control");
-			if (!gameState->paused) {
-				if (ImGui::Button("pause")) {
-					gameState->paused = true;
-				}
-				if (ImGui::Button("undo")) {
-					if (gameState->editorState.actionHistory.size() > 0) {
-						int lastIndex = gameState->editorState.actionHistory.size() - 1; 
-						int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
-						auto actionToUndo = gameState->editorState.actionHistory[targetIndex];
-						gameState->undoQueue.push(actionToUndo);
-						++gameState->editorState.historySinkDepth;
-					}
-				}
-				if (ImGui::Button("redo")) {
-					if (gameState->editorState.historySinkDepth > 0) {
-						int lastIndex = gameState->editorState.actionHistory.size() - 1; 
-						--gameState->editorState.historySinkDepth;
-						int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
-						auto actionToRedo = gameState->editorState.actionHistory[targetIndex];
-						gameState->actionQueue.push(actionToRedo);
-					}
-				}
-			}
-			else {
-				if (ImGui::Button("continue")) {
-					gameState->paused = false;
-					gameState->editorState.stepDir = 1;
-				}
-				if (ImGui::Button("next step")) {
-					gameState->editorState.doOneStep = true;
-					gameState->editorState.stepDir = 1;
-				}
-				if (ImGui::Button("previous step")) {
-					gameState->editorState.doOneStep = true;
-					gameState->editorState.stepDir = -1;
-				}
-			}
-			if (ImGui::Button("reset")) {
-				gameState->reset = true;
-			}
-			if (configs) {
-				if (ImGui::Button("increase grid")) {
-					++configs->gridSize;
-				}
-				if (ImGui::Button("decrease grid")) {
-					--configs->gridSize;
-					if (configs->gridSize < 1)
-						configs->gridSize = 1;
-				}
-			}
-			if (ImGui::Button("PLAY")) {
-				gameState->applicationMode = middle::ApplicationMode::GAME_MODE;
-			}
-			ImGui::End();
-			auto& input = gameState->middleInputState.editorInput;
-			ImGui::Begin("GameState");
-			ImGuiDisplayVector3("camera position", gameState->editorState.camera.position);
-			ImGuiDisplayVector3("camera up", gameState->editorState.camera.up);
-			ImGuiDisplayVector3("camera target", gameState->editorState.camera.target);
-			ImGuiDisplayVector2("mousePos", { input.mouseX, input.mouseY });
-			ImGuiDisplayVector3("mouse near plane pos", gameState->mouseState.mouseNearPlanePos);
-			ImGuiDisplayVector2("mouse normalized pos", gameState->mouseState.mouseNormalizedPos);
-			ImGuiDisplayVector3("mouse dir", gameState->mouseState.mouseDir);
-			ImGuiDisplayVector3("mouse xz pos", gameState->mouseState.mouseXZ_PlanePos);
-			ImGuiDisplayVector3("mouse xz vel", gameState->mouseState.mouseXZ_PlaneVelocity);
-			ImGuiDisplayInt("screen width", gameState->middleInputState.screenWidth);
-			ImGuiDisplayInt("screen height", gameState->middleInputState.screenHeight);
-			ImGui::End();
 
 			ImGui::Begin("Editor");
 
@@ -372,7 +310,7 @@ public:
 
 			};
 
-		middle::queueUi(gameState, ui);
+		middle::queueUi(gameState, oldUI);
 	}
 
 	void gameEditorUi(middle::GameState* gameState) {

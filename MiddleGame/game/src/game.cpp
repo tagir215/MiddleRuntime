@@ -277,6 +277,7 @@ extern "C" {
 
 		gameState->middleState.renderData.clear();
 		gameState->middleState.uiSetups.clear();
+		gameState->middleState.uiCalls.clear();
 		gameState->debugInfo.clear();
 
 		updateMouseStuff(gameState.get());

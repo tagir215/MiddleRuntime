@@ -21,6 +21,7 @@
 #include "MidComp/BubbleGateComponent.h"
 #include "MidComp/NonPhysicalBubbleTag.h"
 #include "midconfig.h"
+#include "abstract_ui.h"
 
 class EqulabSystem : public middle::MiddleGameplaySystem {
 public:
@@ -93,68 +94,91 @@ public:
 		return "";
 	}
 
+	std::vector<bool>fileButtons;
 
 	void update(middle::GameState* gameState) override {
 
-		// UI 
-		auto equlabUi = [gameState, this]() {
-			ImGui::Begin("Bubequ file");
-			static char equationName[128] = "";
-			ImGui::InputText("Equation name", equationName, IM_ARRAYSIZE(equationName));
-			if (ImGui::IsItemFocused()) {
+		// SAVING 
+		using namespace middleUI;
+
+		auto ui = UiBuilder(&gameState->middleState);
+		ui.midgui(Begin); ui.label("Bubequ file");
+
+		static char equationName[128] = "";
+		ui.midgui(InputText); ui.label("Equation name"); ui.string(equationName); ui.setSize(IM_ARRAYSIZE(equationName));
+
+		auto focusedCall = ui.midgui(IsItemFocused);
+		if (focusedCall && focusedCall->boolVal) {
+			if (focusedCall->boolVal) {
 				middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
 				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
 			}
+		}
 
-			if (ImGui::Button("Save bubequ")) {
-				for (middle::Id& activeId : activeBubbleCache->relevantIdVector) {
-
-					std::string name = equationName;
-
-					std::shared_ptr<bubequ::Scope> root;
-					if (gameState->bubbleAlgebraState.activeBubbleName != "") {
-						name = gameState->bubbleAlgebraState.activeBubbleName;
-						middle::Id backgroundId = gameState->bubbleAlgebraState.backgroundBubbleId;
-						auto newBranch = bubequ::bubbleToBubequ(gameState, backgroundId);
-						root = bubequ::loadBubequHead(name, {}, gameState->bubbleAlgebraState.loadDepth);
-						// load root from disc
-						// replace current visible branch on the loaded tree
-						bubequ::replaceBranch(root, newBranch, gameState->bubbleAlgebraState.traversePath);
-					}
-					else {
-						root = bubequ::bubbleToBubequ(gameState, activeId);
-					}
-
-					// convert to hashes and save head reference
-					std::unordered_map<std::string, std::string>hashMap;
-					std::string head = bubequ::bubequToHashes(gameState, root, hashMap);
-					bubequ::saveBubequHead(equationName, head, hashMap, gameState->bubbleAlgebraState.traversePath, {0,0,0}, 1);
+		auto button = ui.midgui(Button); ui.label("save button");
+		if (button && button->boolVal) {
+			for (middle::Id& activeId : activeBubbleCache->relevantIdVector) {
+				std::string name = equationName;
+				std::shared_ptr<bubequ::Scope> root;
+				if (gameState->bubbleAlgebraState.activeBubbleName != "") {
+					name = gameState->bubbleAlgebraState.activeBubbleName;
+					middle::Id backgroundId = gameState->bubbleAlgebraState.backgroundBubbleId;
+					auto newBranch = bubequ::bubbleToBubequ(gameState, backgroundId);
+					root = bubequ::loadBubequHead(name, {}, gameState->bubbleAlgebraState.loadDepth);
+					// load root from disc
+					// replace current visible branch on the loaded tree
+					bubequ::replaceBranch(root, newBranch, gameState->bubbleAlgebraState.traversePath);
 				}
+				else {
+					root = bubequ::bubbleToBubequ(gameState, activeId);
+				}
+
+				// convert to hashes and save head reference
+				std::unordered_map<std::string, std::string>hashMap;
+				std::string head = bubequ::bubequToHashes(gameState, root, hashMap);
+				bubequ::saveBubequHead(equationName, head, hashMap, gameState->bubbleAlgebraState.traversePath, { 0,0,0 }, 1);
 			}
+		}
 
-			ImGui::End();
+		ui.midgui(End);
 
+		// UI 
+
+		// BUBEQU LIST
+		//ui.add(Begin, "bubequ list");
+
+		//std::vector<std::string>filenames = bubequ::getFilenames(std::string(bubblePaths::EQUATION_FOLDER));
+
+		//if (fileButtons.size() != filenames.size()) {
+		//	fileButtons = std::vector<bool>(filenames.size(), false);
+		//}
+		//for (int i = 0; i < filenames.size(); ++i) {
+		//	auto& name = filenames[i];
+
+		//	if (ui.add(Button, name.c_str(), )) {
+
+		//	}
+		//	if (ImGui::Button(name.c_str())) {
+		//		const std::string path = std::string(bubblePaths::EQUATION_FOLDER) + "/" + name + ".bubequ";
+		//		midMath::Vector3 camXZPos = middle::getActiveCam(gameState).position;
+		//		camXZPos.y = 0;
+		//		//auto bubequ = bubequ::loadBubequ(path);
+
+		//		auto bubequ = bubequ::loadBubequHead(name, {}, gameState->bubbleAlgebraState.loadDepth);
+
+		//		middle::Id id = bubequ::bubequToBubble(gameState, camXZPos, bubequ);
+		//		auto registerAction = std::make_shared<middle::EditorActionRegisterId>(id);
+		//		middle::queueAction(gameState, registerAction);
+		//		gameState->bubbleAlgebraState.bubbleActions.push_back(registerAction);
+
+		//		// todo change
+		//		gameState->bubbleAlgebraState.activeBubbleName = name;
+		//	}
+		//}
+
+		auto equlabUi = [gameState, this]() {
 
 			ImGui::Begin("bubequ list");
-			std::vector<std::string>filenames = bubequ::getFilenames(std::string(bubblePaths::EQUATION_FOLDER));
-			for (auto& name : filenames) {
-				if (ImGui::Button(name.c_str())) {
-					const std::string path = std::string(bubblePaths::EQUATION_FOLDER) + "/" + name + ".bubequ";
-					midMath::Vector3 camXZPos = middle::getActiveCam(gameState).position;
-					camXZPos.y = 0;
-					//auto bubequ = bubequ::loadBubequ(path);
-
-					auto bubequ = bubequ::loadBubequHead(name, {}, gameState->bubbleAlgebraState.loadDepth);
-
-					middle::Id id = bubequ::bubequToBubble(gameState, camXZPos, bubequ);
-					auto registerAction = std::make_shared<middle::EditorActionRegisterId>(id);
-					middle::queueAction(gameState, registerAction);
-					gameState->bubbleAlgebraState.bubbleActions.push_back(registerAction);
-
-					// todo change
-					gameState->bubbleAlgebraState.activeBubbleName = name;
-				}
-			}
 			ImGui::End();
 			};
 		middle::queueUi(gameState, equlabUi);

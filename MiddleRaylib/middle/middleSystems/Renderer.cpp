@@ -10,6 +10,7 @@
 #include "middle_math.h"
 #include "middle_state.h"
 #include "middle_math_maping_helper.h"
+#include "MiddleImGuiTranslatorSystem.cpp"
 
 const int fontUnitFactor = 1024;
 
@@ -286,9 +287,7 @@ namespace renderer {
 			if (!releaseBuild) {
 				rlImGuiBegin();
 
-				for (const auto& ui : middleState->uiSetups) {
-					ui();
-				}
+				MiddleImGuiTranslatorSystem::Update(middleState);
 
 				rlImGuiEnd();
 			}

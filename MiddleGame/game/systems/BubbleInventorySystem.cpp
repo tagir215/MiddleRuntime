@@ -28,6 +28,7 @@
 #include "bubble_utils.h"
 #include "MidComp/LocalPosition.h"
 #include "bubble_colors.h"
+#include "abstract_ui.h"
 
 
 class BubbleInventorySystem : public middle::MiddleGameplaySystem {
@@ -96,40 +97,79 @@ public:
 				currentPos += advance;
 			}
 
-			auto ui = [gameState, inv]() {
-				int size = inv->maxSize;
-				ImGui::Begin("inventory");
-				if (size > 0) {
-					ImGui::SliderInt("active item", &inv->activeIndex, 0, size - 1);
-				}
-				ImGui::Separator();
-				ImGui::Checkbox("invert", &inv->invert);
-				ImGui::SameLine();
-				ImGui::Checkbox("negate", &inv->negate);
+			int size = inv->maxSize;
 
-				ImGui::Separator();
-				if (ImGui::RadioButton("Add", inv->insertType == components::INSERT_ADD))
-					inv->insertType = components::INSERT_ADD;
-				ImGui::SameLine();
-				if(ImGui::RadioButton("Multiply", inv->insertType == components::INSERT_MULTIPLY))
-					inv->insertType = components::INSERT_MULTIPLY;
-				ImGui::SameLine();
-				if(ImGui::RadioButton("Power", inv->insertType == components::INSERT_POWER))
-					inv->insertType = components::INSERT_POWER;
 
-				ImGui::Separator();
-				if (ImGui::RadioButton("X/X", inv->invariantType == components::X_OVER_X))
-					inv->invariantType = components::X_OVER_X;
-				ImGui::SameLine();
-				if(ImGui::RadioButton("X-X", inv->invariantType == components::X_MINUS_X))
-					inv->invariantType = components::X_MINUS_X;
+			using namespace middleUI;
+			auto ui = UiBuilder(&gameState->middleState);
+			ui.midgui(Begin); ui.label("inventory");
+			if (size > 0) {
+				ui.midgui(SliderInt); ui.label("active item"); ui.integer(&inv->activeIndex); ui.minMax(0, size - 1);
+			}
+			ui.midgui(Separator);
+			ui.midgui(Checkbox); ui.label("invert"); ui.boolean(&inv->invert);
+			ui.midgui(SameLine);
+			ui.midgui(Checkbox); ui.label("negate"); ui.boolean(&inv->negate);
+			ui.midgui(Separator);
+			auto radioButton0 = ui.midgui(RadioButton); ui.label("Add"); ui.active(inv->insertType == components::INSERT_ADD);
+			auto radioButton1 = ui.midgui(RadioButton); ui.label("Multiply"); ui.active(inv->insertType == components::INSERT_MULTIPLY);
+			auto radioButton2 = ui.midgui(RadioButton); ui.label("Power"); ui.active(inv->insertType == components::INSERT_POWER);
+			auto radioButton3 = ui.midgui(RadioButton); ui.label("X/X"); ui.active(inv->insertType == components::X_OVER_X);
+			auto radioButton4 = ui.midgui(RadioButton); ui.label("X-X"); ui.active(inv->insertType == components::X_MINUS_X);
+			if (radioButton0 && radioButton0->boolVal) 
+				inv->insertType = components::INSERT_ADD;
+			if (radioButton0 && radioButton0->boolVal)
+				inv->insertType = components::INSERT_MULTIPLY;
+			if (radioButton0 && radioButton0->boolVal)
+				inv->insertType = components::INSERT_POWER;
+			if (radioButton0 && radioButton0->boolVal)
+				inv->invariantType = components::X_OVER_X;
+			if (radioButton0 && radioButton0->boolVal)
+				inv->invariantType = components::X_MINUS_X;
+			static bool isWindowHovered = false;
+			static bool isAnyItemHovered = false;
+			ui.midgui(IsWindowHovered, &isAnyItemHovered);
+			ui.midgui(IsAnyItemFocused, &isAnyItemHovered);
+			if (isWindowHovered || isAnyItemHovered) {
+				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
+			}
+			ui.midgui(End);
 
-				if (ImGui::IsWindowHovered() || ImGui::IsAnyItemHovered()) {
-					middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
-				}
-				ImGui::End();
-				};
-			middle::queueUi(gameState, ui);
+
+			//auto ui = [gameState, inv]() {
+			//	int size = inv->maxSize;
+			//	ImGui::Begin("inventory");
+			//	if (size > 0) {
+			//		ImGui::SliderInt("active item", &inv->activeIndex, 0, size - 1);
+			//	}
+			//	ImGui::Separator();
+			//	ImGui::Checkbox("invert", &inv->invert);
+			//	ImGui::SameLine();
+			//	ImGui::Checkbox("negate", &inv->negate);
+
+			//	ImGui::Separator();
+			//	if (ImGui::RadioButton("Add", inv->insertType == components::INSERT_ADD))
+			//		inv->insertType = components::INSERT_ADD;
+			//	ImGui::SameLine();
+			//	if(ImGui::RadioButton("Multiply", inv->insertType == components::INSERT_MULTIPLY))
+			//		inv->insertType = components::INSERT_MULTIPLY;
+			//	ImGui::SameLine();
+			//	if(ImGui::RadioButton("Power", inv->insertType == components::INSERT_POWER))
+			//		inv->insertType = components::INSERT_POWER;
+
+			//	ImGui::Separator();
+			//	if (ImGui::RadioButton("X/X", inv->invariantType == components::X_OVER_X))
+			//		inv->invariantType = components::X_OVER_X;
+			//	ImGui::SameLine();
+			//	if(ImGui::RadioButton("X-X", inv->invariantType == components::X_MINUS_X))
+			//		inv->invariantType = components::X_MINUS_X;
+
+			//	if (ImGui::IsWindowHovered() || ImGui::IsAnyItemHovered()) {
+			//		middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
+			//	}
+			//	ImGui::End();
+			//	};
+			//middle::queueUi(gameState, ui);
 		}
 	}
 
