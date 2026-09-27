@@ -4,7 +4,7 @@
 #include "component_utils.h"
 #include "MidComp/QueuedForSaveTag.h"
 #include "alg_file_utils.h"
-#include "imgui.h"
+#include "abstract_ui.h"
 
 class AutoSaveSystem : public middle::MiddleGameplaySystem {
 	components::CompCache* cache;
@@ -18,21 +18,16 @@ class AutoSaveSystem : public middle::MiddleGameplaySystem {
 		cache->addType<components::QueuedForSaveTag>();
 	}
 	void update(middle::GameState* gameState) override {
-		auto ui = [gameState]() {
-			ImGui::Begin("ActiveBubbleName");
-
-			static char activeBubbleName[128] = "";
-			ImGui::InputText("Equation name", activeBubbleName, IM_ARRAYSIZE(activeBubbleName));
-			if (ImGui::IsItemFocused()) {
-				middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
-				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
-				gameState->bubbleAlgebraState.activeBubbleName = activeBubbleName;
-			}
-
-			ImGui::End();
-
-			};
-		middle::queueUi(gameState, ui);
+		//START_MIDGUI(gameState);
+		//midguiBegin("ActiveBubbleName");
+		//static char activeBubbleName[128] = "";
+		//ImGui::InputText("Equation name", activeBubbleName, IM_ARRAYSIZE(activeBubbleName));
+		//if (ImGui::IsItemFocused()) {
+		//	middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
+		//	middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
+		//	gameState->bubbleAlgebraState.activeBubbleName = activeBubbleName;
+		//}
+		//midguiEnd();
 
 		for (middle::Id id : cache->relevantIdVector) {
 			middle::queueComponentDeletion<components::QueuedForSaveTag>(gameState, id);

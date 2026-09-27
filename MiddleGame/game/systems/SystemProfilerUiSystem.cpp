@@ -1,8 +1,10 @@
 #pragma once
 #include "game_state.h"
 #include "middle_system_registrar.h"
-#include "imgui.h"
 #include "middle_shape_utils.h"
+#include "abstract_ui.h"
+
+using namespace middleUI;
 
 class SystemProfilerUiSystem : public middle::MiddleGameplaySystem {
 public:
@@ -14,7 +16,7 @@ public:
 	void init(middle::GameState* gameState) override {
 	}
 
-	void drawText(const MiddleGameplaySystem* sys) {
+	void drawText(UiBuilder& builder, const MiddleGameplaySystem* sys) {
 		if (!sys) {
 			return;
 		}
@@ -23,33 +25,32 @@ public:
 			return;
 		}
 		std::string text = sys->systemName + ": " + std::to_string(count) + "ms";
-		ImGui::Text(text.c_str());
+		midguiText(text.c_str());
 	}
 
 	void update(middle::GameState* gameState) override {
-		auto ui = [gameState, this] {
-			ImGui::Begin("profiler");
-			for (auto& sys : gameState->engineSystemInitFrame) {
-				drawText(sys.get());
-			}
-			for (auto& sys : gameState->engineSystemsFrameStart) {
-				drawText(sys.get());
-			}
+		START_MIDGUI(gameState);
 
-			for (auto& pair : gameState->gameplaySystems) {
-				drawText(pair.second.get());
-			}
+		midguiBegin("profiler");
+		for (auto& sys : gameState->engineSystemInitFrame) {
+			drawText(builder, sys.get());
+		}
+		for (auto& sys : gameState->engineSystemsFrameStart) {
+			drawText(builder, sys.get());
+		}
 
-			for (auto& pair : gameState->gameplaySystemsPostFrame) {
-				drawText(pair.second.get());
-			}
-			for (auto& sys : gameState->engineRendererSystems) {
-				drawText(sys.get());
-			}
+		for (auto& pair : gameState->gameplaySystems) {
+			drawText(builder, pair.second.get());
+		}
 
-			ImGui::End();
-			};
-		middle::queueUi(gameState, ui);
+		for (auto& pair : gameState->gameplaySystemsPostFrame) {
+			drawText(builder, pair.second.get());
+		}
+		for (auto& sys : gameState->engineRendererSystems) {
+			drawText(builder, sys.get());
+		}
+
+		midguiEnd();
 	}
 };
 

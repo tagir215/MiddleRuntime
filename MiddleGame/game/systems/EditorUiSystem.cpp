@@ -2,7 +2,6 @@
 #include "game_state.h"
 #include "editor_actions.h"
 #include "middle_system_registrar.h"
-#include "imgui.h"
 #include "middle_shape_utils.h"
 #include "MidComp/LoopSociety.h"
 #include "MidComp/EditorConfigs.h"
@@ -68,261 +67,261 @@ public:
 
 		static const char* items[] = {"SELECT MODE", "SPHERE MODE", "CONSTRAINT MODE", "CAMERA MODE", "LOOP_MODE"};
 		int currentItem = static_cast<int>(gameState->editorState.creationMode);
-		int itemsSize = IM_ARRAYSIZE(items);
+		int itemsSize = MID_ARRAYSIZE(items);
 		midguiCombo("Select things to add", items, currentItem, itemsSize);
 		gameState->editorState.creationMode = static_cast<middle::CreationMode>(currentItem);
 
 		midguiEnd();
 
-		auto oldUI = [gameState, configs]() {
-			midMath::Vector3 referencePos = { 0,0,0 };
+		//auto oldUI = [gameState, configs]() {
+		//	midMath::Vector3 referencePos = { 0,0,0 };
 
 
 
-			if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
-			}
+		//	if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
+		//		middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
+		//	}
 
-			ImGui::Begin("Editor");
+		//	ImGui::Begin("Editor");
 
-			if (ImGui::Button("DELETE OBJECT")) {
-				middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionDelete>(middle::getSelectedShapes(gameState)));
-			}
+		//	if (ImGui::Button("DELETE OBJECT")) {
+		//		middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionDelete>(middle::getSelectedShapes(gameState)));
+		//	}
 
-			if (ImGui::Button("SAVE SCENE")) {
-				middle::queueAction(gameState, std::make_shared<middle::EditorActionSaveScene>(gameState->activeSceneName));
-			}
+		//	if (ImGui::Button("SAVE SCENE")) {
+		//		middle::queueAction(gameState, std::make_shared<middle::EditorActionSaveScene>(gameState->activeSceneName));
+		//	}
 
-			if (ImGui::Button("CREATE LOOP")) {
-				middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionCreateLoop>(middle::getSelectedShapes(gameState)));
-			}
+		//	if (ImGui::Button("CREATE LOOP")) {
+		//		middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionCreateLoop>(middle::getSelectedShapes(gameState)));
+		//	}
 
-			ImGui::Separator();
+		//	ImGui::Separator();
 
-			if (ImGui::Button("BUILD")) {
-				middle::queueAction(gameState, std::make_shared<middle::EditorActionBuild>());
-			}
-
-
-
-			// SCENE MANAGER
-
-			ImGui::Begin("Scene");
-
-			if (gameState->sceneNames.size() > 0) {
-				ImGui::Text(("ActiveScene: " + gameState->activeSceneName).c_str());
-			}
-
-			static int action = 0;
-			int load = 1;
-			int import = 2;
-			// Add new scene button
-			if (ImGui::Button("OPEN SCENE")) {
-				ImGui::OpenPopup("Scene Selector");
-				action = load;
-			}
-
-
-			if (ImGui::Button("IMPORT SCENE")) {
-				ImGui::OpenPopup("Scene Selector");
-				action = import;
-			}
-
-			if (ImGui::BeginPopup("Scene Selector")) {
-
-				for (int i = 0; i < gameState->sceneNames.size(); ++i) {
-					auto name = gameState->sceneNames[i];
-					if (ImGui::Button(name.c_str())) {
-						if (action == load) {
-							middle::queueAction(gameState, std::make_shared<middle::EditorActionLoadScene>(name));
-						}
-						if (action == import) {
-							middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionImportScene>("../assets/scenes/", name));
-						}
-
-						ImGui::CloseCurrentPopup();
-					}
-				}
-
-				ImGui::EndPopup();
-			}
-
-			if (ImGui::Button("IMPORT SHAPE")) {
-				ImGui::OpenPopup("Shape Selector");
-			}
-
-			if (ImGui::BeginPopup("Shape Selector")) {
-				for (int i = 0; i < gameState->shapeNames.size(); ++i) {
-					auto name = gameState->shapeNames[i];
-					if (ImGui::Button(name.c_str())) {
-						middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionImportScene>("../assets/shapes/", name));
-						ImGui::CloseCurrentPopup();
-					}
-				}
-				ImGui::EndPopup();
-			}
-
-			// Add new scene button
-			if (ImGui::Button("ADD NEW SCENE")) {
-				ImGui::OpenPopup("New Scene Popup");
-			}
-
-			// Popup for entering new scene name
-			static char newSceneName[128] = ""; // buffer for scene name input
-			if (ImGui::BeginPopup("New Scene Popup")) {
-				middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
-
-				ImGui::Text("Enter new scene name:");
-				ImGui::InputText("##newSceneName", newSceneName, IM_ARRAYSIZE(newSceneName));
-
-				if (ImGui::Button("Add")) {
-					if (strlen(newSceneName) > 0) {
-						// Add the new scene to the editor
-						middle::queueAction(gameState, std::make_shared<middle::EditorActionNewScene>(newSceneName));
-
-						// Clear buffer and close popup
-						newSceneName[0] = '\0';
-						ImGui::CloseCurrentPopup();
-					}
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Cancel")) {
-					newSceneName[0] = '\0';
-					ImGui::CloseCurrentPopup();
-				}
-
-				ImGui::EndPopup();
-			}
-
-			if (ImGui::Button("Sync Generations")) {
-				middle::loopInstances(gameState, [gameState](int j, middle::Shape& shape) {
-					auto loop = middle::getComponent<components::LoopSociety>(shape);
-					if (loop) {
-						for (int index = 0; index < loop->loopMemberIds.size(); ++index) {
-							loop->loopMemberIds[index] = gameState->ids[loop->loopMemberIds[index].index];
-						}
-						if (loop->parentLoopId.index != middle::UNASSIGNED) {
-							loop->parentLoopId = gameState->ids[loop->parentLoopId.index];
-						}
-					}
-					return true;
-					});
-			}
-
-
-			ImGui::Separator();
-
-			ImGui::End();
+		//	if (ImGui::Button("BUILD")) {
+		//		middle::queueAction(gameState, std::make_shared<middle::EditorActionBuild>());
+		//	}
 
 
 
+		//	// SCENE MANAGER
+
+		//	ImGui::Begin("Scene");
+
+		//	if (gameState->sceneNames.size() > 0) {
+		//		ImGui::Text(("ActiveScene: " + gameState->activeSceneName).c_str());
+		//	}
+
+		//	static int action = 0;
+		//	int load = 1;
+		//	int import = 2;
+		//	// Add new scene button
+		//	if (ImGui::Button("OPEN SCENE")) {
+		//		ImGui::OpenPopup("Scene Selector");
+		//		action = load;
+		//	}
 
 
-			// SCRIPT MANAGER
+		//	if (ImGui::Button("IMPORT SCENE")) {
+		//		ImGui::OpenPopup("Scene Selector");
+		//		action = import;
+		//	}
 
-			ImGui::Begin("System Manager");
+		//	if (ImGui::BeginPopup("Scene Selector")) {
 
-			// import SCRIPT
-			if (ImGui::Button("IMPORT SYSTEM")) {
-				ImGui::OpenPopup("System Selector");
-			}
+		//		for (int i = 0; i < gameState->sceneNames.size(); ++i) {
+		//			auto name = gameState->sceneNames[i];
+		//			if (ImGui::Button(name.c_str())) {
+		//				if (action == load) {
+		//					middle::queueAction(gameState, std::make_shared<middle::EditorActionLoadScene>(name));
+		//				}
+		//				if (action == import) {
+		//					middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionImportScene>("../assets/scenes/", name));
+		//				}
 
-			// import COMPONENT
-			ImGui::Button("IMPORT COMPONENT");
-			if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-				ImGui::OpenPopup("Component Selector");
-			}
+		//				ImGui::CloseCurrentPopup();
+		//			}
+		//		}
 
+		//		ImGui::EndPopup();
+		//	}
 
-			if (ImGui::BeginPopup("System Selector")) {
+		//	if (ImGui::Button("IMPORT SHAPE")) {
+		//		ImGui::OpenPopup("Shape Selector");
+		//	}
 
-				for (auto& name : gameState->systemNames) {
-					if (ImGui::Button(name.c_str())) {
+		//	if (ImGui::BeginPopup("Shape Selector")) {
+		//		for (int i = 0; i < gameState->shapeNames.size(); ++i) {
+		//			auto name = gameState->shapeNames[i];
+		//			if (ImGui::Button(name.c_str())) {
+		//				middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionImportScene>("../assets/shapes/", name));
+		//				ImGui::CloseCurrentPopup();
+		//			}
+		//		}
+		//		ImGui::EndPopup();
+		//	}
 
-						middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionImportSystem>(name));
+		//	// Add new scene button
+		//	if (ImGui::Button("ADD NEW SCENE")) {
+		//		ImGui::OpenPopup("New Scene Popup");
+		//	}
 
-						ImGui::CloseCurrentPopup();
-					}
-				}
+		//	// Popup for entering new scene name
+		//	static char newSceneName[128] = ""; // buffer for scene name input
+		//	if (ImGui::BeginPopup("New Scene Popup")) {
+		//		middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
 
-				ImGui::EndPopup();
-			}
+		//		ImGui::Text("Enter new scene name:");
+		//		ImGui::InputText("##newSceneName", newSceneName, IM_ARRAYSIZE(newSceneName));
 
+		//		if (ImGui::Button("Add")) {
+		//			if (strlen(newSceneName) > 0) {
+		//				// Add the new scene to the editor
+		//				middle::queueAction(gameState, std::make_shared<middle::EditorActionNewScene>(newSceneName));
 
-			if (ImGui::BeginPopup("Component Selector")) {
-				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
-				for (auto& name : gameState->componentNames) {
-					if (ImGui::Button(name.c_str())) {
-						middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionImportComponent>(name, middle::getSelectedShapes(gameState)));
-						ImGui::CloseCurrentPopup();
-					}
-				}
+		//				// Clear buffer and close popup
+		//				newSceneName[0] = '\0';
+		//				ImGui::CloseCurrentPopup();
+		//			}
+		//		}
+		//		ImGui::SameLine();
+		//		if (ImGui::Button("Cancel")) {
+		//			newSceneName[0] = '\0';
+		//			ImGui::CloseCurrentPopup();
+		//		}
 
-				ImGui::EndPopup();
-			}
+		//		ImGui::EndPopup();
+		//	}
 
-			// Add new system button
-			if (ImGui::Button("ADD NEW SCRIPT")) {
-				ImGui::OpenPopup("New Script Popup");
-			}
-
-			// Popup for entering new scene name
-			static char newScriptName[128] = ""; // buffer for scene name input
-			if (ImGui::BeginPopup("New Script Popup")) {
-				middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
-
-				ImGui::Text("Enter new initSystem name:");
-				ImGui::InputText("##newScriptName", newScriptName, IM_ARRAYSIZE(newScriptName));
-
-				const char* systemItems[] = { "SYSTEM", "COMPONENT" };
-				static int selectedSystemItem = 0;
-				ImGui::Combo("Component or System?", &selectedSystemItem, systemItems, IM_ARRAYSIZE(systemItems));
-
-				if (ImGui::Button("Add")) {
-					if (strlen(newScriptName) > 0) {
-						// Add the new scene to the editor
-						if (selectedSystemItem == 0) {
-							middle::queueAction(gameState, std::make_shared<middle::EditorActionNewSystem>(newScriptName));
-						}
-						else {
-							middle::queueAction(gameState, std::make_shared<middle::EditorActionNewComponent>(newScriptName));
-						}
-
-						// Clear buffer and close popup
-						newScriptName[0] = '\0';
-						ImGui::CloseCurrentPopup();
-					}
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Cancel")) {
-					newScriptName[0] = '\0';
-					ImGui::CloseCurrentPopup();
-				}
-
-				ImGui::EndPopup();
-			}
-
-			ImGui::End();
+		//	if (ImGui::Button("Sync Generations")) {
+		//		middle::loopInstances(gameState, [gameState](int j, middle::Shape& shape) {
+		//			auto loop = middle::getComponent<components::LoopSociety>(shape);
+		//			if (loop) {
+		//				for (int index = 0; index < loop->loopMemberIds.size(); ++index) {
+		//					loop->loopMemberIds[index] = gameState->ids[loop->loopMemberIds[index].index];
+		//				}
+		//				if (loop->parentLoopId.index != middle::UNASSIGNED) {
+		//					loop->parentLoopId = gameState->ids[loop->parentLoopId.index];
+		//				}
+		//			}
+		//			return true;
+		//			});
+		//	}
 
 
-			ImGui::End();
+		//	ImGui::Separator();
 
-			};
+		//	ImGui::End();
 
-		middle::queueUi(gameState, oldUI);
+
+
+
+
+		//	// SCRIPT MANAGER
+
+		//	ImGui::Begin("System Manager");
+
+		//	// import SCRIPT
+		//	if (ImGui::Button("IMPORT SYSTEM")) {
+		//		ImGui::OpenPopup("System Selector");
+		//	}
+
+		//	// import COMPONENT
+		//	ImGui::Button("IMPORT COMPONENT");
+		//	if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+		//		ImGui::OpenPopup("Component Selector");
+		//	}
+
+
+		//	if (ImGui::BeginPopup("System Selector")) {
+
+		//		for (auto& name : gameState->systemNames) {
+		//			if (ImGui::Button(name.c_str())) {
+
+		//				middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionImportSystem>(name));
+
+		//				ImGui::CloseCurrentPopup();
+		//			}
+		//		}
+
+		//		ImGui::EndPopup();
+		//	}
+
+
+		//	if (ImGui::BeginPopup("Component Selector")) {
+		//		middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
+		//		for (auto& name : gameState->componentNames) {
+		//			if (ImGui::Button(name.c_str())) {
+		//				middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionImportComponent>(name, middle::getSelectedShapes(gameState)));
+		//				ImGui::CloseCurrentPopup();
+		//			}
+		//		}
+
+		//		ImGui::EndPopup();
+		//	}
+
+		//	// Add new system button
+		//	if (ImGui::Button("ADD NEW SCRIPT")) {
+		//		ImGui::OpenPopup("New Script Popup");
+		//	}
+
+		//	// Popup for entering new scene name
+		//	static char newScriptName[128] = ""; // buffer for scene name input
+		//	if (ImGui::BeginPopup("New Script Popup")) {
+		//		middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
+
+		//		ImGui::Text("Enter new initSystem name:");
+		//		ImGui::InputText("##newScriptName", newScriptName, IM_ARRAYSIZE(newScriptName));
+
+		//		const char* systemItems[] = { "SYSTEM", "COMPONENT" };
+		//		static int selectedSystemItem = 0;
+		//		ImGui::Combo("Component or System?", &selectedSystemItem, systemItems, IM_ARRAYSIZE(systemItems));
+
+		//		if (ImGui::Button("Add")) {
+		//			if (strlen(newScriptName) > 0) {
+		//				// Add the new scene to the editor
+		//				if (selectedSystemItem == 0) {
+		//					middle::queueAction(gameState, std::make_shared<middle::EditorActionNewSystem>(newScriptName));
+		//				}
+		//				else {
+		//					middle::queueAction(gameState, std::make_shared<middle::EditorActionNewComponent>(newScriptName));
+		//				}
+
+		//				// Clear buffer and close popup
+		//				newScriptName[0] = '\0';
+		//				ImGui::CloseCurrentPopup();
+		//			}
+		//		}
+		//		ImGui::SameLine();
+		//		if (ImGui::Button("Cancel")) {
+		//			newScriptName[0] = '\0';
+		//			ImGui::CloseCurrentPopup();
+		//		}
+
+		//		ImGui::EndPopup();
+		//	}
+
+		//	ImGui::End();
+
+
+		//	ImGui::End();
+
+		//	};
+
+		//middle::queueUi(gameState, oldUI);
 	}
 
 	void gameEditorUi(middle::GameState* gameState) {
 
-		auto ui = [gameState]() {
-			ImGui::Begin("Control");
-			if (ImGui::Button("Edit")) {
-				gameState->applicationMode = middle::ApplicationMode::EDITOR_MODE;
-			}
-			ImGui::End();
-			};
+		//auto ui = [gameState]() {
+		//	ImGui::Begin("Control");
+		//	if (ImGui::Button("Edit")) {
+		//		gameState->applicationMode = middle::ApplicationMode::EDITOR_MODE;
+		//	}
+		//	ImGui::End();
+		//	};
 
-		middle::queueUi(gameState, ui);
+		//middle::queueUi(gameState, ui);
 	}
 
 	void update(middle::GameState* gameState) override {

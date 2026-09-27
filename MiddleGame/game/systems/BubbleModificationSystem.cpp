@@ -22,7 +22,6 @@
 #include "MidComp/SnapRef.h"
 #include "MidComp/TimerComponent.h"
 #include "MidComp/InsertableBubble.h"
-#include "imgui.h"
 #include "MidComp/BubblePowerComponent.h"
 #include "MidComp/IntersectingTag.h"
 #include "MidComp/QueuedForSaveTag.h"
@@ -219,17 +218,6 @@ public:
 		}
 	}
 
-	// TODO moves these
-	void updateUi(middle::GameState* gameState, int movesLeft) {
-		auto stepsLeft = [gameState, movesLeft]() {
-			ImGui::Begin("Moves Left");
-			std::string updatedString = std::to_string(movesLeft);
-			ImGui::Text(updatedString.c_str());
-			ImGui::End();
-			};
-		middle::queueUi(gameState, stepsLeft);
-	}
-
 
 	void copyAsHelper(middle::GameState* gameState, middle::Id id, const midMath::Vector3& targetPos) {
 		auto copyAction = std::make_shared<bubbleActions::CopyAsHelper>(id, targetPos);
@@ -264,7 +252,6 @@ public:
 				}
 			}
 
-			updateUi(gameState, configs->allowedMoves);
 			if (configs->allowedMoves <= 0) {
 				return;
 			}

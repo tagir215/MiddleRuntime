@@ -23,7 +23,6 @@
 #include "MidComp/SnapRef.h"
 #include "MidComp/Layer.h"
 #include "MidComp/InsertableBubble.h"
-#include "imgui.h"
 #include "MidComp/IntersectingTag.h"
 #include "bubble_utils.h"
 #include "MidComp/LocalPosition.h"
