@@ -138,6 +138,7 @@ namespace middle {
 		MiddleOutputState middleState;
 		ApplicationMode applicationMode;
 		MouseState mouseState;
+		int resultUiCallIterIndex = 0;
 		bool paused = false;
 		bool reset = false;
 		bool loaded = false;

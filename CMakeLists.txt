@@ -68,6 +68,7 @@ add_executable(middle
     ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/Renderer.cpp
     ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/InputSystem.cpp
     ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/FileDropSystem.cpp
+    ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/MiddleImGuiTranslatorSystem.cpp
     ${MIDDLE_RAYLIB_DIR}/middle/src/assets_loading.cpp
     ## todo?
     ${MIDDLE_GAME_DIR}/include/middle_state.h

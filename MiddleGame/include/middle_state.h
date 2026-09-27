@@ -7,6 +7,46 @@
 #include <set>
 #include "asset_enums.h"
 
+namespace middleUI{
+	enum UiCallType {
+		None,
+		Begin,
+		End,
+		Text,
+		Button,
+		InputText,
+		IsItemFocused,
+		IsAnyItemFocused,
+		SliderInt,   // use setMinMax 
+		Separator,
+		Checkbox,
+		SameLine,
+		RadioButton,  // use setAcive to set it active/inactive
+		IsWindowHovered,
+		BeginPopup,
+		EndPopup,
+		OpenPopup,
+		CloseCurrentPopup,
+		Combo,
+		CollapsingHeader,
+		IsItemClickedMouseLeft,
+	};
+
+	struct UiCall {
+		UiCallType type;
+		size_t id;
+		const char* label = nullptr;
+		bool boolVal;
+		int intVal;
+		float floatVal;
+		const char* stringVal = nullptr;
+		const char* const* items = nullptr;
+		int min, max;
+		size_t size;
+		bool active;
+	};
+}
+
 namespace middle {
 
 
@@ -79,11 +119,14 @@ namespace middle {
 		EditorInput editorInput;
 		GameInput gameInput;
 		EqulabInput equlabInput;
+		std::vector<middleUI:: UiCall>resultUiCalls;
 	};
+
 
 	struct MiddleOutputState {
 		std::vector<middle::RenderItem> renderData;
 		std::vector<std::function<void()>>uiSetups;
+		std::vector<middleUI:: UiCall>uiCalls;
 		midPrimitive::Color backgroundColor = { 188, 144, 181, 255 };
 		midPrimitive::Camera activeCamera;
 		std::set<InputBlockers> inputBlockers;

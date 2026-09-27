@@ -10,6 +10,7 @@
 #include "middle_math.h"
 #include "middle_state.h"
 #include "middle_math_maping_helper.h"
+#include "MiddleImGuiTranslatorSystem.cpp"
 
 const int fontUnitFactor = 1024;
 
@@ -252,7 +253,7 @@ namespace renderer {
 
 	class RendererSystem {
 	public:
-		static void update(const middle::MiddleOutputState* const middleState, const Font& font, const std::vector<Shader>& shaders, const std::vector<Texture>& textures, bool releaseBuild)  {
+		static void update(const middle::MiddleOutputState* const middleState, middle::MiddleInputState* inputState, const Font& font, const std::vector<Shader>& shaders, const std::vector<Texture>& textures, bool releaseBuild)  {
 
 			BeginDrawing();
 
@@ -286,9 +287,7 @@ namespace renderer {
 			if (!releaseBuild) {
 				rlImGuiBegin();
 
-				for (const auto& ui : middleState->uiSetups) {
-					ui();
-				}
+				MiddleImGuiTranslatorSystem::Update(middleState, inputState);
 
 				rlImGuiEnd();
 			}

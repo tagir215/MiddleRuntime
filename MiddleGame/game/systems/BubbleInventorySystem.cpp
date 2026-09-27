@@ -28,6 +28,7 @@
 #include "bubble_utils.h"
 #include "MidComp/LocalPosition.h"
 #include "bubble_colors.h"
+#include "abstract_ui.h"
 
 
 class BubbleInventorySystem : public middle::MiddleGameplaySystem {
@@ -96,40 +97,80 @@ public:
 				currentPos += advance;
 			}
 
-			auto ui = [gameState, inv]() {
-				int size = inv->maxSize;
-				ImGui::Begin("inventory");
-				if (size > 0) {
-					ImGui::SliderInt("active item", &inv->activeIndex, 0, size - 1);
-				}
-				ImGui::Separator();
-				ImGui::Checkbox("invert", &inv->invert);
-				ImGui::SameLine();
-				ImGui::Checkbox("negate", &inv->negate);
+			int size = inv->maxSize;
 
-				ImGui::Separator();
-				if (ImGui::RadioButton("Add", inv->insertType == components::INSERT_ADD))
-					inv->insertType = components::INSERT_ADD;
-				ImGui::SameLine();
-				if(ImGui::RadioButton("Multiply", inv->insertType == components::INSERT_MULTIPLY))
-					inv->insertType = components::INSERT_MULTIPLY;
-				ImGui::SameLine();
-				if(ImGui::RadioButton("Power", inv->insertType == components::INSERT_POWER))
-					inv->insertType = components::INSERT_POWER;
 
-				ImGui::Separator();
-				if (ImGui::RadioButton("X/X", inv->invariantType == components::X_OVER_X))
-					inv->invariantType = components::X_OVER_X;
-				ImGui::SameLine();
-				if(ImGui::RadioButton("X-X", inv->invariantType == components::X_MINUS_X))
-					inv->invariantType = components::X_MINUS_X;
+			using namespace middleUI;
+			START_MIDGUI(gameState);
 
-				if (ImGui::IsWindowHovered() || ImGui::IsAnyItemHovered()) {
-					middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
-				}
-				ImGui::End();
-				};
-			middle::queueUi(gameState, ui);
+			midguiBegin("inventory");
+			if (size > 0) {
+				midguiSliderInt("active item", inv->activeIndex, 0, size - 1);
+			}
+			midguiSeparator();
+			midguiCheckbox("invert", inv->invert);
+			midguiCheckbox("negate", inv->negate);
+			midguiSeparator();
+			if (midguiRadioButton("Add", inv->insertType == components::INSERT_ADD)) {
+				inv->insertType = components::INSERT_ADD;
+			}
+			midguiSameLine();
+			if (midguiRadioButton("Multiply", inv->insertType == components::INSERT_MULTIPLY)) {
+				inv->insertType = components::INSERT_MULTIPLY;
+			}
+			midguiSameLine();
+			if (midguiRadioButton("Power", inv->insertType == components::INSERT_POWER)) {
+				inv->insertType = components::INSERT_POWER;
+			}
+			if (midguiRadioButton("X/x", inv->invariantType == components::X_OVER_X)) {
+				inv->invariantType = components::X_OVER_X;
+			}
+			midguiSameLine();
+			if (midguiRadioButton("X-x", inv->invariantType == components::X_MINUS_X)) {
+				inv->invariantType = components::X_MINUS_X;
+			}
+
+			if (midguiIsWindowHovered() || midguiIsAnyItemFocused()) {
+				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
+			}
+
+			midguiEnd();
+
+
+			//auto ui = [gameState, inv]() {
+			//	int size = inv->maxSize;
+			//	ImGui::Begin("inventory");
+			//	if (size > 0) {
+			//		ImGui::SliderInt("active item", &inv->activeIndex, 0, size - 1);
+			//	}
+			//	ImGui::Separator();
+			//	ImGui::Checkbox("invert", &inv->invert);
+			//	ImGui::SameLine();
+			//	ImGui::Checkbox("negate", &inv->negate);
+
+			//	ImGui::Separator();
+			//	if (ImGui::RadioButton("Add", inv->insertType == components::INSERT_ADD))
+			//		inv->insertType = components::INSERT_ADD;
+			//	ImGui::SameLine();
+			//	if(ImGui::RadioButton("Multiply", inv->insertType == components::INSERT_MULTIPLY))
+			//		inv->insertType = components::INSERT_MULTIPLY;
+			//	ImGui::SameLine();
+			//	if(ImGui::RadioButton("Power", inv->insertType == components::INSERT_POWER))
+			//		inv->insertType = components::INSERT_POWER;
+
+			//	ImGui::Separator();
+			//	if (ImGui::RadioButton("X/X", inv->invariantType == components::X_OVER_X))
+			//		inv->invariantType = components::X_OVER_X;
+			//	ImGui::SameLine();
+			//	if(ImGui::RadioButton("X-X", inv->invariantType == components::X_MINUS_X))
+			//		inv->invariantType = components::X_MINUS_X;
+
+			//	if (ImGui::IsWindowHovered() || ImGui::IsAnyItemHovered()) {
+			//		middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
+			//	}
+			//	ImGui::End();
+			//	};
+			//middle::queueUi(gameState, ui);
 		}
 	}
 

@@ -6,6 +6,7 @@
 #include "middle_shape_utils.h"
 #include "MidComp/LoopSociety.h"
 #include "MidComp/EditorConfigs.h"
+#include "abstract_ui.h"
 
 class EditorUiSystem : public middle::MiddleGameplaySystem {
 public:
@@ -30,123 +31,59 @@ public:
 		}
 
 
-		auto ui = [gameState, configs]() {
+		using namespace middleUI;
+		static bool isWindowHovered = false;
+
+		START_MIDGUI(gameState);
+		midguiBegin("Control");
+		if (midguiButton("undo")) {
+			if (gameState->editorState.actionHistory.size() > 0) {
+				int lastIndex = gameState->editorState.actionHistory.size() - 1;
+				int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
+				auto actionToUndo = gameState->editorState.actionHistory[targetIndex];
+				gameState->undoQueue.push(actionToUndo);
+				++gameState->editorState.historySinkDepth;
+			}
+		}
+		if (midguiButton("redo")) {
+			if (gameState->editorState.historySinkDepth > 0) {
+				int lastIndex = gameState->editorState.actionHistory.size() - 1;
+				--gameState->editorState.historySinkDepth;
+				int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
+				auto actionToRedo = gameState->editorState.actionHistory[targetIndex];
+				gameState->actionQueue.push(actionToRedo);
+			}
+		}
+		if (midguiButton("reset")) {
+			gameState->reset = true;
+		}
+		if (midguiButton("play")) {
+			gameState->applicationMode = middle::ApplicationMode::GAME_MODE;
+		}
+		midguiEnd();
+
+
+
+		midguiBegin("Editor");
+
+		static const char* items[] = {"SELECT MODE", "SPHERE MODE", "CONSTRAINT MODE", "CAMERA MODE", "LOOP_MODE"};
+		int currentItem = static_cast<int>(gameState->editorState.creationMode);
+		int itemsSize = IM_ARRAYSIZE(items);
+		midguiCombo("Select things to add", items, currentItem, itemsSize);
+		gameState->editorState.creationMode = static_cast<middle::CreationMode>(currentItem);
+
+		midguiEnd();
+
+		auto oldUI = [gameState, configs]() {
 			midMath::Vector3 referencePos = { 0,0,0 };
 
-			auto ImGuiDisplayText = [](const char* label, const char* text) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("%s", text);
-				};
 
-			auto ImGuiDisplayBool = [](const char* label, bool b) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("%s", b ? "true" : "false");
-				};
-
-			auto ImGuiDisplayInt = [](const char* label, int i) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("%d", i);
-				};
-
-			auto ImGuiDisplayFloat = [](const char* label, float f) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("%.25f", f);
-				};
-
-			auto ImGuiDisplayVector2 = [](const char* label, midMath::Vector2 v) {
-				if (ImGui::CollapsingHeader(label))
-					ImGui::Text("(%.2f, %.2f)", v.x, v.y);
-				};
-
-			auto ImGuiDisplayVector3 = [&referencePos](const char* label, midMath::Vector3 v) {
-				if (ImGui::CollapsingHeader(label)) {
-					ImGui::Text("x: (%.25f)", v.x);
-					ImGui::Text("y: (%.25f)", v.y);
-					ImGui::Text("z: (%.25f)", v.z);
-				}
-				};
 
 			if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
 				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
 			}
 
-			ImGui::Begin("Control");
-			if (!gameState->paused) {
-				if (ImGui::Button("pause")) {
-					gameState->paused = true;
-				}
-				if (ImGui::Button("undo")) {
-					if (gameState->editorState.actionHistory.size() > 0) {
-						int lastIndex = gameState->editorState.actionHistory.size() - 1; 
-						int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
-						auto actionToUndo = gameState->editorState.actionHistory[targetIndex];
-						gameState->undoQueue.push(actionToUndo);
-						++gameState->editorState.historySinkDepth;
-					}
-				}
-				if (ImGui::Button("redo")) {
-					if (gameState->editorState.historySinkDepth > 0) {
-						int lastIndex = gameState->editorState.actionHistory.size() - 1; 
-						--gameState->editorState.historySinkDepth;
-						int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
-						auto actionToRedo = gameState->editorState.actionHistory[targetIndex];
-						gameState->actionQueue.push(actionToRedo);
-					}
-				}
-			}
-			else {
-				if (ImGui::Button("continue")) {
-					gameState->paused = false;
-					gameState->editorState.stepDir = 1;
-				}
-				if (ImGui::Button("next step")) {
-					gameState->editorState.doOneStep = true;
-					gameState->editorState.stepDir = 1;
-				}
-				if (ImGui::Button("previous step")) {
-					gameState->editorState.doOneStep = true;
-					gameState->editorState.stepDir = -1;
-				}
-			}
-			if (ImGui::Button("reset")) {
-				gameState->reset = true;
-			}
-			if (configs) {
-				if (ImGui::Button("increase grid")) {
-					++configs->gridSize;
-				}
-				if (ImGui::Button("decrease grid")) {
-					--configs->gridSize;
-					if (configs->gridSize < 1)
-						configs->gridSize = 1;
-				}
-			}
-			if (ImGui::Button("PLAY")) {
-				gameState->applicationMode = middle::ApplicationMode::GAME_MODE;
-			}
-			ImGui::End();
-			auto& input = gameState->middleInputState.editorInput;
-			ImGui::Begin("GameState");
-			ImGuiDisplayVector3("camera position", gameState->editorState.camera.position);
-			ImGuiDisplayVector3("camera up", gameState->editorState.camera.up);
-			ImGuiDisplayVector3("camera target", gameState->editorState.camera.target);
-			ImGuiDisplayVector2("mousePos", { input.mouseX, input.mouseY });
-			ImGuiDisplayVector3("mouse near plane pos", gameState->mouseState.mouseNearPlanePos);
-			ImGuiDisplayVector2("mouse normalized pos", gameState->mouseState.mouseNormalizedPos);
-			ImGuiDisplayVector3("mouse dir", gameState->mouseState.mouseDir);
-			ImGuiDisplayVector3("mouse xz pos", gameState->mouseState.mouseXZ_PlanePos);
-			ImGuiDisplayVector3("mouse xz vel", gameState->mouseState.mouseXZ_PlaneVelocity);
-			ImGuiDisplayInt("screen width", gameState->middleInputState.screenWidth);
-			ImGuiDisplayInt("screen height", gameState->middleInputState.screenHeight);
-			ImGui::End();
-
 			ImGui::Begin("Editor");
-
-			const char* items[] = { "SELECT MODE", "SPHERE MODE", "CONSTRAINT MODE", "CAMERA MODE", "LOOP_MODE" };
-			int currentItem = static_cast<int>(gameState->editorState.creationMode);
-			ImGui::Combo("Select things to add", &currentItem, items, IM_ARRAYSIZE(items));
-			gameState->editorState.creationMode = static_cast<middle::CreationMode>(currentItem);
-
 
 			if (ImGui::Button("DELETE OBJECT")) {
 				middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionDelete>(middle::getSelectedShapes(gameState)));
@@ -372,7 +309,7 @@ public:
 
 			};
 
-		middle::queueUi(gameState, ui);
+		middle::queueUi(gameState, oldUI);
 	}
 
 	void gameEditorUi(middle::GameState* gameState) {
