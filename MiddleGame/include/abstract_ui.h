@@ -1,9 +1,9 @@
 #pragma once
-#include <imgui.h>
 #include "middle_shape_utils.h"
 #include "middle_state.h"
 
 namespace middleUI {
+#define MID_ARRAYSIZE(_ARR)          ((int)(sizeof(_ARR) / sizeof(*(_ARR))))
 
 	// A simple bit-combining function used by boost
 	inline void hash_combine(std::size_t& seed, std::size_t value) {

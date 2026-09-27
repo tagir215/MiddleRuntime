@@ -4,7 +4,6 @@
 #include "component_utils.h"
 #include "MidComp/BubbleComponent.h"
 #include "MidComp/Rectangle.h"
-#include "imgui.h"
 #include "MidComp/PauseLayoutTag.h"
 #include "MidComp/BubblePowerComponent.h"
 #include "bubble_utils.h"

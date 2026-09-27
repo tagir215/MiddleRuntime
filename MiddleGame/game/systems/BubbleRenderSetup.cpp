@@ -40,7 +40,6 @@
 #include "MidComp/GlobalRect.h"
 #include "MidComp/BubbleSummationComponent.h"
 #include "bubble_paths.h"
-#include "imgui.h"
 #include "MidComp/BubbleTextComponent.h"
 #include "MidComp/BubbleSwapComponent.h"
 #include "MidComp/BubbleLogicComponent.h"
