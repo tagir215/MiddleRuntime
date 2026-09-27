@@ -5,51 +5,68 @@
 class MiddleImGuiTranslatorSystem {
 public:
 
-	static void translateCall(const middleUI::UiCall& call) {
-		switch (call.type) {
+	static void translateCall(int i, const middle::MiddleOutputState* const middleState, middle::MiddleInputState* inputState) {
+		auto copyCall = middleState->uiCalls[i];
+		switch (copyCall.type) {
 		case(middleUI::Begin):
-			ImGui::Begin(call.label);
+			ImGui::Begin(copyCall.label);
 			break;
 		case(middleUI::End):
 			ImGui::End();
 			break;
 		case(middleUI::Text):
-			ImGui::Text(call.stringVal);
+			ImGui::Text(copyCall.stringVal);
 			break;
 		case(middleUI::Button):
-			*call.boolVal = ImGui::Button(call.label);
+			copyCall.boolVal = ImGui::Button(copyCall.label);
 			break;
 		case(middleUI::Checkbox):
-			ImGui::Checkbox(call.label, call.boolVal);
+			ImGui::Checkbox(copyCall.label, &copyCall.boolVal);
 			break;
-			// TODOOOOOOOOOOOOOOOOOOOOOOOOOO
 		case(middleUI::Combo):
+			ImGui::Combo(copyCall.label, &copyCall.intVal, copyCall.items, copyCall.size);
 			break;
 		case(middleUI::BeginPopup):
-			*call.boolVal = ImGui::BeginPopup(call.label);
+			copyCall.boolVal = ImGui::BeginPopup(copyCall.label);
 			break;
 		case(middleUI::EndPopup):
 			ImGui::EndPopup();
 			break;
 		case(middleUI::OpenPopup):
-			ImGui::OpenPopup(call.label);
+			ImGui::OpenPopup(copyCall.label);
 			break;
 		case(middleUI::CloseCurrentPopup):
 			ImGui::CloseCurrentPopup();
 			break;
 		case(middleUI::CollapsingHeader):
-			ImGui::CollapsingHeader(call.label);
+			ImGui::CollapsingHeader(copyCall.label);
+			break;
+		case(middleUI::RadioButton):
+			copyCall.boolVal = ImGui::RadioButton(copyCall.label, copyCall.active);
 			break;
 		case(middleUI::InputText):
-			ImGui::InputText(call.label, call.stringVal, call.size);
+			// TOOOOOOOOOOOOOOOOOOOOOOOOOOOOODDDDDDDDDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+			//ImGui::InputText(copyCall.label, copyCall.stringVal, copyCall.size);
+			break;
+		case(middleUI::SameLine):
+			ImGui::SameLine();
+			break;
+		case(middleUI::Separator):
+			ImGui::Separator();
+			break;
+		case(middleUI::SliderInt):
+			ImGui::SliderInt(copyCall.label, &copyCall.intVal, copyCall.min, copyCall.max);
 			break;
 		}
+
+		inputState->resultUiCalls.push_back(copyCall);
 	}
 
 
-	static void Update(const middle::MiddleOutputState* const middleState) {
-		for (const auto& call : middleState->uiCalls) {
-			translateCall(call);
+	static void Update(const middle::MiddleOutputState* const middleState, middle::MiddleInputState* inputState) {
+		inputState->resultUiCalls.clear();
+		for (int i = 0; i < middleState->uiCalls.size(); ++i) {
+			translateCall(i, middleState, inputState);
 		}
 	}
 };

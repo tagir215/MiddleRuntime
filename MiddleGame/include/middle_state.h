@@ -35,11 +35,12 @@ namespace middleUI{
 	struct UiCall {
 		UiCallType type;
 		size_t id;
-		char* label = nullptr;
+		const char* label = nullptr;
 		bool boolVal;
 		int intVal;
 		float floatVal;
-		char* stringVal = nullptr;
+		const char* stringVal = nullptr;
+		const char* const* items = nullptr;
 		int min, max;
 		size_t size;
 		bool active;
@@ -118,15 +119,14 @@ namespace middle {
 		EditorInput editorInput;
 		GameInput gameInput;
 		EqulabInput equlabInput;
+		std::vector<middleUI:: UiCall>resultUiCalls;
 	};
 
-	static int previousUiCallIterIndex = -1;
 
 	struct MiddleOutputState {
 		std::vector<middle::RenderItem> renderData;
 		std::vector<std::function<void()>>uiSetups;
 		std::vector<middleUI:: UiCall>uiCalls;
-		std::vector<middleUI:: UiCall>previousUiCalls;
 		midPrimitive::Color backgroundColor = { 188, 144, 181, 255 };
 		midPrimitive::Camera activeCamera;
 		std::set<InputBlockers> inputBlockers;

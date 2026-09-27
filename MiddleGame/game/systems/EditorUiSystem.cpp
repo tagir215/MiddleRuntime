@@ -34,10 +34,9 @@ public:
 		using namespace middleUI;
 		static bool isWindowHovered = false;
 
-		auto ui = UiBuilder(&gameState->middleState);
-		ui.midgui(Begin); ui.label("Control");
-		auto undoButton = ui.midgui(Button); ui.label("undo");
-		if (undoButton && undoButton->boolVal) {
+		START_MIDGUI(gameState);
+		midguiBegin("Control");
+		if (midguiButton("undo")) {
 			if (gameState->editorState.actionHistory.size() > 0) {
 				int lastIndex = gameState->editorState.actionHistory.size() - 1;
 				int targetIndex = lastIndex - gameState->editorState.historySinkDepth;
@@ -46,8 +45,7 @@ public:
 				++gameState->editorState.historySinkDepth;
 			}
 		}
-		auto redoButton = ui.midgui(Button); ui.label("redo");
-		if (redoButton && redoButton->boolVal) {
+		if (midguiButton("redo")) {
 			if (gameState->editorState.historySinkDepth > 0) {
 				int lastIndex = gameState->editorState.actionHistory.size() - 1;
 				--gameState->editorState.historySinkDepth;
@@ -56,18 +54,25 @@ public:
 				gameState->actionQueue.push(actionToRedo);
 			}
 		}
-		auto resetButton = ui.midgui(Button); ui.label("reset");
-		if (resetButton && resetButton->boolVal) {
+		if (midguiButton("reset")) {
 			gameState->reset = true;
 		}
-		auto playButton = ui.midgui(Button); ui.label("play");
-		if (playButton && playButton->boolVal) {
+		if (midguiButton("play")) {
 			gameState->applicationMode = middle::ApplicationMode::GAME_MODE;
 		}
-		ui.midgui(End);
+		midguiEnd();
 
 
 
+		midguiBegin("Editor");
+
+		static const char* items[] = {"SELECT MODE", "SPHERE MODE", "CONSTRAINT MODE", "CAMERA MODE", "LOOP_MODE"};
+		int currentItem = static_cast<int>(gameState->editorState.creationMode);
+		int itemsSize = IM_ARRAYSIZE(items);
+		midguiCombo("Select things to add", items, currentItem, itemsSize);
+		gameState->editorState.creationMode = static_cast<middle::CreationMode>(currentItem);
+
+		midguiEnd();
 
 		auto oldUI = [gameState, configs]() {
 			midMath::Vector3 referencePos = { 0,0,0 };
@@ -79,12 +84,6 @@ public:
 			}
 
 			ImGui::Begin("Editor");
-
-			const char* items[] = { "SELECT MODE", "SPHERE MODE", "CONSTRAINT MODE", "CAMERA MODE", "LOOP_MODE" };
-			int currentItem = static_cast<int>(gameState->editorState.creationMode);
-			ImGui::Combo("Select things to add", &currentItem, items, IM_ARRAYSIZE(items));
-			gameState->editorState.creationMode = static_cast<middle::CreationMode>(currentItem);
-
 
 			if (ImGui::Button("DELETE OBJECT")) {
 				middle::queueEditorAction(gameState, std::make_shared<middle::EditorActionDelete>(middle::getSelectedShapes(gameState)));

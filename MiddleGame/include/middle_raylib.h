@@ -44,6 +44,7 @@ public:
 	RayState rayState;
 	float frameTimeAccumulator = 0;
 	middle::MiddleOutputState* outputState = nullptr;
+	middle::MiddleInputState inputState;
 
 	void init() {
 		SetTargetFPS(fps);               
@@ -54,12 +55,12 @@ public:
 	}
 
 	middle::MiddleInputState updateInputState() {
-		middle::MiddleInputState inputState;
 		const float fixedTimeStep = 1.0f / (float)fps;
 		inputState.frameTime = fixedTimeStep;
 		inputState.frameTimeAccumulator = frameTimeAccumulator + GetFrameTime();
 		inputState.screenWidth = GetScreenWidth();
 		inputState.screenHeight = GetScreenHeight();
+		inputState.closeGame = false;
 		return inputState;
 	}
 
@@ -73,19 +74,19 @@ public:
 			//----------------------------------------------------------------------------------
 			ReloadGameDLL();
 
-			auto inputState = updateInputState();
+			inputState = updateInputState();
 			InputSystem::update(&inputState, outputState);
 
 			UpdateGame(inputState, &outputState);
 
-			renderer::RendererSystem::update(outputState, rayState.globalFont, rayState.shaders, rayState.textures, false);
+			renderer::RendererSystem::update(outputState, &inputState, rayState.globalFont, rayState.shaders, rayState.textures, false);
 
 			if (outputState->closeGame) {
 				break;
 			}
 		}
 
-		auto inputState = updateInputState();
+		inputState = updateInputState();
 		inputState.closeGame = true;
 		UpdateGame(inputState, &outputState);
 	}

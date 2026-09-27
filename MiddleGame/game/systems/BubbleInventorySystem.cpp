@@ -101,39 +101,40 @@ public:
 
 
 			using namespace middleUI;
-			auto ui = UiBuilder(&gameState->middleState);
-			ui.midgui(Begin); ui.label("inventory");
+			START_MIDGUI(gameState);
+
+			midguiBegin("inventory");
 			if (size > 0) {
-				ui.midgui(SliderInt); ui.label("active item"); ui.integer(&inv->activeIndex); ui.minMax(0, size - 1);
+				midguiSliderInt("active item", inv->activeIndex, 0, size - 1);
 			}
-			ui.midgui(Separator);
-			ui.midgui(Checkbox); ui.label("invert"); ui.boolean(&inv->invert);
-			ui.midgui(SameLine);
-			ui.midgui(Checkbox); ui.label("negate"); ui.boolean(&inv->negate);
-			ui.midgui(Separator);
-			auto radioButton0 = ui.midgui(RadioButton); ui.label("Add"); ui.active(inv->insertType == components::INSERT_ADD);
-			auto radioButton1 = ui.midgui(RadioButton); ui.label("Multiply"); ui.active(inv->insertType == components::INSERT_MULTIPLY);
-			auto radioButton2 = ui.midgui(RadioButton); ui.label("Power"); ui.active(inv->insertType == components::INSERT_POWER);
-			auto radioButton3 = ui.midgui(RadioButton); ui.label("X/X"); ui.active(inv->insertType == components::X_OVER_X);
-			auto radioButton4 = ui.midgui(RadioButton); ui.label("X-X"); ui.active(inv->insertType == components::X_MINUS_X);
-			if (radioButton0 && radioButton0->boolVal) 
+			midguiSeparator();
+			midguiCheckbox("invert", inv->invert);
+			midguiCheckbox("negate", inv->negate);
+			midguiSeparator();
+			if (midguiRadioButton("Add", inv->insertType == components::INSERT_ADD)) {
 				inv->insertType = components::INSERT_ADD;
-			if (radioButton0 && radioButton0->boolVal)
+			}
+			midguiSameLine();
+			if (midguiRadioButton("Multiply", inv->insertType == components::INSERT_MULTIPLY)) {
 				inv->insertType = components::INSERT_MULTIPLY;
-			if (radioButton0 && radioButton0->boolVal)
+			}
+			midguiSameLine();
+			if (midguiRadioButton("Power", inv->insertType == components::INSERT_POWER)) {
 				inv->insertType = components::INSERT_POWER;
-			if (radioButton0 && radioButton0->boolVal)
+			}
+			if (midguiRadioButton("X/x", inv->invariantType == components::X_OVER_X)) {
 				inv->invariantType = components::X_OVER_X;
-			if (radioButton0 && radioButton0->boolVal)
+			}
+			midguiSameLine();
+			if (midguiRadioButton("X-x", inv->invariantType == components::X_MINUS_X)) {
 				inv->invariantType = components::X_MINUS_X;
-			static bool isWindowHovered = false;
-			static bool isAnyItemHovered = false;
-			ui.midgui(IsWindowHovered, &isAnyItemHovered);
-			ui.midgui(IsAnyItemFocused, &isAnyItemHovered);
-			if (isWindowHovered || isAnyItemHovered) {
+			}
+
+			if (midguiIsWindowHovered() || midguiIsAnyItemFocused()) {
 				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
 			}
-			ui.midgui(End);
+
+			midguiEnd();
 
 
 			//auto ui = [gameState, inv]() {

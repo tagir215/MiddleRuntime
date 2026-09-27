@@ -101,22 +101,20 @@ public:
 		// SAVING 
 		using namespace middleUI;
 
-		auto ui = UiBuilder(&gameState->middleState);
-		ui.midgui(Begin); ui.label("Bubequ file");
+		START_MIDGUI(gameState);
+		midguiBegin("Bubequ file");
 
-		static char equationName[128] = "";
-		ui.midgui(InputText); ui.label("Equation name"); ui.string(equationName); ui.setSize(IM_ARRAYSIZE(equationName));
+		//midguiInput("Equation name");
 
-		auto focusedCall = ui.midgui(IsItemFocused);
-		if (focusedCall && focusedCall->boolVal) {
-			if (focusedCall->boolVal) {
-				middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
-				middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
-			}
+		static char equationName[128] = "TODO NAME";
+		//ui.midgui(InputText); ui.label("Equation name"); ui.string(equationName); ui.setSize(IM_ARRAYSIZE(equationName));
+
+		if (midguiIsItemFocused()) {
+			middle::insertInputBlock(gameState, middle::InputBlockers::KEYBOARD_BLOCK);
+			middle::insertInputBlock(gameState, middle::InputBlockers::MOUSE_BLOCK);
 		}
 
-		auto button = ui.midgui(Button); ui.label("save button");
-		if (button && button->boolVal) {
+		if (midguiButton("save")) {
 			for (middle::Id& activeId : activeBubbleCache->relevantIdVector) {
 				std::string name = equationName;
 				std::shared_ptr<bubequ::Scope> root;
@@ -140,49 +138,40 @@ public:
 			}
 		}
 
-		ui.midgui(End);
+		midguiEnd();
 
 		// UI 
 
 		// BUBEQU LIST
-		//ui.add(Begin, "bubequ list");
+		midguiBegin("bubequ list");
 
-		//std::vector<std::string>filenames = bubequ::getFilenames(std::string(bubblePaths::EQUATION_FOLDER));
+		static std::vector<std::string>filenames = bubequ::getFilenames(std::string(bubblePaths::EQUATION_FOLDER));
 
-		//if (fileButtons.size() != filenames.size()) {
-		//	fileButtons = std::vector<bool>(filenames.size(), false);
-		//}
-		//for (int i = 0; i < filenames.size(); ++i) {
-		//	auto& name = filenames[i];
+		if (fileButtons.size() != filenames.size()) {
+			fileButtons = std::vector<bool>(filenames.size(), false);
+		}
+		for (int i = 0; i < filenames.size(); ++i) {
+			auto& name = filenames[i];
 
-		//	if (ui.add(Button, name.c_str(), )) {
+			if (midguiButton(name.c_str())) {
+				const std::string path = std::string(bubblePaths::EQUATION_FOLDER) + "/" + name + ".bubequ";
+				midMath::Vector3 camXZPos = middle::getActiveCam(gameState).position;
+				camXZPos.y = 0;
+				//auto bubequ = bubequ::loadBubequ(path);
 
-		//	}
-		//	if (ImGui::Button(name.c_str())) {
-		//		const std::string path = std::string(bubblePaths::EQUATION_FOLDER) + "/" + name + ".bubequ";
-		//		midMath::Vector3 camXZPos = middle::getActiveCam(gameState).position;
-		//		camXZPos.y = 0;
-		//		//auto bubequ = bubequ::loadBubequ(path);
+				auto bubequ = bubequ::loadBubequHead(name, {}, gameState->bubbleAlgebraState.loadDepth);
 
-		//		auto bubequ = bubequ::loadBubequHead(name, {}, gameState->bubbleAlgebraState.loadDepth);
+				middle::Id id = bubequ::bubequToBubble(gameState, camXZPos, bubequ);
+				auto registerAction = std::make_shared<middle::EditorActionRegisterId>(id);
+				middle::queueAction(gameState, registerAction);
+				gameState->bubbleAlgebraState.bubbleActions.push_back(registerAction);
 
-		//		middle::Id id = bubequ::bubequToBubble(gameState, camXZPos, bubequ);
-		//		auto registerAction = std::make_shared<middle::EditorActionRegisterId>(id);
-		//		middle::queueAction(gameState, registerAction);
-		//		gameState->bubbleAlgebraState.bubbleActions.push_back(registerAction);
+				// todo change
+				gameState->bubbleAlgebraState.activeBubbleName = name;
+			}
+		}
 
-		//		// todo change
-		//		gameState->bubbleAlgebraState.activeBubbleName = name;
-		//	}
-		//}
-
-		auto equlabUi = [gameState, this]() {
-
-			ImGui::Begin("bubequ list");
-			ImGui::End();
-			};
-		middle::queueUi(gameState, equlabUi);
-
+		midguiEnd();
 
 		// ACTIONS
 		std::string keyString = keyToString(gameState);

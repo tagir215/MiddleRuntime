@@ -253,7 +253,7 @@ namespace renderer {
 
 	class RendererSystem {
 	public:
-		static void update(const middle::MiddleOutputState* const middleState, const Font& font, const std::vector<Shader>& shaders, const std::vector<Texture>& textures, bool releaseBuild)  {
+		static void update(const middle::MiddleOutputState* const middleState, middle::MiddleInputState* inputState, const Font& font, const std::vector<Shader>& shaders, const std::vector<Texture>& textures, bool releaseBuild)  {
 
 			BeginDrawing();
 
@@ -287,7 +287,7 @@ namespace renderer {
 			if (!releaseBuild) {
 				rlImGuiBegin();
 
-				MiddleImGuiTranslatorSystem::Update(middleState);
+				MiddleImGuiTranslatorSystem::Update(middleState, inputState);
 
 				rlImGuiEnd();
 			}
