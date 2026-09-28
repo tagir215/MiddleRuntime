@@ -18,7 +18,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectBubbleGateComponent(middle::Shape& shape, V& v) {
+    static void reflectBubbleGateComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubbleGateComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLEGATECOMPONENT(X)

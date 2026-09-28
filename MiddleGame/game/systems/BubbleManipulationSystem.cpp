@@ -37,7 +37,7 @@ public:
 		bubbleCache->addType<components::InventoryItem>(components::NOTINTERESTED);
 	}
 
-	void move(middle::GameState* gameState, middle::Shape& shape) {
+	void move(middle::GameState* gameState, middle::MiddleMan& shape) {
 		midMath::Vector3 pos;
 		auto transform = middle::getComponent<components::GlobalTransform>(shape);
 		if (transform) {
@@ -62,7 +62,7 @@ public:
 		}
 	}
 
-	void attachComponents(middle::GameState* gameState, middle::Shape& shape, components::MouseGrabbable* grabbable) {
+	void attachComponents(middle::GameState* gameState, middle::MiddleMan& shape, components::MouseGrabbable* grabbable) {
 
 		bool intersecting = bubble::isIntersecting(gameState, shape);
 		if (gameState->middleInputState.editorInput.mouseClicked && intersecting && gameState->bubbleAlgebraState.grabbedId.index == middle::UNASSIGNED) {

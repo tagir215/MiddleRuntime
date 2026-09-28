@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectNewBubbleTag(middle::Shape& shape, V& v) {
+    static void reflectNewBubbleTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<NewBubbleTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLENEWBUBBLETAG(X)

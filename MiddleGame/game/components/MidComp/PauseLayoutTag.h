@@ -10,7 +10,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectPauseLayoutTag(middle::Shape& shape, V& v) {
+    static void reflectPauseLayoutTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<PauseLayoutTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEPAUSELAYOUTTAG(X)

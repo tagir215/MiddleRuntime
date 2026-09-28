@@ -61,7 +61,7 @@ public:
 		inventoryCache->addType<components::Inventory>();
 	}
 
-	bool isMultiplicationConnection(middle::GameState* gameState, middle::Shape& parentShape) {
+	bool isMultiplicationConnection(middle::GameState* gameState, middle::MiddleMan& parentShape) {
 		auto mulComp = middle::getComponent<components::BubbleMultiplyComponent>(parentShape);
 		if (mulComp) {
 			return true;
@@ -69,7 +69,7 @@ public:
 		return false;
 	}
 
-	void substitute(middle::GameState* gameState, middle::Shape& intersectedShape, middle::Shape& deletionRefShape, middle::Shape& shapeForDeletion) {
+	void substitute(middle::GameState* gameState, middle::MiddleMan& intersectedShape, middle::MiddleMan& deletionRefShape, middle::MiddleMan& shapeForDeletion) {
 
 		middle::Id parentId = middle::getParent(gameState, deletionRefShape.id);
 		if (!bubble::isEqualsBubble(gameState, parentId)) {
@@ -88,7 +88,7 @@ public:
 		bubble::queueBubbleAction(gameState, intersectedShape.id, action);
 	}
 
-	void tryCombine(middle::GameState* gameState, middle::Shape& refParent, middle::Shape& refShape, middle::Shape& intersectedShape) {
+	void tryCombine(middle::GameState* gameState, middle::MiddleMan& refParent, middle::MiddleMan& refShape, middle::MiddleMan& intersectedShape) {
 
 		// is multiplication connection
 		if (middle::getComponent<components::BubbleMultiplyComponent>(refParent)) {
@@ -170,7 +170,7 @@ public:
 		}
 	}
 
-	void microOperation(middle::GameState* gameState, int actionType, middle::Id& refId, middle::Shape& intersectedShape) {
+	void microOperation(middle::GameState* gameState, int actionType, middle::Id& refId, middle::MiddleMan& intersectedShape) {
 		std::shared_ptr<bubbleActions::BubbleAction>action;
 
 		// pop as long as not multiplication
@@ -277,7 +277,7 @@ public:
 			for (int i = 0; i < intersectingCache->getSize(); ++i) {
 				auto intersecting = *intersectingIt;
 				if (intersecting->intersectingTop) {
-					middle::Shape& intersectingShape = middle::getShape(gameState, intersectingCache->relevantIdVector[i].index);
+					middle::MiddleMan& intersectingShape = middle::getShape(gameState, intersectingCache->relevantIdVector[i].index);
 
 					// copy is not undoable bubble action for now
 					if (gameState->middleInputState.gameInput.copy) {

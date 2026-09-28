@@ -10,7 +10,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectBubblePathMark(middle::Shape& shape, V& v) {
+    static void reflectBubblePathMark(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubblePathMark>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLEPATHMARK(X)

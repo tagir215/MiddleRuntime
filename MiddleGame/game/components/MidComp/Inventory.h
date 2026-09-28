@@ -26,7 +26,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectInventory(middle::Shape& shape, V& v) {
+    static void reflectInventory(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<Inventory>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEINVENTORY(X)

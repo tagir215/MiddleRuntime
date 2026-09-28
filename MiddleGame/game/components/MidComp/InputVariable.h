@@ -16,7 +16,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectInputVariable(middle::Shape& shape, V& v) {
+    static void reflectInputVariable(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<InputVariable>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEINPUTVARIABLE(X)

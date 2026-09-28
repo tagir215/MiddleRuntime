@@ -11,7 +11,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectUiComponent(middle::Shape& shape, V& v) {
+    static void reflectUiComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<UiComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEUICOMPONENT(X)

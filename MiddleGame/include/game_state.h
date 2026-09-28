@@ -148,7 +148,7 @@ namespace middle {
 		EditorState editorState;
 		// shapes
 		std::array<Id, MAX_SHAPE_COUNT>ids;
-		std::array<Shape, MAX_SHAPE_COUNT>shapes;
+		std::array<MiddleMan, MAX_SHAPE_COUNT>shapes;
 		// systems
 		std::unique_ptr<MiddleGameplaySystem>componentCacheSystem;
 		std::unordered_map<std::string, std::unique_ptr<MiddleGameplaySystem>> gameplaySystems;

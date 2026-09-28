@@ -12,9 +12,9 @@ namespace middle {
 	struct Component;
 
 	struct ComponentReflectionMethods {
-		void(*serialize)(middle::Shape&, std::ostream&);
-		void(*deserialize)(middle::Shape&, const std::vector<std::string>&, int);
-		void(*getFields)(middle::Shape&, std::vector<middle::FieldInfo>&, int*);
+		void(*serialize)(middle::MiddleMan&, std::ostream&);
+		void(*deserialize)(middle::MiddleMan&, const std::vector<std::string>&, int);
+		void(*getFields)(middle::MiddleMan&, std::vector<middle::FieldInfo>&, int*);
 	};
 
 	struct IComponentVectorContainer {
@@ -78,7 +78,7 @@ namespace middle {
 	}
 
 	template<typename T>
-	inline T* getComponent(Shape& shape) {
+	inline T* getComponent(MiddleMan& shape) {
 		int typeId = getTypeId<T>();
 		int offset = shape.componentOffsets[typeId];
 		if (offset == middle::UNASSIGNED) {
@@ -91,7 +91,7 @@ namespace middle {
 
 
 	template<typename T>
-	inline T* addComponent(Shape& shape) {
+	inline T* addComponent(MiddleMan& shape) {
 		int typeId = getTypeId<T>();
 		ComponentVectorContainer<T>* vectorContainer = getComponentVectorContainer<T>();
 		int nextIndex = vectorContainer->grow();
@@ -101,7 +101,7 @@ namespace middle {
 	}
 
 	template<typename T>
-	inline void deleteComponent(Shape& shape) {
+	inline void deleteComponent(MiddleMan& shape) {
 		int typeId = getTypeId<T>();
 		ComponentVectorContainer<T>* vectorContainer = getComponentVectorContainer<T>();
 		int offset = getCompOffset(shape, typeId);

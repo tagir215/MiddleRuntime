@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectProcedureUseUiTag(middle::Shape& shape, V& v) {
+    static void reflectProcedureUseUiTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<ProcedureUseUiTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEPROCEDUREUSEUITAG(X)

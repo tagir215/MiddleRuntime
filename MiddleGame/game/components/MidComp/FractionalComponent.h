@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectFractionalComponent(middle::Shape& shape, V& v) {
+    static void reflectFractionalComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<FractionalComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEFRACTIONALCOMPONENT(X)

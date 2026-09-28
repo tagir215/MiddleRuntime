@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectTopDogInViewTag(middle::Shape& shape, V& v) {
+    static void reflectTopDogInViewTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<TopDogInViewTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLETOPDOGINVIEWTAG(X)

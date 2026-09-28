@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectActiveCheckBoxTag(middle::Shape& shape, V& v) {
+    static void reflectActiveCheckBoxTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<ActiveCheckBoxTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEACTIVECHECKBOXTAG(X)

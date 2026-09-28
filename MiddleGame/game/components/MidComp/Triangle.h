@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectTriangle(middle::Shape& shape, V& v) {
+    static void reflectTriangle(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<Triangle>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLETRIANGLE(X)

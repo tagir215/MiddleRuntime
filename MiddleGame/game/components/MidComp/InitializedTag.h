@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectInitializedTag(middle::Shape& shape, V& v) {
+    static void reflectInitializedTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<InitializedTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEINITIALIZEDTAG(X)

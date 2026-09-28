@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectGridElement(middle::Shape& shape, V& v) {
+    static void reflectGridElement(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<GridElement>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEGRIDELEMENT(X)

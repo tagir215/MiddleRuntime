@@ -11,7 +11,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectBubbleLogicGateConnection(middle::Shape& shape, V& v) {
+    static void reflectBubbleLogicGateConnection(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubbleLogicGateConnection>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLELOGICGATECONNECTION(X)

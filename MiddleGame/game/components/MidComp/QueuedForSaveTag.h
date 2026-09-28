@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectQueuedForSaveTag(middle::Shape& shape, V& v) {
+    static void reflectQueuedForSaveTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<QueuedForSaveTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEQUEUEDFORSAVETAG(X)

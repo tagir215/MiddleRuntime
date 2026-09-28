@@ -10,7 +10,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectComponentRefParent(middle::Shape& shape, V& v) {
+    static void reflectComponentRefParent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<ComponentRefParent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLECOMPONENTREFPARENT(X)

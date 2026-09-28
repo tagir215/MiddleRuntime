@@ -25,7 +25,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectTextureComponent(middle::Shape& shape, V& v) {
+    static void reflectTextureComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<TextureComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLETEXTURECOMPONENT(X)

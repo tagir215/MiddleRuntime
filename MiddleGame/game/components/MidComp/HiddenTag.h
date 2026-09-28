@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectHiddenTag(middle::Shape& shape, V& v) {
+    static void reflectHiddenTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<HiddenTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEHIDDENTAG(X)

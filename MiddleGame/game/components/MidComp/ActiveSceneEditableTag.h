@@ -8,7 +8,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectActiveSceneEditableTag(middle::Shape& shape, V& v) {
+    static void reflectActiveSceneEditableTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<ActiveSceneSelectableTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEACTIVESCENEEDITABLETAG(X)

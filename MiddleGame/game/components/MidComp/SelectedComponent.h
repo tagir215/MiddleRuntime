@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectSelectedComponent(middle::Shape& shape, V& v) {
+    static void reflectSelectedComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<SelectedComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLESELECTEDCOMPONENT(X)

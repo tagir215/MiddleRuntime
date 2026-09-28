@@ -11,7 +11,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectTimerComponent(middle::Shape& shape, V& v) {
+    static void reflectTimerComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<TimerComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLETIMERCOMPONENT(X)

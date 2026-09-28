@@ -11,7 +11,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectIntersectingTag(middle::Shape& shape, V& v) {
+    static void reflectIntersectingTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<IntersectingTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEINTERSECTINGTAG(X)

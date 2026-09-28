@@ -46,7 +46,7 @@ namespace middle {
 	typedef int componentOffset;
 	typedef int compoenntTypeId;
 
-	struct Shape {
+	struct MiddleMan {
 		Id id;
 		std::vector<componentOffset>componentOffsets;
 		std::vector<compoenntTypeId>componentTypes;

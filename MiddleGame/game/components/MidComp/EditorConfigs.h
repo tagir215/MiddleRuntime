@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectEditorConfigs(middle::Shape& shape, V& v) {
+    static void reflectEditorConfigs(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<EditorConfigs>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEEDITORCONFIGS(X)

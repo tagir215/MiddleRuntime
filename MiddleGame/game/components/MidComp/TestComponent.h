@@ -12,7 +12,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectTestComponent(middle::Shape& shape, V& v) {
+    static void reflectTestComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<TestComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLETESTCOMPONENT(X)

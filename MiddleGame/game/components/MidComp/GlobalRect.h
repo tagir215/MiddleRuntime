@@ -14,7 +14,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectGlobalRect(middle::Shape& shape, V& v) {
+    static void reflectGlobalRect(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<GlobalRect>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEGLOBALRECT(X)

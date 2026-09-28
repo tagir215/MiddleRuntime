@@ -12,7 +12,7 @@ namespace components {
 
 
     template<typename V>
-    static void reflectBubbleMultiplyComponent(middle::Shape& shape, V& v) {
+    static void reflectBubbleMultiplyComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubbleMultiplyComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLEMULTIPLYCOMPONENT(X)

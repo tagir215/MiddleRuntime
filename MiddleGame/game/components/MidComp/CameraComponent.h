@@ -31,7 +31,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectCameraComponent(middle::Shape& shape, V& v) {
+    static void reflectCameraComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<CameraComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLECAMERACOMPONENT(X)

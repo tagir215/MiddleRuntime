@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectBubbleTextSizeChangedTag(middle::Shape& shape, V& v) {
+    static void reflectBubbleTextSizeChangedTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubbleTextSizeChangedTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLETEXTSIZECHANGEDTAG(X)

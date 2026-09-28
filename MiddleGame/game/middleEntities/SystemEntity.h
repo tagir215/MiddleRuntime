@@ -15,7 +15,7 @@
 namespace entities{
 
     inline void initSystem(middle::GameState* gameState, int index, const midMath::Vector3& position, const std::string& systemName){
-		middle::Shape shape = middle::createShape(gameState);
+		middle::MiddleMan shape = middle::createShape(gameState);
 		middle::addComponent<components::MouseSelectable>(shape);
 		middle::addComponent<components::MouseGrabbable>(shape);
 		middle::addComponent<components::MouseIntersectable>(shape);

@@ -15,7 +15,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectPosition(middle::Shape& shape, V& v) {
+    static void reflectPosition(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<Position>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEPOSITION(X)

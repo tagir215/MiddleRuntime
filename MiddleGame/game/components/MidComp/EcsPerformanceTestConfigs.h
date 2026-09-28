@@ -12,7 +12,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectEcsPerformanceTestConfigs(middle::Shape& shape, V& v) {
+    static void reflectEcsPerformanceTestConfigs(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<EcsPerformanceTestConfigs>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEECSPERFORMANCETESTCONFIGS(X)

@@ -33,7 +33,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectAlgebraNode(middle::Shape& shape, V& v) {
+    static void reflectAlgebraNode(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<AlgebraNode>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEALGEBRANODE(X)

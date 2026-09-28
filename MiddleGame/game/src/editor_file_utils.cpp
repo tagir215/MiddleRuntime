@@ -117,7 +117,7 @@ namespace middle {
 		}
 	}
 
-	void saveComponent(middle::Shape& shape, std::ofstream& outFile) {
+	void saveComponent(middle::MiddleMan& shape, std::ofstream& outFile) {
 
 		// references are special. for references skip children to save storage 
 		bool skipChildren = middle::getComponent<components::Reference>(shape);

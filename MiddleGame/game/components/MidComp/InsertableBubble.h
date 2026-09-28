@@ -10,7 +10,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectInsertableBubble(middle::Shape& shape, V& v) {
+    static void reflectInsertableBubble(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<InsertableBubble>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEINSERTABLEBUBBLE(X)

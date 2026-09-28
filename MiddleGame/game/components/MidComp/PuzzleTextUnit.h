@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectPuzzleTextUnit(middle::Shape& shape, V& v) {
+    static void reflectPuzzleTextUnit(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<PuzzleTextUnit>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEPUZZLETEXTUNIT(X)

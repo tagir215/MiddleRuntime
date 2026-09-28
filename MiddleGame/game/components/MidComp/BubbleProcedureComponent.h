@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectBubbleProcedureComponent(middle::Shape& shape, V& v) {
+    static void reflectBubbleProcedureComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubbleProcedureComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLEPROCEDURECOMPONENT(X)

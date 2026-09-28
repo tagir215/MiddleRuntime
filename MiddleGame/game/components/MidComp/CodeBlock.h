@@ -12,7 +12,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectCodeBlock(middle::Shape& shape, V& v) {
+    static void reflectCodeBlock(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<CodeBlock>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLECODEBLOCK(X)

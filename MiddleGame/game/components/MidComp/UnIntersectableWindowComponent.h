@@ -10,7 +10,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectUnIntersectableWindowComponent(middle::Shape& shape, V& v) {
+    static void reflectUnIntersectableWindowComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<UnIntersectableWindowComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEUNINTERSECTABLEWINDOWCOMPONENT(X)

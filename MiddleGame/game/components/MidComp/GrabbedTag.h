@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectGrabbedTag(middle::Shape& shape, V& v) {
+    static void reflectGrabbedTag(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<GrabbedTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEGRABBEDTAG(X)

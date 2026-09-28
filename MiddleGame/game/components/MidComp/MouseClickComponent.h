@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectMouseClickComponent(middle::Shape& shape, V& v) {
+    static void reflectMouseClickComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<MouseClickComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEMOUSECLICKCOMPONENT(X)

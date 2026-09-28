@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectModelComponent(middle::Shape& shape, V& v) {
+    static void reflectModelComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<ModelComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEMODELCOMPONENT(X)

@@ -53,9 +53,9 @@ namespace middle {
 
 	class EditorActionRegisterShape : public EditorActionContainer {
 	public:
-		middle::Shape shapeToRegister;
+		middle::MiddleMan shapeToRegister;
 		middle::Id newShapeId;
-		EditorActionRegisterShape(middle::Shape& shape) {
+		EditorActionRegisterShape(middle::MiddleMan& shape) {
 			shapeToRegister = shape;
 		}
 		void execute(GameState* gameState) override;

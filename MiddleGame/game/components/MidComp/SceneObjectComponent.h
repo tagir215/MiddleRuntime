@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectSceneObjectComponent(middle::Shape& shape, V& v) {
+    static void reflectSceneObjectComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<SceneObjectComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLESCENEOBJECTCOMPONENT(X)

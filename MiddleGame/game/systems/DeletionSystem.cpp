@@ -31,7 +31,7 @@ public:
 			// if dependency is deleted, delete this as well
 			auto dependency = *dependencyIt;
 			if (!middle::isValidId(gameState, dependency->idRef)) {
-				middle::Shape& shape = middle::getShape(gameState, dependencyCache->relevantIdVector[i].index);
+				middle::MiddleMan& shape = middle::getShape(gameState, dependencyCache->relevantIdVector[i].index);
 				middle::queueAction(gameState, std::make_shared<middle::EditorActionDeleteSingle>(shape.id));
 			}
 		}
@@ -39,7 +39,7 @@ public:
 		for (int i = 0; i < deleteCache->getSize(); ++i) {
 			// if delete comp delete when frame count counts to 0
 			auto deleteComp = *deleteIt;
-			middle::Shape& shape = middle::getShape(gameState, deleteCache->relevantIdVector[i].index);
+			middle::MiddleMan& shape = middle::getShape(gameState, deleteCache->relevantIdVector[i].index);
 			if (deleteComp->framesUntilDelete <= 0) {
 				middle::queueAction(gameState, std::make_shared<middle::EditorActionDeleteSingle>(shape.id));
 			}

@@ -15,7 +15,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectCuboid(middle::Shape& shape, V& v) {
+    static void reflectCuboid(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<Cuboid>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLECUBOID(X)

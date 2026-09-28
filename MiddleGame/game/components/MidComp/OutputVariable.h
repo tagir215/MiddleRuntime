@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectOutputVariable(middle::Shape& shape, V& v) {
+    static void reflectOutputVariable(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<OutputVariable>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEOUTPUTVARIABLE(X)

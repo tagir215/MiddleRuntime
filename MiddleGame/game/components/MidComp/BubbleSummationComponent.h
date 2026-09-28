@@ -20,7 +20,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectBubbleSummationComponent(middle::Shape& shape, V& v) {
+    static void reflectBubbleSummationComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubbleSummationComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLESUMMATIONCOMPONENT(X)

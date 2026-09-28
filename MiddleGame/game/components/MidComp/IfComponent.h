@@ -11,7 +11,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectIfComponent(middle::Shape& shape, V& v) {
+    static void reflectIfComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<IfComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEIFCOMPONENT(X)

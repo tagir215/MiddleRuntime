@@ -10,7 +10,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectMouseSelectable(middle::Shape& shape, V& v) {
+    static void reflectMouseSelectable(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<MouseSelectable>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEMOUSESELECTABLE(X)

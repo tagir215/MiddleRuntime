@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectBubbleEqualsVariable(middle::Shape& shape, V& v) {
+    static void reflectBubbleEqualsVariable(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubbleEqualsVariable>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLEEQUALSVARIABLE(X)

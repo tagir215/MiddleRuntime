@@ -11,7 +11,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectCircle(middle::Shape& shape, V& v) {
+    static void reflectCircle(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<Circle>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLECIRCLE(X)

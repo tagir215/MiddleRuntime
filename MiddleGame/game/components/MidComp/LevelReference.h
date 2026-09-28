@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectLevelReference(middle::Shape& shape, V& v) {
+    static void reflectLevelReference(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<LevelReference>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLELEVELREFERENCE(X)

@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectLoopSociety(middle::Shape& shape, V& v) {
+    static void reflectLoopSociety(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<LoopSociety>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLELOOPSOCIETY(X)

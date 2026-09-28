@@ -11,7 +11,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectRotation(middle::Shape& shape, V& v) {
+    static void reflectRotation(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<Rotation>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEROTATION(X)

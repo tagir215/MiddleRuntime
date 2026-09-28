@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectBubbleInequaltyComponent(middle::Shape& shape, V& v) {
+    static void reflectBubbleInequaltyComponent(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<BubbleInequaltyComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLEINEQUALTYCOMPONENT(X)

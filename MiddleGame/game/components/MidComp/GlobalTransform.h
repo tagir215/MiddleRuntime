@@ -15,7 +15,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflectGlobalTransform(middle::Shape& shape, V& v) {
+    static void reflectGlobalTransform(middle::MiddleMan& shape, V& v) {
         auto comp = middle::getComponent<GlobalTransform>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEGLOBALTRANSFORM(X)
