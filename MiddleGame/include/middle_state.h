@@ -117,6 +117,7 @@ namespace middle {
 		float frameTimeAccumulator = 0;
 		double nearPlaneDistance = 10;
 		double farPlaneDistance = 4000;
+		float cameraFOVY = 45;
 		EditorInput editorInput;
 		GameInput gameInput;
 		EqulabInput equlabInput;

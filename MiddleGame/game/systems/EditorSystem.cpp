@@ -71,7 +71,7 @@ public:
 				{0,-100,0},
 				{0,0,0},
 				{0,0,1},
-				45,
+				gameState->middleInputState.cameraFOVY,
 				0 // RAYLIB CAMERA_PERSPECTIVE
 			};
 		}
