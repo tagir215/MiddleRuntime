@@ -4,7 +4,7 @@
 
 MiddleRuntime supposed to run videogame gamplay/physics simulation, while you would use a different engine to render the actual game. It exposes MiddleState objects whcih contain render/sound/ui calls which the renderer will consume. For example I use Raylib as renderer when prototyping / debug gameplay / physics logic, and use Unreal Engine for final visuals (lighting, animations, other viusal stuff). This allows faster workflow for gameplay coding while not having to invent a graphics engine. The front end engine would also poll inputs and launching the game.   
 
-The Algebra Rewrite System is designed to let users perform algebraic manipulations interactively. Algebraic objects are currently called **Bubbles**, a name that comes from an earlier visual design where the objects were planned to be bubble-shaped. The visual design has since changed toward rectangular shapes, so this terminology will likely change in the future.
+Kind of coupled with the engine (for now) is a Algebra Rewrite System or an Algebra videogame. The Algebra Rewrite System is designed to let users perform algebraic manipulations interactively. Algebraic objects are currently called **Bubbles**, a name that comes from an earlier visual design where the objects were planned to be bubble-shaped. The visual design has since changed toward rectangular shapes, so this terminology will likely change in the future.
 
 <img width="1791" height="1187" alt="Screenshot 2026-09-15 214337" src="https://github.com/user-attachments/assets/aab693a1-c596-49d2-a716-20088ea7feae" />
 
