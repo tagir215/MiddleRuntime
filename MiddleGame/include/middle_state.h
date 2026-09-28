@@ -115,6 +115,8 @@ namespace middle {
 		float screenHeight;
 		float frameTime;
 		float frameTimeAccumulator = 0;
+		double nearPlaneDistance = 10;
+		double farPlaneDistance = 4000;
 		EditorInput editorInput;
 		GameInput gameInput;
 		EqulabInput equlabInput;
@@ -130,8 +132,6 @@ namespace middle {
 		midPrimitive::Camera activeCamera;
 		std::set<InputBlockers> inputBlockers;
 		float frameTimeAccumulator = 0;
-		double nearPlaneDistance = 10;
-		double farPlaneDistance = 4000;
 		bool closeGame;
 		ApplicationMode applicationMode;
 	};

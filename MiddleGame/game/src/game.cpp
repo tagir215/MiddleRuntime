@@ -39,7 +39,7 @@ namespace middle{
 		float angle = gameState->middleState.activeCamera.fovy * (PI / 180)  * 0.5f;
 
 		// todo move {
-		float nearAxisY = tan(angle) * gameState->middleState.nearPlaneDistance;
+		float nearAxisY = tan(angle) * gameState->middleInputState.nearPlaneDistance;
 		float nearAxisX = nearAxisY * gameState->aspectRatio;
 		gameState->nearPlaneAxisY = nearAxisY;
 		gameState->nearPlaneAxisX = nearAxisX;
@@ -53,7 +53,7 @@ namespace middle{
 		midMath::Vector3 cameraRight = Vector3Normalize(Vector3CrossProduct(cameraDir, camera.up));
 		midMath::Vector3 cameraUp = Vector3CrossProduct(cameraRight, cameraDir);
 		midMath::Vector3 nearPlanePos = camera.position
-			+ cameraDir * gameState->middleState.nearPlaneDistance
+			+ cameraDir * gameState->middleInputState.nearPlaneDistance
 			+ cameraRight * nearPlanePos2dX
 			+ cameraUp * nearPlanePos2dY;
 		midMath::Vector3 mouseDir = midMath::Vector3Normalize(mouseState.mouseNearPlanePos - gameState->middleState.activeCamera.position);
