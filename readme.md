@@ -2,7 +2,7 @@
 
 **MiddleRuntime is a game engine developed to run an educational Algebra Rewrite System.**
 
-MiddleRuntime supposed to run videogame gamplay/physics simulation, while you would use a different engine to render the actual game. It exponses MiddleState objects whcih contain render/sound/ui calls which the renderer will consume. For example I use Raylib as renderer when prototyping / debug gameplay / physics logic, and use Unreal Engine for final visuals (lighting, animations, other viusal stuff). This allows faster workflow for gameplay coding while not having to invent a graphics engine. The front end engine would also poll inputs and launching the game.   
+MiddleRuntime supposed to run videogame gamplay/physics simulation, while you would use a different engine to render the actual game. It exposes MiddleState objects whcih contain render/sound/ui calls which the renderer will consume. For example I use Raylib as renderer when prototyping / debug gameplay / physics logic, and use Unreal Engine for final visuals (lighting, animations, other viusal stuff). This allows faster workflow for gameplay coding while not having to invent a graphics engine. The front end engine would also poll inputs and launching the game.   
 
 The Algebra Rewrite System is designed to let users perform algebraic manipulations interactively. Algebraic objects are currently called **Bubbles**, a name that comes from an earlier visual design where the objects were planned to be bubble-shaped. The visual design has since changed toward rectangular shapes, so this terminology will likely change in the future.
 
