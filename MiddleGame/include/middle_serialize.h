@@ -272,6 +272,7 @@ namespace middle {
 		}
 	};
 
+
 	struct FieldInfo {
 		const char* name;
 		void* value;

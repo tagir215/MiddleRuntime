@@ -256,9 +256,14 @@ namespace middle {
 		int componentOffset = componentList->grow();
 		Serializable* serializable = componentListMap[typeId]->getSerializable(componentOffset);
 		serializable->deserialize(buffer, indexOffset);
+
 		auto& shape = gameState->shapes[index];
 		middle::setCompOffset(shape, typeId, componentOffset);
 		middle::notifyStructuralChanges(gameState, shape.id, typeId);
+
+		ComponentReflectionMethods& reflectionMethods = getComponentReflectionMethods(typeId);
+		reflectionMethods.deserialize(shape, buffer, indexOffset);
+
 		buffer.clear();
 
 	}

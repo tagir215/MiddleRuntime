@@ -21,7 +21,7 @@ public:
 
 	void update(middle::GameState* gameState) override {
 
-		if (gameState->applicationMode == middle::ApplicationMode::EDITOR_MODE) {
+		if (gameState->middleState.applicationMode == middle::ApplicationMode::EDITOR_MODE) {
 			auto& input = gameState->middleInputState.editorInput;
 			// camera controls
 			const float maxCameraSpeed = 60;
@@ -47,7 +47,7 @@ public:
 			gameState->middleState.activeCamera = gameState->editorState.camera;
 		}
 
-		if (gameState->applicationMode == middle::ApplicationMode::GAME_MODE) {
+		if (gameState->middleState.applicationMode == middle::ApplicationMode::GAME_MODE) {
 			auto cameraIt = cameraCache->begin<components::CameraComponent>();
 			for (int i = 0; i < cameraCache->getSize(); ++i) {
 				auto cameraComponent = *cameraIt;

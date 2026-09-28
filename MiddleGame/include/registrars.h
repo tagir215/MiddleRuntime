@@ -4,10 +4,11 @@
 #include <ostream>
 
 namespace middle {
+
 	template<typename T>
 	struct ComponentRegistrar {
-		ComponentRegistrar(const std::string& componentName) {
-			registerToComponentTypes<T>(componentName);
+		ComponentRegistrar(const std::string& componentName, middle::ComponentReflectionMethods& refMethods) {
+			registerToComponentTypes<T>(componentName, refMethods);
 		}
 	};
 }

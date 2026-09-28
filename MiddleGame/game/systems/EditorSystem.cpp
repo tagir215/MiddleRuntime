@@ -57,7 +57,7 @@ public:
 	void update(middle::GameState* gameState) override {
 
 		if (gameState->editorState.startGame) {
-			if (gameState->applicationMode == middle::ApplicationMode::EDITOR_MODE) {
+			if (gameState->middleState.applicationMode == middle::ApplicationMode::EDITOR_MODE) {
 				middle::loadEditorState(gameState);
 			}
 			loadSceneAndShapeNames(gameState);

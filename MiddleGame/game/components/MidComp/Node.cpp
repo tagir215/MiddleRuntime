@@ -1,21 +1,24 @@
 #include "Node.h"
 
 namespace components {
-	void Node::serialize(std::ostream& ostream) {
+	static void serialize(middle::Shape& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflect(shape, serializer);
 	}
-
-	void Node::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::Shape& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflect(shape, deserializer);
 	}
-
-	void Node::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::Shape& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflect(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<Node>reg("Node");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<Node>reg("Node", refMethods);
 }
