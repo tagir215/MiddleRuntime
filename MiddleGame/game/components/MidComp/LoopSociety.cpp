@@ -1,21 +1,24 @@
 #include "LoopSociety.h"
 
 namespace components {
-	void LoopSociety::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectLoopSociety(shape, serializer);
 	}
-
-	void LoopSociety::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectLoopSociety(shape, deserializer);
 	}
-
-	void LoopSociety::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectLoopSociety(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<LoopSociety>reg("LoopSociety");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<LoopSociety>reg("LoopSociety", refMethods);
 }

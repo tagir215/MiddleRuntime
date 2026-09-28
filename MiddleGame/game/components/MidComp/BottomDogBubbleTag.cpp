@@ -1,21 +1,24 @@
 #include "BottomDogBubbleTag.h"
 
 namespace components {
-	void BottomDogBubbleTag::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectBottomDogBubbleTag(shape, serializer);
 	}
-
-	void BottomDogBubbleTag::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectBottomDogBubbleTag(shape, deserializer);
 	}
-
-	void BottomDogBubbleTag::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectBottomDogBubbleTag(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<BottomDogBubbleTag>reg("BottomDogBubbleTag");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<BottomDogBubbleTag>reg("BottomDogBubbleTag", refMethods);
 }

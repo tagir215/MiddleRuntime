@@ -68,7 +68,7 @@ namespace middle {
 	void EditorActionSaveScene::execute(GameState* gameState) {
 		middle::resetGenerations(gameState);
 		// sync generations
-		middle::loopInstances(gameState, [gameState](int j, middle::Shape& shape) {
+		middle::loopInstances(gameState, [gameState](int j, middle::MiddleMan& shape) {
 			auto loop = middle::getComponent<components::LoopSociety>(shape);
 			if (loop) {
 				for (int index = 0; index < loop->loopMemberIds.size(); ++index) {
@@ -311,7 +311,7 @@ namespace middle {
 
 	void EditorActionRemoveFromLoop::execute(GameState* gameState)
 	{
-		Shape& childShape = getShape(gameState, childIndex);
+		MiddleMan& childShape = getShape(gameState, childIndex);
 		auto childLoop = getComponent<components::LoopSociety>(childShape);
 		assert(childLoop);
 		middle::Id parentId = middle::getParent(gameState, childShape.id);
@@ -322,7 +322,7 @@ namespace middle {
 		middle::Id oldParentId = childLoop->parentLoopId;
 		oldParentIndex = childLoop->parentLoopId.index;
 
-		Shape& parentShape = getShape(gameState, childLoop->parentLoopId.index);
+		MiddleMan& parentShape = getShape(gameState, childLoop->parentLoopId.index);
 		auto parentLoop = getComponent<components::LoopSociety>(parentShape);
 		assert(parentLoop);
 
@@ -360,7 +360,7 @@ namespace middle {
 	void EditorActionReparent::execute(GameState* gameState)
 	{
 		assert(parentIndex != childIndex);
-		Shape& childShape = getShape(gameState, childIndex);
+		MiddleMan& childShape = getShape(gameState, childIndex);
 		auto childLoop = getComponent<components::LoopSociety>(childShape);
 		middle::Id oldParentId = childLoop->parentLoopId;
 		oldParentIndex = childLoop->parentLoopId.index;
@@ -375,7 +375,7 @@ namespace middle {
 
 
 		if (parentIndex != UNASSIGNED) {
-			Shape& parentShape = getShape(gameState, parentIndex);
+			MiddleMan& parentShape = getShape(gameState, parentIndex);
 			auto parentLoop = getComponent<components::LoopSociety>(parentShape);
 			for (Id id : parentLoop->loopMemberIds) {
 				if (id == childShape.id) {
@@ -469,7 +469,7 @@ namespace middle {
 			std::vector<Id>children;
 			getAllChildren(gameState, copyShape.id, children);
 			for (Id& id : children) {
-				Shape& child = getShape(gameState, id.index);
+				MiddleMan& child = getShape(gameState, id.index);
 				middle::queueComponentAttachment<components::PlacementComponent>(gameState, child.id);
 			}
 		}
@@ -502,7 +502,7 @@ namespace middle {
 	void EditorActionUnhide::execute(GameState* gameState)
 	{
 		std::vector<int>& unhidded = unhidIndexes;
-		loopInstances(gameState, [&unhidded, gameState](int i, middle::Shape& shape) {
+		loopInstances(gameState, [&unhidded, gameState](int i, middle::MiddleMan& shape) {
 			if (middle::getComponent<components::HiddenTag>(shape)) {
 				queueComponentDeletion<components::HiddenTag>(gameState, shape.id);
 				unhidded.push_back(shape.id.index);
@@ -574,7 +574,7 @@ namespace middle {
 	void EditorActionRegisterShape::execute(GameState* gameState)
 	{
 		int freeIndex = middle::findFreeIndex(gameState);
-		middle::Shape& registeredShape = middle::registerShape(gameState, shapeToRegister);
+		middle::MiddleMan& registeredShape = middle::registerShape(gameState, shapeToRegister);
 		newShapeId = registeredShape.id;
 	}
 

@@ -1,21 +1,24 @@
 #include "ProcedureUseUiTag.h"
 
 namespace components {
-	void ProcedureUseUiTag::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectProcedureUseUiTag(shape, serializer);
 	}
-
-	void ProcedureUseUiTag::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectProcedureUseUiTag(shape, deserializer);
 	}
-
-	void ProcedureUseUiTag::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectProcedureUseUiTag(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<ProcedureUseUiTag>reg("ProcedureUseUiTag");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<ProcedureUseUiTag>reg("ProcedureUseUiTag", refMethods);
 }

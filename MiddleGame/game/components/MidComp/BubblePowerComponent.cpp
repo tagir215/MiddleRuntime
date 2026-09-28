@@ -1,21 +1,24 @@
 #include "BubblePowerComponent.h"
 
 namespace components {
-	void BubblePowerComponent::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectBubblePowerComponent(shape, serializer);
 	}
-
-	void BubblePowerComponent::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectBubblePowerComponent(shape, deserializer);
 	}
-
-	void BubblePowerComponent::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectBubblePowerComponent(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<BubblePowerComponent>reg("BubblePowerComponent");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<BubblePowerComponent>reg("BubblePowerComponent", refMethods);
 }

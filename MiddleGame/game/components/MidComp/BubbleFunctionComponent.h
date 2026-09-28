@@ -5,18 +5,16 @@
 	X(label)
 
 namespace components {
-	struct BubbleFunctionComponent : public middle::Serializable{
+	struct BubbleFunctionComponent {
 		std::string label;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEBUBBLEFUNCTIONCOMPONENT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectBubbleFunctionComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<BubbleFunctionComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEFUNCTIONCOMPONENT(X)
+        #undef X
+    }
 }

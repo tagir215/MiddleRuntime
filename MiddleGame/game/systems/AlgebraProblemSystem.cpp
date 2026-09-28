@@ -11,7 +11,6 @@
 #include "MidComp/ProcedureContainer.h"
 #include "bubble_constants.h"
 #include "editor_file_utils.h"
-#include "imgui.h"
 #include "MidComp/GlobalTransform.h"
 #include "equlab_actions.h"
 
@@ -39,16 +38,6 @@ public:
 			undo(gameState);
 		}
 
-		auto undoUi = [this, gameState] {
-			ImGui::Begin("--");
-
-			if (ImGui::Button("UNDO")) {
-				undo(gameState);
-			}
-			ImGui::End();
-			};
-
-		middle::queueUi(gameState, undoUi);
 
 	}
 

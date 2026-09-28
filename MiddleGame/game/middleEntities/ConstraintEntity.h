@@ -8,15 +8,15 @@
 namespace entities{
 
     inline void initConstraint(middle::GameState* gameState, int index, int indexA, int indexB, float targetDistance){
-		middle::Shape shape = middle::createShape(gameState);
+		middle::MiddleMan shape = middle::createShape(gameState);
 		components::Constraint* constraint = middle::addComponent<components::Constraint>(shape);
 		middle::addComponent<components::MouseSelectable>(shape);
 		middle::addComponent<components::MouseIntersectable>(shape);
 		middle::registerShape(gameState, shape);
 		constraint->stiffness = middle::DEF_STIFFNESS;
 		constraint->targetDistance = targetDistance;
-		middle::Shape& shapeA = middle::getShape(gameState, indexA);
-		middle::Shape& shapeB = middle::getShape(gameState, indexB);
+		middle::MiddleMan& shapeA = middle::getShape(gameState, indexA);
+		middle::MiddleMan& shapeB = middle::getShape(gameState, indexB);
 		constraint->idA = shapeA.id;
 		constraint->idB = shapeB.id;
     }

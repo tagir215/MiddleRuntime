@@ -6,20 +6,18 @@
 
 
 namespace components {
-	struct Button : public middle::Serializable{
+	struct Button {
 		int function = middle::UNASSIGNED;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEBUTTON(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectButton(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<Button>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUTTON(X)
+        #undef X
+    }
 }
 
 

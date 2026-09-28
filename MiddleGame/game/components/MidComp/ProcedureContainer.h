@@ -43,7 +43,7 @@ namespace procedureConstants {
 }
 
 namespace components {
-	struct ProcedureContainer : public middle::Serializable {
+	struct ProcedureContainer  {
 		middle::Id activeBlock;
 		middle::Id startBlock;
 		middle::Id bubbleRef;
@@ -61,15 +61,13 @@ namespace components {
 		int size = 0;
 		bool editMode = true;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEPROCEDURECONTAINER(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectProcedureContainer(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<ProcedureContainer>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPROCEDURECONTAINER(X)
+        #undef X
+    }
 }

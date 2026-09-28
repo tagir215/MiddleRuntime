@@ -5,18 +5,16 @@
 	X(value)
 
 namespace components {
-	struct BubbleUnit : public middle::Serializable{
+	struct BubbleUnit {
 		int value = 1;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEBUBBLEUNIT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectBubbleUnit(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<BubbleUnit>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEUNIT(X)
+        #undef X
+    }
 }

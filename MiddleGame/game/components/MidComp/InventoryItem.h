@@ -5,20 +5,18 @@
 	X(itemType) 
 
 namespace components {
-	struct InventoryItem : public middle::Serializable{
+	struct InventoryItem {
 		int itemType = 0;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEINVENTORYITEM(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectInventoryItem(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<InventoryItem>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINVENTORYITEM(X)
+        #undef X
+    }
 }
 
 namespace bubbleInventoryItemType {
@@ -47,4 +45,5 @@ namespace bubbleInventoryItemType {
 	inline int COMPRESS_EXPONENT = 22;
 	inline int NEW_POWER_TERM = 23;
 	inline int COPY_TO_INVENTORY = 24;
+
 }

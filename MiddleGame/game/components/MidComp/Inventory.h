@@ -14,7 +14,7 @@ namespace components {
 		X_OVER_X,
 		X_MINUS_X
 	};
-	struct Inventory : public middle::Serializable{
+	struct Inventory {
 		int maxSize = 5;
 		int activeIndex = 0;
 		bool invert = false;
@@ -23,15 +23,13 @@ namespace components {
 		InventoryInvariantType invariantType;
 		
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEINVENTORY(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectInventory(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<Inventory>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINVENTORY(X)
+        #undef X
+    }
 }

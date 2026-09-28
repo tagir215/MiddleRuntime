@@ -1,21 +1,24 @@
 #include "BubbleSummationComponent.h"
 
 namespace components {
-	void BubbleSummationComponent::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectBubbleSummationComponent(shape, serializer);
 	}
-
-	void BubbleSummationComponent::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectBubbleSummationComponent(shape, deserializer);
 	}
-
-	void BubbleSummationComponent::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectBubbleSummationComponent(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<BubbleSummationComponent>reg("BubbleSummationComponent");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<BubbleSummationComponent>reg("BubbleSummationComponent", refMethods);
 }

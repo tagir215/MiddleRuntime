@@ -4,17 +4,15 @@
 #define MIDDLEMOUSECLICKCOMPONENT(X) 
 
 namespace components {
-	struct MouseClickComponent : public middle::Serializable{
+	struct MouseClickComponent {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEMOUSECLICKCOMPONENT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectMouseClickComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<MouseClickComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEMOUSECLICKCOMPONENT(X)
+        #undef X
+    }
 }

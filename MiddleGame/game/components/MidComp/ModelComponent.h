@@ -5,20 +5,18 @@
 	X(path)
 
 namespace components {
-	struct ModelComponent : public middle::Serializable{
+	struct ModelComponent {
 		std::string path;
 		midPrimitive::Model model;
 		bool initialized = false;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEMODELCOMPONENT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectModelComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<ModelComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEMODELCOMPONENT(X)
+        #undef X
+    }
 }

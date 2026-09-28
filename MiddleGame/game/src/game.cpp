@@ -137,12 +137,12 @@ namespace middle{
 
 	void updateSystems(GameState* gameState, const std::vector<std::unique_ptr<MiddleGameplaySystem>>& systems) {
 		for (auto& system : systems) {
-			if (gameState->applicationMode == ApplicationMode::GAME_MODE
+			if (gameState->middleState.applicationMode == ApplicationMode::GAME_MODE
 				&& system->systemModeType == SystemModeType::EDITOR) {
 				continue;
 			}
 
-			if (gameState->applicationMode == ApplicationMode::EDITOR_MODE
+			if (gameState->middleState.applicationMode == ApplicationMode::EDITOR_MODE
 				&& system->systemModeType == SystemModeType::GAMEPLAY) {
 				continue;
 			}
@@ -204,12 +204,12 @@ namespace middle{
 			if (!system)
 				continue;
 
-			if (gameState->applicationMode == ApplicationMode::GAME_MODE
+			if (gameState->middleState.applicationMode == ApplicationMode::GAME_MODE
 				&& system->systemModeType == SystemModeType::EDITOR) {
 				continue;
 			}
 
-			if (gameState->applicationMode == ApplicationMode::EDITOR_MODE
+			if (gameState->middleState.applicationMode == ApplicationMode::EDITOR_MODE
 				&& system->systemModeType == SystemModeType::GAMEPLAY) {
 				continue;
 			}
@@ -315,12 +315,12 @@ extern "C" {
 
 		for (auto& renderSystem : gameState->engineRendererSystems) {
 
-			if (gameState->applicationMode == middle::ApplicationMode::GAME_MODE
+			if (gameState->middleState.applicationMode == middle::ApplicationMode::GAME_MODE
 				&& renderSystem->systemModeType == middle::SystemModeType::EDITOR) {
 				continue;
 			}
 
-			if (gameState->applicationMode == middle::ApplicationMode::EDITOR_MODE
+			if (gameState->middleState.applicationMode == middle::ApplicationMode::EDITOR_MODE
 				&& renderSystem->systemModeType == middle::SystemModeType::GAMEPLAY) {
 				continue;
 			}

@@ -5,16 +5,15 @@
 
 namespace components {
 
-	struct InsertableBubble : public middle::Serializable {
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
+	struct InsertableBubble  {
 
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEINSERTABLEBUBBLE(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectInsertableBubble(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<InsertableBubble>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINSERTABLEBUBBLE(X)
+        #undef X
+    }
 }

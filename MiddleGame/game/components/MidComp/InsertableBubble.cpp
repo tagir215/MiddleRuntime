@@ -1,21 +1,24 @@
 #include "InsertableBubble.h"
 
 namespace components {
-	void InsertableBubble::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectInsertableBubble(shape, serializer);
 	}
-
-	void InsertableBubble::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectInsertableBubble(shape, deserializer);
 	}
-
-	void InsertableBubble::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectInsertableBubble(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<InsertableBubble>reg("InsertableBubble");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<InsertableBubble>reg("InsertableBubble", refMethods);
 }

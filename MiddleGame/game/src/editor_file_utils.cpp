@@ -36,7 +36,7 @@ namespace middle {
 
 	middle::Id loadTempShape(GameState* gameState, Id& idToLoad)
 	{
-		std::string folder = std::string(middlePaths::TEMP_FOLDER) + "/";
+		std::string folder = std::string(middlePaths::TEMP_FOLDER);
 		std::string name = "s" + std::to_string(idToLoad.index) + "_" + std::to_string(idToLoad.generation);
 		return loadShape(gameState, folder, name, false);
 	}
@@ -117,7 +117,7 @@ namespace middle {
 		}
 	}
 
-	void saveComponent(middle::Shape& shape, std::ofstream& outFile) {
+	void saveComponent(middle::MiddleMan& shape, std::ofstream& outFile) {
 
 		// references are special. for references skip children to save storage 
 		bool skipChildren = middle::getComponent<components::Reference>(shape);
@@ -132,7 +132,6 @@ namespace middle {
 			}
 
 			outFile << componentName << "\n";
-			Serializable* serializable = componentListMap[typeId]->getSerializable(offset);
 
 			// skip children for reference types to save storage memory
 			if (skipChildren) {
@@ -140,7 +139,8 @@ namespace middle {
 				if (isLoopComp) continue;
 			}
 
-			serializable->serialize(outFile);
+			ComponentReflectionMethods& reflectionMethods = getComponentReflectionMethods(typeId);
+			reflectionMethods.serialize(shape, outFile);
 		}
 	}
 
@@ -254,11 +254,14 @@ namespace middle {
 		int typeId = componentTypeMap[componentName];
 		auto& componentList = componentListMap[typeId];
 		int componentOffset = componentList->grow();
-		Serializable* serializable = componentListMap[typeId]->getSerializable(componentOffset);
-		serializable->deserialize(buffer, indexOffset);
+
 		auto& shape = gameState->shapes[index];
 		middle::setCompOffset(shape, typeId, componentOffset);
 		middle::notifyStructuralChanges(gameState, shape.id, typeId);
+
+		ComponentReflectionMethods& reflectionMethods = getComponentReflectionMethods(typeId);
+		reflectionMethods.deserialize(shape, buffer, indexOffset);
+
 		buffer.clear();
 
 	}

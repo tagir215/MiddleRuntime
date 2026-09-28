@@ -4,17 +4,15 @@
 #define MIDDLEUINODE(X) 
 
 namespace components {
-	struct UiNode : public middle::Serializable{
+	struct UiNode {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEUINODE(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectUiNode(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<UiNode>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEUINODE(X)
+        #undef X
+    }
 }

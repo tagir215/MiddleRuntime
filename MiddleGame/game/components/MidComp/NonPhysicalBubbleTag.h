@@ -4,17 +4,15 @@
 #define MIDDLENONPHYSICALBUBBLETAG(X)
 
 namespace components {
-	struct NonPhysicalBubbleTag : public middle::Serializable{
+	struct NonPhysicalBubbleTag {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLENONPHYSICALBUBBLETAG(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectNonPhysicalBubbleTag(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<NonPhysicalBubbleTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLENONPHYSICALBUBBLETAG(X)
+        #undef X
+    }
 }

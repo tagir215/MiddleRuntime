@@ -1,21 +1,24 @@
 #include "BubbleMultiplyComponent.h"
 
 namespace components {
-	void BubbleMultiplyComponent::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectBubbleMultiplyComponent(shape, serializer);
 	}
-
-	void BubbleMultiplyComponent::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectBubbleMultiplyComponent(shape, deserializer);
 	}
-
-	void BubbleMultiplyComponent::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectBubbleMultiplyComponent(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<BubbleMultiplyComponent>reg("BubbleMultiplyComponent");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<BubbleMultiplyComponent>reg("BubbleMultiplyComponent", refMethods);
 }

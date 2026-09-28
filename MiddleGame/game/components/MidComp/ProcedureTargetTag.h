@@ -4,17 +4,15 @@
 #define MIDDLEPROCEDURETARGETTAG(X) 
 
 namespace components {
-	struct ProcedureTargetTag : public middle::Serializable{
+	struct ProcedureTargetTag {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEPROCEDURETARGETTAG(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectProcedureTargetTag(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<ProcedureTargetTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPROCEDURETARGETTAG(X)
+        #undef X
+    }
 }

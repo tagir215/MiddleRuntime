@@ -1,21 +1,24 @@
 #include "NewBubbleTag.h"
 
 namespace components {
-	void NewBubbleTag::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectNewBubbleTag(shape, serializer);
 	}
-
-	void NewBubbleTag::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectNewBubbleTag(shape, deserializer);
 	}
-
-	void NewBubbleTag::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectNewBubbleTag(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<NewBubbleTag>reg("NewBubbleTag");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<NewBubbleTag>reg("NewBubbleTag", refMethods);
 }

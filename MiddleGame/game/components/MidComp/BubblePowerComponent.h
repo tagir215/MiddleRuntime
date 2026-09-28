@@ -8,17 +8,15 @@ namespace components {
 		POWER_ROLE_BASE,
 		POWER_ROLE_EXPONENT
 	};
-	struct BubblePowerComponent : public middle::Serializable {
+	struct BubblePowerComponent  {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEBUBBLEPOWERCOMPONENT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectBubblePowerComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<BubblePowerComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEPOWERCOMPONENT(X)
+        #undef X
+    }
 }

@@ -27,7 +27,7 @@ namespace equlab {
 	const float freshnessTime = 0.8f;
 
 	void AddBubble::execute(middle::GameState* gameState) {
-		middle::Shape newBubbleProto = bubble::newBubble(gameState, targetPosition);
+		middle::MiddleMan newBubbleProto = bubble::newBubble(gameState, targetPosition);
 		auto registerAction = middle::executeAction<middle::EditorActionRegisterShape>
 			(gameState, this, newBubbleProto);
 		resultId = registerAction->newShapeId;
@@ -54,7 +54,7 @@ namespace equlab {
 			return;
 		}
 
-		middle::Shape newUnitProto = bubble::newUnit(gameState, targetPosition);
+		middle::MiddleMan newUnitProto = bubble::newUnit(gameState, targetPosition);
 		auto registerAction = std::make_unique<middle::EditorActionRegisterShape>(newUnitProto);
 		registerAction->execute(gameState);
 		resultId = registerAction->newShapeId;
@@ -220,12 +220,12 @@ namespace equlab {
 
 
 	void AddEquals::execute(middle::GameState* gameState) {
-		middle::Shape bubAProto = bubble::newBubble(gameState, targetPos + midMath::Vector3{-1,0,0});
-		middle::Shape bubBProto = bubble::newBubble(gameState, targetPos + midMath::Vector3{1,0,0});
-		middle::Shape equalsProto = bubble::newEquals(gameState, targetPos);
-		middle::Shape& bubA = middle::registerShape(gameState, bubAProto);
-		middle::Shape& bubB = middle::registerShape(gameState, bubBProto);
-		middle::Shape& equals = middle::registerShape(gameState, equalsProto);
+		middle::MiddleMan bubAProto = bubble::newBubble(gameState, targetPos + midMath::Vector3{-1,0,0});
+		middle::MiddleMan bubBProto = bubble::newBubble(gameState, targetPos + midMath::Vector3{1,0,0});
+		middle::MiddleMan equalsProto = bubble::newEquals(gameState, targetPos);
+		middle::MiddleMan& bubA = middle::registerShape(gameState, bubAProto);
+		middle::MiddleMan& bubB = middle::registerShape(gameState, bubBProto);
+		middle::MiddleMan& equals = middle::registerShape(gameState, equalsProto);
 		resultId = equals.id;
 
 		middle::EditorActionReparent(equals.id.index, bubA.id.index).execute(gameState);
@@ -243,12 +243,12 @@ namespace equlab {
 	}
 
 	void AddInequals::execute(middle::GameState* gameState) {
-		middle::Shape bubAProto = bubble::newBubble(gameState, targetPos + midMath::Vector3{-1,0,0});
-		middle::Shape bubBProto = bubble::newBubble(gameState, targetPos + midMath::Vector3{1,0,0});
-		middle::Shape inequalsProto = bubble::newInequals(gameState, targetPos, equalOr);
-		middle::Shape& bubA = middle::registerShape(gameState, bubAProto);
-		middle::Shape& bubB = middle::registerShape(gameState, bubBProto);
-		middle::Shape& inequalsShape = middle::registerShape(gameState, inequalsProto);
+		middle::MiddleMan bubAProto = bubble::newBubble(gameState, targetPos + midMath::Vector3{-1,0,0});
+		middle::MiddleMan bubBProto = bubble::newBubble(gameState, targetPos + midMath::Vector3{1,0,0});
+		middle::MiddleMan inequalsProto = bubble::newInequals(gameState, targetPos, equalOr);
+		middle::MiddleMan& bubA = middle::registerShape(gameState, bubAProto);
+		middle::MiddleMan& bubB = middle::registerShape(gameState, bubBProto);
+		middle::MiddleMan& inequalsShape = middle::registerShape(gameState, inequalsProto);
 
 		middle::EditorActionReparent(inequalsShape.id.index, bubA.id.index).execute(gameState);
 		middle::EditorActionReparent(inequalsShape.id.index, bubB.id.index).execute(gameState);
@@ -284,7 +284,7 @@ namespace equlab {
 	}
 
 	void AddMultiplication::execute(middle::GameState* gameState) {
-		middle::Shape newBubbleProto = bubble::newMultiplication(gameState, targetPosition);
+		middle::MiddleMan newBubbleProto = bubble::newMultiplication(gameState, targetPosition);
 		auto registerAction = middle::executeAction<middle::EditorActionRegisterShape>
 			(gameState, this, newBubbleProto);
 		resultId = registerAction->newShapeId;
@@ -308,7 +308,7 @@ namespace equlab {
 	}
 
 	void AddPower::execute(middle::GameState* gameState) {
-		middle::Shape newBubbleProto = bubble::newPower(gameState, targetPosition);
+		middle::MiddleMan newBubbleProto = bubble::newPower(gameState, targetPosition);
 		auto registerAction = middle::executeAction<middle::EditorActionRegisterShape>
 			(gameState, this, newBubbleProto);
 		resultId = registerAction->newShapeId;
@@ -382,8 +382,8 @@ namespace equlab {
 		midMath::Vector3 targetPos = (middle::getGlobalPosition(gameState, baseId)
 			+ middle::getGlobalPosition(gameState, exponentId)) * 0.5f;
 
-		middle::Shape newPowerProto = bubble::newPower(gameState, targetPos);
-		middle::Shape& newPower = middle::registerShape(gameState, newPowerProto);
+		middle::MiddleMan newPowerProto = bubble::newPower(gameState, targetPos);
+		middle::MiddleMan& newPower = middle::registerShape(gameState, newPowerProto);
 		auto registerAction = std::make_unique<middle::EditorActionRegisterId>(newPower.id);
 		registerAction->execute(gameState);
 		actions.push_back(std::move(registerAction));
@@ -501,7 +501,7 @@ namespace equlab {
 
 	void AddBubbleText::execute(middle::GameState* gameState)
 	{
-		middle::Shape newBubbleProto = bubble::newTextBubble(gameState, targetPosition);
+		middle::MiddleMan newBubbleProto = bubble::newTextBubble(gameState, targetPosition);
 		auto registerAction = middle::executeAction<middle::EditorActionRegisterShape>
 			(gameState, this, newBubbleProto);
 		resultId = registerAction->newShapeId;
@@ -525,8 +525,8 @@ namespace equlab {
 
 	void AddSwapBubble::execute(middle::GameState* gameState)
 	{
-		middle::Shape newSwapProto = bubble::newSwapBubble(gameState, targetPosition);
-		middle::Shape& newSwapShape = middle::registerShape(gameState, newSwapProto);
+		middle::MiddleMan newSwapProto = bubble::newSwapBubble(gameState, targetPosition);
+		middle::MiddleMan& newSwapShape = middle::registerShape(gameState, newSwapProto);
 		auto registerAction = middle::executeAction<middle::EditorActionRegisterId>(gameState, this, newSwapShape.id);
 		resultId = newSwapShape.id;
 		if (parentId.index != middle::UNASSIGNED) {
@@ -555,7 +555,7 @@ namespace equlab {
 
 	void AddLogicBubble::execute(middle::GameState* gameState)
 	{
-		middle::Shape newBubbleProto = bubble::newLogicBubble(gameState, targetPosition);
+		middle::MiddleMan newBubbleProto = bubble::newLogicBubble(gameState, targetPosition);
 		auto registerAction = middle::executeAction<middle::EditorActionRegisterShape>
 			(gameState, this, newBubbleProto);
 		resultId = registerAction->newShapeId;
@@ -579,7 +579,7 @@ namespace equlab {
 
 	void AddGateBubble::execute(middle::GameState* gameState)
 	{
-		middle::Shape newBubbleProto = bubble::newGateBubble(gameState, targetPosition);
+		middle::MiddleMan newBubbleProto = bubble::newGateBubble(gameState, targetPosition);
 		auto registerAction = middle::executeAction<middle::EditorActionRegisterShape>
 			(gameState, this, newBubbleProto);
 		resultId = registerAction->newShapeId;

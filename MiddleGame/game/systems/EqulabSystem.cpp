@@ -6,7 +6,6 @@
 #include "MidComp/BubbleComponent.h"
 #include "MidComp/SelectedComponent.h"
 #include "component_utils.h"
-#include "imgui.h"
 #include "MidComp/BubbleUnit.h"
 #include "alg_file_utils.h"
 #include "MidComp/LoopSociety.h"

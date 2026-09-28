@@ -1,21 +1,24 @@
 #include "BubbleVariable.h"
 
 namespace components {
-	void BubbleVariable::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectBubbleVariable(shape, serializer);
 	}
-
-	void BubbleVariable::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectBubbleVariable(shape, deserializer);
 	}
-
-	void BubbleVariable::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectBubbleVariable(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<BubbleVariable>reg("BubbleVariable");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<BubbleVariable>reg("BubbleVariable", refMethods);
 }

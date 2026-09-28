@@ -14,7 +14,7 @@
 	X(visible) 
 
 namespace components {
-	struct Text : public middle::Serializable{
+	struct Text {
 		std::string text = "Text";
 		float fontColorR = 255;
 		float fontColorG = 255;
@@ -26,14 +26,13 @@ namespace components {
 		float fontSize = 1;
 		bool visible = true;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLETEXT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectText(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<Text>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETEXT(X)
+        #undef X
+    }
 }

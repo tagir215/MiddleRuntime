@@ -35,7 +35,7 @@ namespace MouseGrabbingSystem {
 			placableCache->addType<components::GlobalTransform>();
 		}
 
-		void dragging(middle::GameState* gameState, middle::Shape& shape) {
+		void dragging(middle::GameState* gameState, middle::MiddleMan& shape) {
 			midMath::Vector3 pos = middle::getGlobalPosition(gameState, shape.id);
 			auto grid = middle::getComponent<components::GridElement>(shape);
 
@@ -115,7 +115,7 @@ namespace MouseGrabbingSystem {
 					std::vector<middle::Id>members;
 					middle::getAllChildren(gameState, shape.id, members);
 					for (middle::Id& childId : members) {
-						middle::Shape& child = middle::getShape(gameState, childId.index);
+						middle::MiddleMan& child = middle::getShape(gameState, childId.index);
 						middle::queueComponentDeletion<components::PlacementComponent>(gameState, childId);
 					}
 				}

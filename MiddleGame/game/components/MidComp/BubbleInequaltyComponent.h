@@ -9,16 +9,14 @@ namespace components {
 		INEQUAL_GREATER
 	};
 
-	struct BubbleInequaltyComponent : public middle::Serializable {
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEBUBBLEINEQUALTYCOMPONENT(X)
-#undef X
-		}
+	struct BubbleInequaltyComponent  {
 	};
+
+    template<typename V>
+    static void reflectBubbleInequaltyComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<BubbleInequaltyComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEINEQUALTYCOMPONENT(X)
+        #undef X
+    }
 }

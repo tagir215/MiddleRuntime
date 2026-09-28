@@ -5,18 +5,16 @@
 	X(scale)
 
 namespace components {
-	struct LocalScale : public middle::Serializable{
+	struct LocalScale {
 		midMath::Vector3 scale = { 1,1,1 };
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLELOCALSCALE(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectLocalScale(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<LocalScale>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLELOCALSCALE(X)
+        #undef X
+    }
 }

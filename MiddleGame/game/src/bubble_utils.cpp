@@ -47,7 +47,7 @@ namespace bubble {
 	float bubbleAxis = 50;
 	float bubbleFontSize = 150;
 
-	bool pointIntersectBubble(middle::GameState* gameState, middle::Shape& bubbleShape, const midMath::Vector3& point)
+	bool pointIntersectBubble(middle::GameState* gameState, middle::MiddleMan& bubbleShape, const midMath::Vector3& point)
 	{
 		auto bubbleComponent = middle::getComponent<components::BubbleComponent>(bubbleShape);
 		assert(bubbleComponent);
@@ -109,7 +109,7 @@ namespace bubble {
 		}
 	}
 
-	bool shouldSkipRectBound(middle::Shape& shape) {
+	bool shouldSkipRectBound(middle::MiddleMan& shape) {
 		if (!middle::getComponent<components::Rectangle>(shape)) {
 			return true;
 		}
@@ -192,7 +192,7 @@ namespace bubble {
 		}
 	}
 
-	bool buttonClicked(middle::GameState* gameState, middle::Shape& shape, int function)
+	bool buttonClicked(middle::GameState* gameState, middle::MiddleMan& shape, int function)
 	{
 		if (!gameState->middleInputState.editorInput.mouseClicked) {
 			return false;
@@ -254,7 +254,7 @@ namespace bubble {
 	middle::Id topLevelBubble(middle::GameState* gameState)
 	{
 		middle::Id resultId;
-		middle::loopInstances(gameState, [gameState, &resultId](int i, middle::Shape& shape) {
+		middle::loopInstances(gameState, [gameState, &resultId](int i, middle::MiddleMan& shape) {
 			auto bubble = middle::getComponent<components::BubbleComponent>(shape);
 			auto mul = middle::getComponent<components::BubbleMultiplyComponent>(shape);
 			if (!bubble && !mul) {
@@ -272,7 +272,7 @@ namespace bubble {
 
 
 
-	bool isIntersecting(middle::GameState* gameState, middle::Shape& shape) {
+	bool isIntersecting(middle::GameState* gameState, middle::MiddleMan& shape) {
 		auto intersecting = middle::getComponent<components::IntersectingTag>(shape);
 		return intersecting && intersecting->intersectingTop;
 	}
@@ -297,8 +297,8 @@ namespace bubble {
 	}
 
 	bool containerStructureEquals(middle::GameState* gameState, middle::Id idA, middle::Id idB) {
-		middle::Shape& shapeA = middle::getShape(gameState, idA.index);
-		middle::Shape& shapeB = middle::getShape(gameState, idB.index);
+		middle::MiddleMan& shapeA = middle::getShape(gameState, idA.index);
+		middle::MiddleMan& shapeB = middle::getShape(gameState, idB.index);
 		// make sure same type of container
 		auto typeA = getStructureType(gameState, shapeA.id);
 		auto typeB = getStructureType(gameState, shapeB.id);
@@ -323,7 +323,7 @@ namespace bubble {
 	UnitValue unitValue(middle::GameState* gameState, middle::Id& containerId)
 	{
 		UnitValue result;
-		middle::Shape& shape = middle::getShape(gameState, containerId.index);
+		middle::MiddleMan& shape = middle::getShape(gameState, containerId.index);
 		auto unit = middle::getComponent<components::BubbleUnit>(shape);
 		if (unit) {
 			result.scale = unit->value;
@@ -1403,11 +1403,11 @@ namespace bubble {
 
 			auto& realBubbleShape = middle::getShape(gameState, realBubbleId.index);
 
-			middle::Shape nodeShapeProto = middle::createShape(gameState);
+			middle::MiddleMan nodeShapeProto = middle::createShape(gameState);
 			auto node = middle::addComponent<components::AlgebraNode>(nodeShapeProto);
 			auto nodeLoop = middle::addComponent<components::LoopSociety>(nodeShapeProto);
 			node->type = static_cast<int>(getStructureType(gameState, realBubbleId));
-			middle::Shape& nodeShape = middle::registerShape(gameState, nodeShapeProto);
+			middle::MiddleMan& nodeShape = middle::registerShape(gameState, nodeShapeProto);
 			newNodes.push_back(nodeShape.id);
 			parentMap[realBubbleId.index] = nodeShape.id;
 
@@ -1462,12 +1462,12 @@ namespace bubble {
 
 			auto& realBubbleShape = middle::getShape(gameState, realBubbleStackTopId.index);
 
-			middle::Shape nodeShapeProto = middle::createShape(gameState);
+			middle::MiddleMan nodeShapeProto = middle::createShape(gameState);
 			auto node = middle::addComponent<components::AlgebraNode>(nodeShapeProto);
 			auto nodeLoop = middle::addComponent<components::LoopSociety>(nodeShapeProto);
 			node->type = static_cast<int>(getStructureType(gameState, realBubbleStackTopId));
 
-			middle::Shape& newNodeShape = middle::registerShape(gameState, nodeShapeProto);
+			middle::MiddleMan& newNodeShape = middle::registerShape(gameState, nodeShapeProto);
 			newNodes.push_back(newNodeShape.id);
 			parentMap[realBubbleStackTopId.index] = newNodeShape.id;
 
@@ -1514,8 +1514,8 @@ namespace bubble {
 
 
 
-	middle::Shape newBubble(middle::GameState* gameState, const midMath::Vector3& targetPos) {
-		middle::Shape newBubbleShape = middle::createShape(gameState);
+	middle::MiddleMan newBubble(middle::GameState* gameState, const midMath::Vector3& targetPos) {
+		middle::MiddleMan newBubbleShape = middle::createShape(gameState);
 		middle::addComponent<components::BubbleComponent>(newBubbleShape);
 		middle::addComponent<components::MouseGrabbable>(newBubbleShape);
 		middle::addComponent<components::MouseSelectable>(newBubbleShape);
@@ -1538,33 +1538,33 @@ namespace bubble {
 		return newBubbleShape;
 	}
 
-	middle::Shape newUnit(middle::GameState* gameState, const midMath::Vector3& targetPos, bool isNegative)
+	middle::MiddleMan newUnit(middle::GameState* gameState, const midMath::Vector3& targetPos, bool isNegative)
 	{
-		middle::Shape newUnitShape = newBubble(gameState, targetPos);
+		middle::MiddleMan newUnitShape = newBubble(gameState, targetPos);
 		auto unit = middle::addComponent<components::BubbleUnit>(newUnitShape);
 		unit->value = isNegative ? -1 : 1;
 		return newUnitShape;
 	}
 
-	middle::Shape newVariable(middle::GameState* gameState, const std::string& label, const midMath::Vector3& targetPos, bool isNegative)
+	middle::MiddleMan newVariable(middle::GameState* gameState, const std::string& label, const midMath::Vector3& targetPos, bool isNegative)
 	{
-		middle::Shape variableProto = newBubble(gameState, targetPos);
+		middle::MiddleMan variableProto = newBubble(gameState, targetPos);
 		auto varComp = middle::addComponent<components::BubbleVariable>(variableProto);
 		varComp->label = label;
 		varComp->isNegative = isNegative;
 		return variableProto;
 	}
 
-	middle::Shape newEquals(middle::GameState* gameState, const midMath::Vector3& targetPos)
+	middle::MiddleMan newEquals(middle::GameState* gameState, const midMath::Vector3& targetPos)
 	{
-		middle::Shape newBubbleShape = newBubble(gameState, targetPos);
+		middle::MiddleMan newBubbleShape = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleEqualsComponent>(newBubbleShape);
 		return newBubbleShape;
 	}
 
-	middle::Shape newInequals(middle::GameState* gameState, const midMath::Vector3& targetPos, bool equalOr)
+	middle::MiddleMan newInequals(middle::GameState* gameState, const midMath::Vector3& targetPos, bool equalOr)
 	{
-		middle::Shape newBubbleShape = newBubble(gameState, targetPos);
+		middle::MiddleMan newBubbleShape = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleInequaltyComponent>(newBubbleShape);
 		if (equalOr) {
 			middle::addComponent<components::BubbleEqualsComponent>(newBubbleShape);
@@ -1572,37 +1572,37 @@ namespace bubble {
 		return newBubbleShape;
 	}
 
-	middle::Shape newMultiplication(middle::GameState* gameState, const midMath::Vector3& targetPos)
+	middle::MiddleMan newMultiplication(middle::GameState* gameState, const midMath::Vector3& targetPos)
 	{
-		middle::Shape newBubbleShape = newBubble(gameState, targetPos);
+		middle::MiddleMan newBubbleShape = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleMultiplyComponent>(newBubbleShape);
 		return newBubbleShape;
 	}
 
-	middle::Shape newPower(middle::GameState* gameState, const midMath::Vector3& targetPos)
+	middle::MiddleMan newPower(middle::GameState* gameState, const midMath::Vector3& targetPos)
 	{
-		middle::Shape newBubbleShape = newBubble(gameState, targetPos);
+		middle::MiddleMan newBubbleShape = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubblePowerComponent>(newBubbleShape);
 		return newBubbleShape;
 	}
 
-	middle::Shape newFunction(middle::GameState* gameState, const std::string& label, const midMath::Vector3& targetPos)
+	middle::MiddleMan newFunction(middle::GameState* gameState, const std::string& label, const midMath::Vector3& targetPos)
 	{
-		middle::Shape newBubbleShape = newBubble(gameState, targetPos);
+		middle::MiddleMan newBubbleShape = newBubble(gameState, targetPos);
 		auto funcComp = middle::addComponent<components::BubbleFunctionComponent>(newBubbleShape);
 		funcComp->label = label;
 		return newBubbleShape;
 	}
 
-	middle::Shape newSummation(middle::GameState* gameState, const midMath::Vector3& targetPos) {
-		middle::Shape newBubbleShape = newBubble(gameState, targetPos);
+	middle::MiddleMan newSummation(middle::GameState* gameState, const midMath::Vector3& targetPos) {
+		middle::MiddleMan newBubbleShape = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleSummationComponent>(newBubbleShape);
 		return newBubbleShape;
 	}
 
-	middle::Shape newTextBubble(middle::GameState* gameState, const midMath::Vector3& targetPos)
+	middle::MiddleMan newTextBubble(middle::GameState* gameState, const midMath::Vector3& targetPos)
 	{
-		middle::Shape newBubbleShape = newBubble(gameState, targetPos);
+		middle::MiddleMan newBubbleShape = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleTextSizeChangedTag>(newBubbleShape);
 		auto text = middle::addComponent<components::BubbleTextComponent>(newBubbleShape);
 		text->text = R"(Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -1616,45 +1616,45 @@ mollis. Duis eleifend hendrerit ullamcorper.)";
 		return newBubbleShape;
 	}
 
-	middle::Shape newLogicBubble(middle::GameState* gameState, const midMath::Vector3& targetPos)
+	middle::MiddleMan newLogicBubble(middle::GameState* gameState, const midMath::Vector3& targetPos)
 	{
-		middle::Shape logicProto = newBubble(gameState, targetPos);
+		middle::MiddleMan logicProto = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleLogicComponent>(logicProto);
 		return logicProto;
 	}
 
-	middle::Shape newGateBubble(middle::GameState* gameState, const midMath::Vector3& targetPos)
+	middle::MiddleMan newGateBubble(middle::GameState* gameState, const midMath::Vector3& targetPos)
 	{
-		middle::Shape gateProto = newBubble(gameState, targetPos);
+		middle::MiddleMan gateProto = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleGateComponent>(gateProto);
 		return gateProto;
 	}
 
-	middle::Shape newSwapBubble(middle::GameState* gameState, const midMath::Vector3& targetPos) {
-		middle::Shape bubbleProto = newBubble(gameState, targetPos);
+	middle::MiddleMan newSwapBubble(middle::GameState* gameState, const midMath::Vector3& targetPos) {
+		middle::MiddleMan bubbleProto = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleSwapComponent>(bubbleProto);
 		return bubbleProto;
 	}
 
 	middle::Id newSummationWithChildren(middle::GameState* gameState, const midMath::Vector3& targetPos)
 	{
-		middle::Shape newBubbleShape = newBubble(gameState, targetPos);
+		middle::MiddleMan newBubbleShape = newBubble(gameState, targetPos);
 		middle::addComponent<components::BubbleSummationComponent>(newBubbleShape);
-		middle::Shape& container = middle::registerShape(gameState, newBubbleShape);
+		middle::MiddleMan& container = middle::registerShape(gameState, newBubbleShape);
 
-		middle::Shape newIndexProto = newEquals(gameState, targetPos);
-		middle::Shape& index = middle::registerShape(gameState, newIndexProto);
-		middle::Shape indexVarProto = newBubble(gameState, targetPos);
-		middle::Shape& indexVar = middle::registerShape(gameState, indexVarProto);
-		middle::Shape indexValueProto = newBubble(gameState, targetPos);
-		middle::Shape& indexValue = middle::registerShape(gameState, indexValueProto);
+		middle::MiddleMan newIndexProto = newEquals(gameState, targetPos);
+		middle::MiddleMan& index = middle::registerShape(gameState, newIndexProto);
+		middle::MiddleMan indexVarProto = newBubble(gameState, targetPos);
+		middle::MiddleMan& indexVar = middle::registerShape(gameState, indexVarProto);
+		middle::MiddleMan indexValueProto = newBubble(gameState, targetPos);
+		middle::MiddleMan& indexValue = middle::registerShape(gameState, indexValueProto);
 		middle::EditorActionReparent(index.id.index, indexVar.id.index).execute(gameState);
 		middle::EditorActionReparent(index.id.index, indexValue.id.index).execute(gameState);
 
-		middle::Shape newUpperLimitProto = newBubble(gameState, targetPos);
-		middle::Shape& upperLimit = middle::registerShape(gameState, newUpperLimitProto);
-		middle::Shape newSummandProto = newBubble(gameState, targetPos);
-		middle::Shape& summand = middle::registerShape(gameState, newSummandProto);
+		middle::MiddleMan newUpperLimitProto = newBubble(gameState, targetPos);
+		middle::MiddleMan& upperLimit = middle::registerShape(gameState, newUpperLimitProto);
+		middle::MiddleMan newSummandProto = newBubble(gameState, targetPos);
+		middle::MiddleMan& summand = middle::registerShape(gameState, newSummandProto);
 
 		middle::EditorActionReparent(container.id.index, index.id.index).execute(gameState);
 		middle::EditorActionReparent(container.id.index, upperLimit.id.index).execute(gameState);
@@ -1664,8 +1664,8 @@ mollis. Duis eleifend hendrerit ullamcorper.)";
 	}
 
 	middle::Id newPower(middle::GameState* gameState, middle::Id baseId, middle::Id exponentId, const midMath::Vector3& targetPos) {
-		middle::Shape powerProto = bubble::newPower(gameState, targetPos);
-		middle::Shape& powerShape = middle::registerShape(gameState, powerProto);
+		middle::MiddleMan powerProto = bubble::newPower(gameState, targetPos);
+		middle::MiddleMan& powerShape = middle::registerShape(gameState, powerProto);
 		middle::EditorActionReparent(powerShape.id.index, baseId.index).execute(gameState);
 		middle::EditorActionReparent(powerShape.id.index, exponentId.index).execute(gameState);
 		return powerShape.id;
@@ -1676,14 +1676,14 @@ mollis. Duis eleifend hendrerit ullamcorper.)";
 		int s = std::abs(value);
 		middle::Id containerId;
 		if (s > 1) {
-			middle::Shape bubbleProto = newBubble(gameState, targetPos);
-			middle::Shape& bubbleShape = middle::registerShape(gameState, bubbleProto);
+			middle::MiddleMan bubbleProto = newBubble(gameState, targetPos);
+			middle::MiddleMan& bubbleShape = middle::registerShape(gameState, bubbleProto);
 			containerId = bubbleShape.id;
 		}
 		bool isNegative = value < 0;
 		for (int i = 0; i < s; ++i) {
-			middle::Shape unitProto = newUnit(gameState, targetPos + midMath::Vector3{ i * 0.1f, 0,0 }, isNegative);
-			middle::Shape& unitShape = middle::registerShape(gameState, unitProto);
+			middle::MiddleMan unitProto = newUnit(gameState, targetPos + midMath::Vector3{ i * 0.1f, 0,0 }, isNegative);
+			middle::MiddleMan& unitShape = middle::registerShape(gameState, unitProto);
 			if (s > 1) {
 				middle::EditorActionReparent(containerId.index, unitShape.id.index).execute(gameState);
 			}
@@ -1698,8 +1698,8 @@ mollis. Duis eleifend hendrerit ullamcorper.)";
 	middle::Id containerize(middle::GameState* gameState, middle::Id id)
 	{
 		midMath::Vector3 targetPos = middle::getGlobalPosition(gameState, id);
-		middle::Shape bubbleProto = newBubble(gameState, targetPos);
-		middle::Shape& newParent = middle::registerShape(gameState, bubbleProto);
+		middle::MiddleMan bubbleProto = newBubble(gameState, targetPos);
+		middle::MiddleMan& newParent = middle::registerShape(gameState, bubbleProto);
 		middle::EditorActionReparent(newParent.id.index, id.index).execute(gameState);
 		return newParent.id;
 	}

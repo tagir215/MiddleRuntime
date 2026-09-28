@@ -1,21 +1,24 @@
 #include "DeleteComponent.h"
 
 namespace components {
-	void DeleteComponent::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectDeleteComponent(shape, serializer);
 	}
-
-	void DeleteComponent::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectDeleteComponent(shape, deserializer);
 	}
-
-	void DeleteComponent::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectDeleteComponent(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<DeleteComponent>reg("DeleteComponent");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<DeleteComponent>reg("DeleteComponent", refMethods);
 }

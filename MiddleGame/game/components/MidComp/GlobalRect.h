@@ -7,19 +7,17 @@
 
 
 namespace components {
-	struct GlobalRect : public middle::Serializable{
-		float width;
-		float height;
+	struct GlobalRect {
+		float width = 0;
+		float height = 0;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEGLOBALRECT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectGlobalRect(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<GlobalRect>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEGLOBALRECT(X)
+        #undef X
+    }
 }

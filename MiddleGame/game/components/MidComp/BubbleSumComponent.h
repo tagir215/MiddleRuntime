@@ -4,17 +4,15 @@
 #define MIDDLEBUBBLESUMCOMPONENT(X) 
 
 namespace components {
-	struct BubbleSumComponent : public middle::Serializable{
+	struct BubbleSumComponent {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEBUBBLESUMCOMPONENT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectBubbleSumComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<BubbleSumComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLESUMCOMPONENT(X)
+        #undef X
+    }
 }

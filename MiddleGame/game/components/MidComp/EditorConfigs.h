@@ -6,20 +6,17 @@
 	X(visibleGridPointRadiusCount)
 
 namespace components {
-	struct EditorConfigs : public middle::Serializable{
+	struct EditorConfigs {
 		int gridSize = 1;
 		int visibleGridPointRadiusCount = 10;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEEDITORCONFIGS(X)
-#undef X
-		}
 	};
-}
 
+    template<typename V>
+    static void reflectEditorConfigs(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<EditorConfigs>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEEDITORCONFIGS(X)
+        #undef X
+    }
+}

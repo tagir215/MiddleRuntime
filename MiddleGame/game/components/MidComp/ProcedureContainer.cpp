@@ -1,21 +1,24 @@
 #include "ProcedureContainer.h"
 
 namespace components {
-	void ProcedureContainer::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectProcedureContainer(shape, serializer);
 	}
-
-	void ProcedureContainer::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectProcedureContainer(shape, deserializer);
 	}
-
-	void ProcedureContainer::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectProcedureContainer(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<ProcedureContainer>reg("ProcedureContainer");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<ProcedureContainer>reg("ProcedureContainer", refMethods);
 }

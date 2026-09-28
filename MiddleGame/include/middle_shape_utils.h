@@ -42,21 +42,21 @@ namespace middle {
 	// get pos quickly very
 	midMath::Vector3 getLocalPosition(GameState* gameState, middle::Id id);
 	// get shape instance
-	Shape& getShape(GameState* gameState, int index);
+	MiddleMan& getShape(GameState* gameState, int index);
 	// delete shape , updates generational indexes
 	void deleteShape(GameState* gameState, int index, bool deleteComponentsOnly = false);
 	// deletes shapes and its children
 	void deleteShapeRecursive(GameState* gameState, int index, bool deleteComponentsOnly = false);
 	// add shape and updates generations
-	Shape& registerShape(GameState* gameState, middle::Shape shape);
+	MiddleMan& registerShape(GameState* gameState, middle::MiddleMan shape);
 	// add shape and updates generations
-	Shape& registerShapeAtIndex(GameState* gameState, middle::Shape shape, int index);
+	MiddleMan& registerShapeAtIndex(GameState* gameState, middle::MiddleMan shape, int index);
 	// add shape and updates generations
-	Shape& registerAsGhostShape(GameState* gameState, middle::Shape shape);
+	MiddleMan& registerAsGhostShape(GameState* gameState, middle::MiddleMan shape);
 	// add shape, doesn't update generations
-	Shape& insertShape(GameState* gameState, middle::Id& id);
+	MiddleMan& insertShape(GameState* gameState, middle::Id& id);
 	// adds not serialized ghost shape and updates generations
-	Shape& addGhostShape(GameState* gameState);
+	MiddleMan& addGhostShape(GameState* gameState);
 	// move camera in xz plane moving also the target 
 	void moveCameraXZ(midPrimitive::Camera3D& initCamera, const midMath::Vector3& pos);
 	// get shapes selected..
@@ -118,15 +118,15 @@ namespace middle {
 	// notify structural changes for cache updates
 	void notifyStructuralChanges(middle::GameState* gameState, middle::Id id, middle::componentType componentType);
 	// check whether has comp
-	bool hasComp(middle::Shape& shape, int typeId);
+	bool hasComp(middle::MiddleMan& shape, int typeId);
 	// get offset
-	middle::componentOffset getCompOffset(middle::Shape& shape, int typeId);
+	middle::componentOffset getCompOffset(middle::MiddleMan& shape, int typeId);
 	// set offset... these are new
-	void setCompOffset(middle::Shape& shape, int typeId, int offset);
+	void setCompOffset(middle::MiddleMan& shape, int typeId, int offset);
 	// remove comp
-	void removeComp(middle::Shape& shape, int typeId);
+	void removeComp(middle::MiddleMan& shape, int typeId);
 	// create shape... replace all the old initializations!
-	Shape createShape(middle::GameState* gameState);
+	MiddleMan createShape(middle::GameState* gameState);
 	// add to rendering list
 	void queueForRender(middle::GameState* gameState, middle::RenderItem item);
 	// add to ui list

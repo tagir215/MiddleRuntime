@@ -5,19 +5,17 @@
 	X(operationType)
 
 namespace components {
-	struct BubbleMultiplyComponent : public middle::Serializable{
+	struct BubbleMultiplyComponent {
 		int operationType = 0;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEBUBBLEMULTIPLYCOMPONENT(X)
-#undef X
-		}
 	};
 
+
+    template<typename V>
+    static void reflectBubbleMultiplyComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<BubbleMultiplyComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEMULTIPLYCOMPONENT(X)
+        #undef X
+    }
 }

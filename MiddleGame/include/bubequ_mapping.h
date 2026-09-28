@@ -44,7 +44,7 @@ namespace bubequ{
 
 			if (auto unitScope = dynamic_cast<bubequ::Unit*>(currentScope)) {
 				if (unitScope->type == bubequ::UnitType::ZERO) {
-					middle::Shape bubProto = bubble::newBubble(gameState, pos);
+					middle::MiddleMan bubProto = bubble::newBubble(gameState, pos);
 					newNodeId = middle::registerShape(gameState, bubProto).id;
 				}
 				if (unitScope->type == bubequ::UnitType::CONSTANT) {
@@ -54,23 +54,23 @@ namespace bubequ{
 					int s = std::abs(unitScope->value);
 					bool isNegative = unitScope->value < 0;
 					if (s == 1) {
-						middle::Shape varProto = bubble::newVariable(gameState, unitScope->label, pos, isNegative);
-						middle::Shape& varShape = middle::registerShape(gameState, varProto);
+						middle::MiddleMan varProto = bubble::newVariable(gameState, unitScope->label, pos, isNegative);
+						middle::MiddleMan& varShape = middle::registerShape(gameState, varProto);
 						newNodeId = varShape.id;
 					}
 					else {
-						middle::Shape bubbleProto = bubble::newBubble(gameState, pos);
-						middle::Shape& bubbleShape = middle::registerShape(gameState, bubbleProto);
+						middle::MiddleMan bubbleProto = bubble::newBubble(gameState, pos);
+						middle::MiddleMan& bubbleShape = middle::registerShape(gameState, bubbleProto);
 						for (int i = 0; i < s; ++i) {
-							middle::Shape varProto = bubble::newVariable(gameState, unitScope->label, pos, isNegative);
-							middle::Shape& varShape = middle::registerShape(gameState, varProto);
+							middle::MiddleMan varProto = bubble::newVariable(gameState, unitScope->label, pos, isNegative);
+							middle::MiddleMan& varShape = middle::registerShape(gameState, varProto);
 							middle::EditorActionReparent(bubbleShape.id.index, varShape.id.index).execute(gameState);
 						}
 						newNodeId = bubbleShape.id;
 					}
 				}
 				else if (unitScope->type == bubequ::UnitType::TEXT) {
-					middle::Shape bubProto = bubble::newTextBubble(gameState, pos);
+					middle::MiddleMan bubProto = bubble::newTextBubble(gameState, pos);
 					auto textComp = middle::getComponent<components::BubbleTextComponent>(bubProto);
 					textComp->textName = unitScope->label;
 					newNodeId = middle::registerShape(gameState, bubProto).id;
@@ -78,53 +78,53 @@ namespace bubequ{
 			}
 			else if (auto linkScope = dynamic_cast<bubequ::Link*>(currentScope)) {
 				if (linkScope->type == bubequ::LinkType::MULTIPLICATION) {
-					middle::Shape linkProto = bubble::newMultiplication(gameState, pos);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newMultiplication(gameState, pos);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::GREATER) {
-					middle::Shape linkProto = bubble::newInequals(gameState, pos, false);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newInequals(gameState, pos, false);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::GREATER_OR_EQUAL) {
-					middle::Shape linkProto = bubble::newInequals(gameState, pos, true);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newInequals(gameState, pos, true);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::EQUALS) {
-					middle::Shape linkProto = bubble::newEquals(gameState, pos);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newEquals(gameState, pos);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::POWER) {
-					middle::Shape linkProto = bubble::newPower(gameState, pos);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newPower(gameState, pos);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::FUNCTION) {
-					middle::Shape linkProto = bubble::newFunction(gameState, linkScope->text, pos);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newFunction(gameState, linkScope->text, pos);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::SUMMATION) {
-					middle::Shape linkProto = bubble::newSummation(gameState, pos);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newSummation(gameState, pos);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::AND_GATE) {
-					middle::Shape linkProto = bubble::newLogicBubble(gameState, pos);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newLogicBubble(gameState, pos);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::SWAPPER) {
-					middle::Shape linkProto = bubble::newSwapBubble(gameState, pos);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newSwapBubble(gameState, pos);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					newNodeId = linkShape.id;
 				}
 				else if (linkScope->type == bubequ::LinkType::GATE) {
-					middle::Shape linkProto = bubble::newGateBubble(gameState, pos);
-					middle::Shape& linkShape = middle::registerShape(gameState, linkProto);
+					middle::MiddleMan linkProto = bubble::newGateBubble(gameState, pos);
+					middle::MiddleMan& linkShape = middle::registerShape(gameState, linkProto);
 					auto gateComp = middle::getComponent<components::BubbleGateComponent>(linkProto);
 					gateComp->status = linkScope->status;
 					newNodeId = linkShape.id;

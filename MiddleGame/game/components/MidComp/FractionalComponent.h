@@ -4,17 +4,15 @@
 #define MIDDLEFRACTIONALCOMPONENT(X)
 
 namespace components {
-	struct FractionalComponent : public middle::Serializable{
+	struct FractionalComponent {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEFRACTIONALCOMPONENT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectFractionalComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<FractionalComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEFRACTIONALCOMPONENT(X)
+        #undef X
+    }
 }

@@ -1,21 +1,24 @@
 #include "CodeFunction.h"
 
 namespace components {
-	void CodeFunction::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectCodeFunction(shape, serializer);
 	}
-
-	void CodeFunction::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectCodeFunction(shape, deserializer);
 	}
-
-	void CodeFunction::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectCodeFunction(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<CodeFunction>reg("CodeFunction");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<CodeFunction>reg("CodeFunction", refMethods);
 }

@@ -14,7 +14,7 @@ namespace middleTextureType {
 
 
 namespace components {
-	struct TextureComponent : public middle::Serializable {
+	struct TextureComponent  {
 		std::string path;
 		std::string filename;
 		float scale = 1;
@@ -22,18 +22,15 @@ namespace components {
 		midPrimitive::Texture2D texture;
 		bool initialized = false;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLETEXTURECOMPONENT(X)
-#undef X
-		}
 	};
 
-}
+    template<typename V>
+    static void reflectTextureComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<TextureComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETEXTURECOMPONENT(X)
+        #undef X
+    }
 
+}
 

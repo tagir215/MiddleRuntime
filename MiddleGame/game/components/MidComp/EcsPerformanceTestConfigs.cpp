@@ -1,21 +1,24 @@
 #include "EcsPerformanceTestConfigs.h"
 
 namespace components {
-	void EcsPerformanceTestConfigs::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectEcsPerformanceTestConfigs(shape, serializer);
 	}
-
-	void EcsPerformanceTestConfigs::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectEcsPerformanceTestConfigs(shape, deserializer);
 	}
-
-	void EcsPerformanceTestConfigs::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectEcsPerformanceTestConfigs(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<EcsPerformanceTestConfigs>reg("EcsPerformanceTestConfigs");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<EcsPerformanceTestConfigs>reg("EcsPerformanceTestConfigs", refMethods);
 }

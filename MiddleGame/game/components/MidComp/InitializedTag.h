@@ -4,17 +4,15 @@
 #define MIDDLEINITIALIZEDTAG(X) 
 
 namespace components {
-	struct InitializedTag : public middle::Serializable{
+	struct InitializedTag {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEINITIALIZEDTAG(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectInitializedTag(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<InitializedTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINITIALIZEDTAG(X)
+        #undef X
+    }
 }

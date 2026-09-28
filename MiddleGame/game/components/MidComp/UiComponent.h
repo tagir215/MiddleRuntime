@@ -5,20 +5,18 @@
 	X(type)
 
 namespace components {
-	struct UiComponent : public middle::Serializable{
+	struct UiComponent {
 		int type = middle::UNASSIGNED;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEUICOMPONENT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectUiComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<UiComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEUICOMPONENT(X)
+        #undef X
+    }
 }
 
 namespace UiElementTypes {
@@ -34,4 +32,5 @@ namespace UiElementTypes {
 	static int PROCEDURE_INPUT = 9;
 	static int PROCEDURE_BACKGROUND = 10;
 	static int PROCEDURE_SCOPE = 11;
+
 }

@@ -111,7 +111,6 @@ namespace middle {
 	struct MiddleInputState {
 		bool closeGame = false;
 		bool releaseBuild = false;
-		float aspectRatio;
 		float screenWidth;
 		float screenHeight;
 		float frameTime;
@@ -134,6 +133,7 @@ namespace middle {
 		double nearPlaneDistance = 10;
 		double farPlaneDistance = 4000;
 		bool closeGame;
+		ApplicationMode applicationMode;
 	};
 
 }

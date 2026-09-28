@@ -1,21 +1,24 @@
 #include "LoopTag.h"
 
 namespace components {
-	void LoopTag::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectLoopTag(shape, serializer);
 	}
-
-	void LoopTag::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectLoopTag(shape, deserializer);
 	}
-
-	void LoopTag::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectLoopTag(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<LoopTag>reg("LoopTag");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<LoopTag>reg("LoopTag", refMethods);
 }

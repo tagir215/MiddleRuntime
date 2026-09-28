@@ -18,7 +18,7 @@
 	X(infiniteMass) 
 
 namespace components {
-	struct PhysicsData : public middle::Serializable{
+	struct PhysicsData {
 		float mass = 1;
 		float invMass = 1;
 		float momentOfInertia = 1;
@@ -34,14 +34,13 @@ namespace components {
 		float accZ = 0;
 		bool infiniteMass = false;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEPHYSICSDATA(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectPhysicsData(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<PhysicsData>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPHYSICSDATA(X)
+        #undef X
+    }
 }

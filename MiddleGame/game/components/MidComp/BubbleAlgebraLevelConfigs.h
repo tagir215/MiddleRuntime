@@ -6,20 +6,18 @@
 	X(levelName) 
 
 namespace components {
-	struct BubbleAlgebraLevelConfigs : public middle::Serializable{
+	struct BubbleAlgebraLevelConfigs {
 		int allowedMoves = 5;
 		std::string levelName = "";
 		bool initialized = false;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEBUBBLEALGEBRALEVELCONFIGS(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectBubbleAlgebraLevelConfigs(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<BubbleAlgebraLevelConfigs>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEALGEBRALEVELCONFIGS(X)
+        #undef X
+    }
 }

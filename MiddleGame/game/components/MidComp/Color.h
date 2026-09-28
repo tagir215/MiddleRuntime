@@ -9,19 +9,19 @@
 	
 
 namespace components {
-	struct Color : public middle::Serializable{
+	struct Color {
 		float colorR;
 		float colorG;
 		float colorB;
 		float colorA;
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-		template<typename V>
-		void reflect(V& v) {
-		#define X(f) v(#f, f);
-			MIDDLECOLOR(X)
-		#undef X
-		}
+
 	};
+
+    template<typename V>
+    static void reflectColor(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<Color>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLECOLOR(X)
+        #undef X
+    }
 }

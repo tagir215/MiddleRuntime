@@ -83,7 +83,6 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/lib/imgui-master)
 
 target_include_directories(rlImGui PUBLIC ${CMAKE_SOURCE_DIR}/lib/raylib-5.5_win64_msvc16/include)
 
-target_link_libraries(game PUBLIC imgui_shared)
 target_link_libraries(middle PUBLIC raylib rlImGui)
 target_link_libraries(rlImGui PUBLIC raylib winmm)
 

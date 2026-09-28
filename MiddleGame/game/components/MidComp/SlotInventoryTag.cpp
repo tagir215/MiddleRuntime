@@ -1,21 +1,24 @@
 #include "SlotInventoryTag.h"
 
 namespace components {
-	void SlotInventoryTag::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectSlotInventoryTag(shape, serializer);
 	}
-
-	void SlotInventoryTag::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectSlotInventoryTag(shape, deserializer);
 	}
-
-	void SlotInventoryTag::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectSlotInventoryTag(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<SlotInventoryTag>reg("SlotInventoryTag");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<SlotInventoryTag>reg("SlotInventoryTag", refMethods);
 }

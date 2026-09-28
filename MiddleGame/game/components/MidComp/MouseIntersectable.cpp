@@ -1,21 +1,24 @@
 #include "MouseIntersectable.h"
 
 namespace components {
-	void MouseIntersectable::serialize(std::ostream& ostream) {
-		//middle::Serializer serializer{ ostream };
-		//reflect(serializer);
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
+		middle::Serializer serializer{ ostream };
+		reflectMouseIntersectable(shape, serializer);
 	}
-
-	void MouseIntersectable::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
-		//middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		//reflect(deserializer);
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
+		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
+		reflectMouseIntersectable(shape, deserializer);
 	}
-
-	void MouseIntersectable::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectMouseIntersectable(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<MouseIntersectable>reg("MouseIntersectable");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<MouseIntersectable>reg("MouseIntersectable", refMethods);
 }

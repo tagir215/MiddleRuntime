@@ -272,6 +272,7 @@ namespace middle {
 		}
 	};
 
+
 	struct FieldInfo {
 		const char* name;
 		void* value;
@@ -289,11 +290,5 @@ namespace middle {
 		}
 	};
 
-	struct Serializable {
-		virtual ~Serializable() = default;
-		virtual void serialize(std::ostream& istream) = 0;
-		virtual void deserialize(const std::vector<std::string>& buffer, int indexOffset) = 0;
-		virtual void getFields(std::vector<FieldInfo>& fields, int* size) = 0;
-	};
 
 }

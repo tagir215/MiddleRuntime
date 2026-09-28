@@ -11,11 +11,16 @@
 namespace middle {
 	struct Component;
 
+	struct ComponentReflectionMethods {
+		void(*serialize)(middle::MiddleMan&, std::ostream&);
+		void(*deserialize)(middle::MiddleMan&, const std::vector<std::string>&, int);
+		void(*getFields)(middle::MiddleMan&, std::vector<middle::FieldInfo>&, int*);
+	};
+
 	struct IComponentVectorContainer {
 		virtual ~IComponentVectorContainer() = default;
 		virtual int grow() = 0;
 		virtual void shrink(int componentOffset) = 0;
-		virtual Serializable* getSerializable(int componentOffset) = 0;
 	};
 	template<typename T> 
 	struct ComponentVectorContainer : public IComponentVectorContainer {
@@ -37,10 +42,6 @@ namespace middle {
 			freeList.push_back(componentOffset);
 			vectorData[componentOffset] = T();
 		}
-
-		Serializable* getSerializable(int componentOffset) {
-			return static_cast<Serializable*>(&vectorData[componentOffset]);
-		}
 	};
 
 	inline int globalTypeCounter = 0;
@@ -53,6 +54,8 @@ namespace middle {
 	extern std::unordered_map <std::string, int> componentTypeMap;
 	extern std::unordered_map <int, std::string> componentNameMap;
 	extern std::unordered_map <int, std::unique_ptr<IComponentVectorContainer>> componentListMap;
+	extern std::vector<ComponentReflectionMethods>reflectionMethodVector;
+
 
 	template<typename T>
 	inline ComponentVectorContainer<T>* getComponentVectorContainer() {
@@ -63,7 +66,7 @@ namespace middle {
 	}
 
 	template<typename T>
-	inline void registerToComponentTypes(const std::string& componentName) {
+	inline void registerToComponentTypes(const std::string& componentName, const ComponentReflectionMethods& reflectionMethods) {
 		int typeId = getTypeId<T>();
 		componentTypeMap[componentName] = typeId;
 		componentNameMap[typeId] = componentName;
@@ -71,10 +74,11 @@ namespace middle {
 		auto vectorContainer = std::make_unique<ComponentVectorContainer<T>>();
 		vectorContainer->vectorData = std::vector<T>();
 		componentListMap[typeId] = std::move(vectorContainer);
+		reflectionMethodVector.push_back(reflectionMethods);
 	}
 
 	template<typename T>
-	inline T* getComponent(Shape& shape) {
+	inline T* getComponent(MiddleMan& shape) {
 		int typeId = getTypeId<T>();
 		int offset = shape.componentOffsets[typeId];
 		if (offset == middle::UNASSIGNED) {
@@ -87,19 +91,17 @@ namespace middle {
 
 
 	template<typename T>
-	inline T* addComponent(Shape& shape) {
+	inline T* addComponent(MiddleMan& shape) {
 		int typeId = getTypeId<T>();
 		ComponentVectorContainer<T>* vectorContainer = getComponentVectorContainer<T>();
-		auto& data = vectorContainer->vectorData;
 		int nextIndex = vectorContainer->grow();
-		T t;
-		data[nextIndex] = t;
+		vectorContainer->vectorData[nextIndex] = T();
 		setCompOffset(shape, typeId, nextIndex);
-		return &data[nextIndex];
+		return &vectorContainer->vectorData[nextIndex];
 	}
 
 	template<typename T>
-	inline void deleteComponent(Shape& shape) {
+	inline void deleteComponent(MiddleMan& shape) {
 		int typeId = getTypeId<T>();
 		ComponentVectorContainer<T>* vectorContainer = getComponentVectorContainer<T>();
 		int offset = getCompOffset(shape, typeId);
@@ -107,4 +109,7 @@ namespace middle {
 		removeComp(shape, typeId);
 	}
 
+	inline ComponentReflectionMethods& getComponentReflectionMethods(int typeId) {
+		return reflectionMethodVector[typeId];
+	}
 }

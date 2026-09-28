@@ -1,21 +1,24 @@
 #include "Cuboid.h"
 
 namespace components {
-	void Cuboid::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectCuboid(shape, serializer);
 	}
-
-	void Cuboid::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectCuboid(shape, deserializer);
 	}
-
-	void Cuboid::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectCuboid(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<Cuboid>reg("Cuboid");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<Cuboid>reg("Cuboid", refMethods);
 }

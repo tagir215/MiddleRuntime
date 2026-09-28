@@ -5,23 +5,21 @@
 	X(rotation)
 
 namespace components {
-	struct Rotation : public middle::Serializable{
+	struct Rotation {
 		midMath::Quaternion rotation;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEROTATION(X)
-#undef X
-		}
 	};
 
+    template<typename V>
+    static void reflectRotation(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<Rotation>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEROTATION(X)
+        #undef X
+    }
 }
 
 namespace middle {
 	const midMath::Vector3 ROTATION_FORWARD = { 0,1,0 };
+
 }

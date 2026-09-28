@@ -1,21 +1,24 @@
 #include "ComponentRefParent.h"
 
 namespace components {
-	void ComponentRefParent::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectComponentRefParent(shape, serializer);
 	}
-
-	void ComponentRefParent::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectComponentRefParent(shape, deserializer);
 	}
-
-	void ComponentRefParent::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectComponentRefParent(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<ComponentRefParent>reg("ComponentRefParent");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<ComponentRefParent>reg("ComponentRefParent", refMethods);
 }

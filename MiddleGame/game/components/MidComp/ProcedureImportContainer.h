@@ -5,19 +5,17 @@
 	X(bubbleRef)
 
 namespace components {
-	struct ProcedureImportContainer : public middle::Serializable{
+	struct ProcedureImportContainer {
 		std::string loadedProcedureName = "";
 		middle::Id bubbleRef;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEPROCEDUREIMPORTCONTAINER(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectProcedureImportContainer(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<ProcedureImportContainer>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPROCEDUREIMPORTCONTAINER(X)
+        #undef X
+    }
 }

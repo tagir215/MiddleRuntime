@@ -5,18 +5,16 @@
 	X(pos)
 
 namespace components {
-	struct LocalPosition : public middle::Serializable{
+	struct LocalPosition {
 		midMath::Vector3 pos = { 0,0,0 };
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLELOCALPOSITION(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectLocalPosition(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<LocalPosition>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLELOCALPOSITION(X)
+        #undef X
+    }
 }

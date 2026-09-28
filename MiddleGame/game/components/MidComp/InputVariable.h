@@ -8,20 +8,18 @@
 	X(startPointNodeId)
 
 namespace components {
-	struct InputVariable : public middle::Serializable{
+	struct InputVariable {
 		middle::Id unitRef;
 		middle::Id rootNodeId;
 		middle::Id startPointNodeId;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEINPUTVARIABLE(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectInputVariable(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<InputVariable>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINPUTVARIABLE(X)
+        #undef X
+    }
 }

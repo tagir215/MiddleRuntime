@@ -4,16 +4,15 @@
 #define MIDDLESELECTEDCOMPONENT(X) 
 
 namespace components {
-	struct SelectedComponent : public middle::Serializable{
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
+	struct SelectedComponent {
 
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLESELECTEDCOMPONENT(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectSelectedComponent(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<SelectedComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESELECTEDCOMPONENT(X)
+        #undef X
+    }
 }

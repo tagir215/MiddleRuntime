@@ -1,21 +1,24 @@
 #include "UnIntersectableWindowComponent.h"
 
 namespace components {
-	void UnIntersectableWindowComponent::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectUnIntersectableWindowComponent(shape, serializer);
 	}
-
-	void UnIntersectableWindowComponent::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectUnIntersectableWindowComponent(shape, deserializer);
 	}
-
-	void UnIntersectableWindowComponent::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectUnIntersectableWindowComponent(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<UnIntersectableWindowComponent>reg("UnIntersectableWindowComponent");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<UnIntersectableWindowComponent>reg("UnIntersectableWindowComponent", refMethods);
 }

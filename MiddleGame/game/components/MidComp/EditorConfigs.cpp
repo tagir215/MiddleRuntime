@@ -1,21 +1,24 @@
 #include "EditorConfigs.h"
 
 namespace components {
-	void EditorConfigs::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectEditorConfigs(shape, serializer);
 	}
-
-	void EditorConfigs::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectEditorConfigs(shape, deserializer);
 	}
-
-	void EditorConfigs::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectEditorConfigs(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<EditorConfigs>reg("EditorConfigs");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<EditorConfigs>reg("EditorConfigs", refMethods);
 }

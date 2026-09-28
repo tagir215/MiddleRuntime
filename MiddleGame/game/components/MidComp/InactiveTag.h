@@ -4,17 +4,15 @@
 #define MIDDLEINACTIVETAG(X) 
 
 namespace components {
-	struct InactiveTag : public middle::Serializable{
+	struct InactiveTag {
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLEINACTIVETAG(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectInactiveTag(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<InactiveTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINACTIVETAG(X)
+        #undef X
+    }
 }

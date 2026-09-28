@@ -1,21 +1,24 @@
 #include "InventoryItem.h"
 
 namespace components {
-	void InventoryItem::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectInventoryItem(shape, serializer);
 	}
-
-	void InventoryItem::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectInventoryItem(shape, deserializer);
 	}
-
-	void InventoryItem::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectInventoryItem(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<InventoryItem>reg("InventoryItem");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<InventoryItem>reg("InventoryItem", refMethods);
 }

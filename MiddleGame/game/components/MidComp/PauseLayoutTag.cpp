@@ -1,21 +1,24 @@
 #include "PauseLayoutTag.h"
 
 namespace components {
-	void PauseLayoutTag::serialize(std::ostream& ostream) {
+	static void serialize(middle::MiddleMan& shape, std::ostream& ostream) {
 		middle::Serializer serializer{ ostream };
-		reflect(serializer);
+		reflectPauseLayoutTag(shape, serializer);
 	}
-
-	void PauseLayoutTag::deserialize(const std::vector<std::string>& buffer, int indexOffset) {
+	static void deserialize(middle::MiddleMan& shape, const std::vector<std::string>& buffer, int indexOffset) {
 		middle::Deserializer deserializer{ buffer, indexOffset, 0 };
-		reflect(deserializer);
+		reflectPauseLayoutTag(shape, deserializer);
 	}
-
-	void PauseLayoutTag::getFields(std::vector<middle::FieldInfo>& fields, int* size)
+	static void getFields(middle::MiddleMan& shape, std::vector<middle::FieldInfo>& fields, int* size)
 	{
 		middle::FieldCollector collector{ fields, size };
-		reflect(collector);
+		reflectPauseLayoutTag(shape, collector);
 	}
-
-	static middle::ComponentRegistrar<PauseLayoutTag>reg("PauseLayoutTag");
+	static middle::ComponentReflectionMethods refMethods = 
+	{
+		&serialize,
+		&deserialize,
+		&getFields
+	};
+	static middle::ComponentRegistrar<PauseLayoutTag>reg("PauseLayoutTag", refMethods);
 }

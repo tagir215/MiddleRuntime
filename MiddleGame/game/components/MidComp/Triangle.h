@@ -6,19 +6,17 @@
 	X(height)
 
 namespace components {
-	struct Triangle : public middle::Serializable{
+	struct Triangle {
 		float width;
 		float height;
 
-		void serialize(std::ostream& ostream) override;
-		void deserialize(const std::vector<std::string>& buffer, int indexOffset) override;
-		void getFields(std::vector<middle::FieldInfo>& fields, int* size) override;
-
-		template<typename V>
-		void reflect(V& v) {
-#define X(f) v(#f, f);
-			MIDDLETRIANGLE(X)
-#undef X
-		}
 	};
+
+    template<typename V>
+    static void reflectTriangle(middle::MiddleMan& shape, V& v) {
+        auto comp = middle::getComponent<Triangle>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETRIANGLE(X)
+        #undef X
+    }
 }
