@@ -6,9 +6,17 @@
 	X(label)
 
 namespace components {
-	struct OutputVariable : public middle::Serializable{
+	struct OutputVariable {
 		middle::Id unitRef;
 		std::string label = "";
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<OutputVariable>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEOUTPUTVARIABLE(X)
+        #undef X
+    }
 }

@@ -8,10 +8,18 @@
 	X(startPointNodeId)
 
 namespace components {
-	struct InputVariable : public middle::Serializable{
+	struct InputVariable {
 		middle::Id unitRef;
 		middle::Id rootNodeId;
 		middle::Id startPointNodeId;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<InputVariable>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINPUTVARIABLE(X)
+        #undef X
+    }
 }

@@ -4,7 +4,15 @@
 #define MIDDLEGRABBEDTAG(X)
 
 namespace components {
-	struct GrabbedTag : public middle::Serializable{
+	struct GrabbedTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<GrabbedTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEGRABBEDTAG(X)
+        #undef X
+    }
 }

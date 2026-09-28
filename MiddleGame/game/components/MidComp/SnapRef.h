@@ -4,7 +4,15 @@
 #define MIDDLESNAPREF(X) 
 
 namespace components {
-	struct SnapRef : public middle::Serializable{
+	struct SnapRef {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<SnapRef>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESNAPREF(X)
+        #undef X
+    }
 }

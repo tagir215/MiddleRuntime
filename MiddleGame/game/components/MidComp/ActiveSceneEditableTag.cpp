@@ -20,5 +20,5 @@ namespace components {
 		&deserialize,
 		&getFields
 	};
-	static middle::ComponentRegistrar<ActiveSceneEditableTag>reg("ActiveSceneEditableTag", refMethods);
+	static middle::ComponentRegistrar<components::ActiveSceneSelectableTag>reg("ActiveSceneEditableTag", refMethods);
 }

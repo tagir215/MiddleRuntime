@@ -4,7 +4,15 @@
 #define MIDDLEBUBBLEPROCEDURECOMPONENT(X) 
 
 namespace components {
-	struct BubbleProcedureComponent : public middle::Serializable{
+	struct BubbleProcedureComponent {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleProcedureComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEPROCEDURECOMPONENT(X)
+        #undef X
+    }
 }

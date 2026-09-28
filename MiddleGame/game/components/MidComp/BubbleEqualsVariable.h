@@ -4,11 +4,19 @@
 #define MIDDLEBUBBLEEQUALSVARIABLE(X) 
 
 namespace components {
-	struct BubbleEqualsVariable : public middle::Serializable{
+	struct BubbleEqualsVariable {
 		std::string variableLabel;
 		bool wantsToReplaceVariable = false;
 		bool wantsToReplaceBubble = false;
 		middle::Id matchingIdRef;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleEqualsVariable>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEEQUALSVARIABLE(X)
+        #undef X
+    }
 }

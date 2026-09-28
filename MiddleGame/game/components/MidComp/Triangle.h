@@ -6,9 +6,17 @@
 	X(height)
 
 namespace components {
-	struct Triangle : public middle::Serializable{
+	struct Triangle {
 		float width;
 		float height;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Triangle>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETRIANGLE(X)
+        #undef X
+    }
 }

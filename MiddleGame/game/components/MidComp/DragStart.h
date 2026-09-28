@@ -5,7 +5,7 @@
 	X(dragStartPos)
 
 namespace components {
-	struct DragStart : public middle::Serializable{
+	struct DragStart {
 		midMath::Vector3 dragStartPos;
 		midMath::Vector3 gizmoPos;
 		midMath::Vector3 axis;
@@ -16,4 +16,12 @@ namespace components {
 		midMath::Vector3 initScale;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<DragStart>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEDRAGSTART(X)
+        #undef X
+    }
 }

@@ -14,7 +14,7 @@ namespace middleTextureType {
 
 
 namespace components {
-	struct TextureComponent : public middle::Serializable {
+	struct TextureComponent  {
 		std::string path;
 		std::string filename;
 		float scale = 1;
@@ -27,3 +27,11 @@ namespace components {
 }
 
 
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<TextureComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETEXTURECOMPONENT(X)
+        #undef X
+    }
+}

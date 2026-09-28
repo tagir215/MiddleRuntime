@@ -5,7 +5,15 @@
 	X(memberIds)
 
 namespace components {
-	struct ComponentRefParent : public middle::Serializable{
+	struct ComponentRefParent {
 		std::vector<middle::Id>memberIds;
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<ComponentRefParent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLECOMPONENTREFPARENT(X)
+        #undef X
+    }
 }

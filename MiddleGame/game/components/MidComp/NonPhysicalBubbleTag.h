@@ -4,7 +4,15 @@
 #define MIDDLENONPHYSICALBUBBLETAG(X)
 
 namespace components {
-	struct NonPhysicalBubbleTag : public middle::Serializable{
+	struct NonPhysicalBubbleTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<NonPhysicalBubbleTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLENONPHYSICALBUBBLETAG(X)
+        #undef X
+    }
 }

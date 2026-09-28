@@ -4,6 +4,14 @@
 #define MIDDLEACTIVESCENEEDITABLETAG(X) 
 
 namespace components {
-	struct ActiveSceneSelectableTag : public middle::Serializable{
+	struct ActiveSceneSelectableTag {
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<ActiveSceneEditableTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEACTIVESCENEEDITABLETAG(X)
+        #undef X
+    }
 }

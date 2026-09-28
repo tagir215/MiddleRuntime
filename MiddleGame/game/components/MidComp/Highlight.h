@@ -4,7 +4,15 @@
 #define MIDDLEHIGHLIGHT(X) 
 
 namespace components {
-	struct Highlight : public middle::Serializable{
+	struct Highlight {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Highlight>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEHIGHLIGHT(X)
+        #undef X
+    }
 }

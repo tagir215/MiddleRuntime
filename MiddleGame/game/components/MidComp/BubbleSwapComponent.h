@@ -16,9 +16,17 @@ namespace components {
 		SWAP_ENABLED
 	};
 
-	struct BubbleSwapComponent : public middle::Serializable{
+	struct BubbleSwapComponent {
 		int activeIndex = 0;
 		SwapComponentStatus status;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleSwapComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLESWAPCOMPONENT(X)
+        #undef X
+    }
 }

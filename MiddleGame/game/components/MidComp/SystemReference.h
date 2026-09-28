@@ -5,8 +5,16 @@
 	X(systemName)
 
 namespace components {
-	struct SystemReference : public middle::Serializable{
+	struct SystemReference {
 		std::string systemName;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<SystemReference>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESYSTEMREFERENCE(X)
+        #undef X
+    }
 }

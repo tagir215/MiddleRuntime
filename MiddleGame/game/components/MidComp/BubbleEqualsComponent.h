@@ -10,7 +10,15 @@ namespace components {
 		EQUALS_RIGHT
 	};
 
-	struct BubbleEqualsComponent : public middle::Serializable{
+	struct BubbleEqualsComponent {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleEqualsComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEEQUALSCOMPONENT(X)
+        #undef X
+    }
 }

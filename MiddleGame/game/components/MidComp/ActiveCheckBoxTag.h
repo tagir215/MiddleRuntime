@@ -4,7 +4,15 @@
 #define MIDDLEACTIVECHECKBOXTAG(X) 
 
 namespace components {
-	struct ActiveCheckBoxTag : public middle::Serializable{
+	struct ActiveCheckBoxTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<ActiveCheckBoxTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEACTIVECHECKBOXTAG(X)
+        #undef X
+    }
 }

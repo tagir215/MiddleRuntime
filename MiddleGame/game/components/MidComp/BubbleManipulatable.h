@@ -4,7 +4,15 @@
 #define MIDDLEBUBBLEMANIPULATABLE(X) 
 
 namespace components {
-	struct BubbleManipulatable : public middle::Serializable{
+	struct BubbleManipulatable {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleManipulatable>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEMANIPULATABLE(X)
+        #undef X
+    }
 }

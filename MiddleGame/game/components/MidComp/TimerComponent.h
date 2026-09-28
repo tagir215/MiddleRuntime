@@ -5,8 +5,16 @@
 	X(timeLeft)
 
 namespace components {
-	struct TimerComponent : public middle::Serializable{
+	struct TimerComponent {
 		float timeLeft = 0;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<TimerComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETIMERCOMPONENT(X)
+        #undef X
+    }
 }

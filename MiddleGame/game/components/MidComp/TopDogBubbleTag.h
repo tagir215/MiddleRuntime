@@ -4,7 +4,15 @@
 #define MIDDLETOPDOGBUBBLETAG(X)
 
 namespace components {
-	struct TopDogBubbleTag : public middle::Serializable{
+	struct TopDogBubbleTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<TopDogBubbleTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETOPDOGBUBBLETAG(X)
+        #undef X
+    }
 }

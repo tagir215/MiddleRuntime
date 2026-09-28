@@ -13,7 +13,7 @@
 	X(active)
 
 namespace components {
-	struct CameraComponent : public middle::Serializable{
+	struct CameraComponent {
 		float targetX;
 		float targetY;
 		float targetZ;
@@ -29,4 +29,12 @@ namespace components {
 
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<CameraComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLECAMERACOMPONENT(X)
+        #undef X
+    }
 }

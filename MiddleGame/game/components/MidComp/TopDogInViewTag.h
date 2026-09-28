@@ -4,7 +4,15 @@
 #define MIDDLETOPDOGINVIEWTAG(X) 
 
 namespace components {
-	struct TopDogInViewTag : public middle::Serializable{
+	struct TopDogInViewTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<TopDogInViewTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETOPDOGINVIEWTAG(X)
+        #undef X
+    }
 }

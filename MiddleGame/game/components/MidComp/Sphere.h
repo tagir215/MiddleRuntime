@@ -5,7 +5,7 @@
 	X(radius)
 
 namespace components {
-	struct Sphere : public middle::Serializable{
+	struct Sphere {
 		float radius;
 	};
 
@@ -16,4 +16,12 @@ namespace components {
 		MIDDLESPHERE(X)
 #undef X
 	}
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Sphere>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESPHERE(X)
+        #undef X
+    }
 }

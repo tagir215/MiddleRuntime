@@ -5,9 +5,17 @@
 	X(path)
 
 namespace components {
-	struct ModelComponent : public middle::Serializable{
+	struct ModelComponent {
 		std::string path;
 		Model model;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Model>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEMODEL(X)
+        #undef X
+    }
 }

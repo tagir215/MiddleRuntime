@@ -4,7 +4,15 @@
 #define MIDDLEPROCEDUREINPUTVARIABLE(X) 
 
 namespace components {
-	struct ProcedureInputVariable : public middle::Serializable{
+	struct ProcedureInputVariable {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<ProcedureInputVariable>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPROCEDUREINPUTVARIABLE(X)
+        #undef X
+    }
 }

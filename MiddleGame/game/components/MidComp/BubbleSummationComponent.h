@@ -15,7 +15,15 @@ namespace components {
 		INDEX_VALUE
 	};
 
-	struct BubbleSummationComponent : public middle::Serializable{
+	struct BubbleSummationComponent {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleSummationComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLESUMMATIONCOMPONENT(X)
+        #undef X
+    }
 }

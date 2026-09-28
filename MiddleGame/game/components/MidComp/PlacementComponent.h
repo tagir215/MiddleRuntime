@@ -4,8 +4,16 @@
 #define MIDDLEPLACEMENTCOMPONENT(X) 
 
 namespace components {
-	struct PlacementComponent : public middle::Serializable{
+	struct PlacementComponent {
 		bool grabbing = true;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<PlacementComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPLACEMENTCOMPONENT(X)
+        #undef X
+    }
 }

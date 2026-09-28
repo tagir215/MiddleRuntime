@@ -5,8 +5,16 @@
 	X(type)
 
 namespace components {
-	struct IfComponent : public middle::Serializable{
+	struct IfComponent {
 		int type = 0;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<IfComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEIFCOMPONENT(X)
+        #undef X
+    }
 }

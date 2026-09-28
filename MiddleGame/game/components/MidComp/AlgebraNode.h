@@ -12,7 +12,7 @@
 
 
 namespace components {
-	struct AlgebraNode : public middle::Serializable{
+	struct AlgebraNode {
 		int type = middle::UNASSIGNED;
 		std::string variableLabel = "";
 		float value = 0;
@@ -31,5 +31,13 @@ namespace components {
 		MULTIPLICATION,
 		EQUALS,
 	};
-}
 
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<AlgebraNode>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEALGEBRANODE(X)
+        #undef X
+    }
+
+}

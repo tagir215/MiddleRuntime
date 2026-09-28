@@ -14,7 +14,7 @@
 	X(visible) 
 
 namespace components {
-	struct Text : public middle::Serializable{
+	struct Text {
 		std::string text = "Text";
 		float fontColorR = 255;
 		float fontColorG = 255;
@@ -27,4 +27,12 @@ namespace components {
 		bool visible = true;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Text>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLETEXT(X)
+        #undef X
+    }
 }

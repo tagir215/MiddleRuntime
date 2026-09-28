@@ -9,6 +9,14 @@ namespace components {
 		INEQUAL_GREATER
 	};
 
-	struct BubbleInequaltyComponent : public middle::Serializable {
+	struct BubbleInequaltyComponent  {
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleInequaltyComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEINEQUALTYCOMPONENT(X)
+        #undef X
+    }
 }

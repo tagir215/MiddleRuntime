@@ -5,8 +5,16 @@
 	X(pos)
 
 namespace components {
-	struct LocalPosition : public middle::Serializable{
+	struct LocalPosition {
 		midMath::Vector3 pos = { 0,0,0 };
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<LocalPosition>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLELOCALPOSITION(X)
+        #undef X
+    }
 }

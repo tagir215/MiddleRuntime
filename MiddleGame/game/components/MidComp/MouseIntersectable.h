@@ -5,7 +5,15 @@
 
 
 namespace components {
-	struct MouseIntersectable : public middle::Serializable{
+	struct MouseIntersectable {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<MouseIntersectable>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEMOUSEINTERSECTABLE(X)
+        #undef X
+    }
 }

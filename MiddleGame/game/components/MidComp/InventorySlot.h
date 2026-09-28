@@ -6,9 +6,17 @@
 	X(slotIndex)
 
 namespace components {
-	struct InventorySlot : public middle::Serializable{
+	struct InventorySlot {
 		int inventoryIndex = -1;
 		int slotIndex = -1;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<InventorySlot>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINVENTORYSLOT(X)
+        #undef X
+    }
 }

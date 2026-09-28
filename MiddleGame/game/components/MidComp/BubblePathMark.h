@@ -4,8 +4,16 @@
 #define MIDDLEBUBBLEPATHMARK(X) 
 
 namespace components {
-	struct BubblePathMark : public middle::Serializable{
+	struct BubblePathMark {
 		size_t stamp = 0;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubblePathMark>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEPATHMARK(X)
+        #undef X
+    }
 }

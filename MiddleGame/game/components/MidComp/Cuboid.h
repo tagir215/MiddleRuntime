@@ -7,10 +7,18 @@
 	X(length)
 
 namespace components {
-	struct Cuboid : public middle::Serializable{
+	struct Cuboid {
 		float width = 0;
 		float height = 0;
 		float length = 0;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Cuboid>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLECUBOID(X)
+        #undef X
+    }
 }

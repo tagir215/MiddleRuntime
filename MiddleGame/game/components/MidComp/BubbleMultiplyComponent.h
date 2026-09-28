@@ -5,9 +5,17 @@
 	X(operationType)
 
 namespace components {
-	struct BubbleMultiplyComponent : public middle::Serializable{
+	struct BubbleMultiplyComponent {
 		int operationType = 0;
 
 	};
 
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleMultiplyComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEMULTIPLYCOMPONENT(X)
+        #undef X
+    }
 }

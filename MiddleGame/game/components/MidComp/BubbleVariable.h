@@ -7,9 +7,17 @@
 
 
 namespace components {
-	struct BubbleVariable : public middle::Serializable{
+	struct BubbleVariable {
 		std::string label;
 		bool isNegative = false;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleVariable>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEVARIABLE(X)
+        #undef X
+    }
 }

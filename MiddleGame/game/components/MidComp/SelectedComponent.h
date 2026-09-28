@@ -4,7 +4,15 @@
 #define MIDDLESELECTEDCOMPONENT(X) 
 
 namespace components {
-	struct SelectedComponent : public middle::Serializable{
+	struct SelectedComponent {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<SelectedComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESELECTEDCOMPONENT(X)
+        #undef X
+    }
 }

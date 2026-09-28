@@ -4,8 +4,16 @@
 #define MIDDLEPAUSELAYOUTTAG(X) 
 
 namespace components {
-	struct PauseLayoutTag : public middle::Serializable{
+	struct PauseLayoutTag {
 		float timeLeft = 0;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<PauseLayoutTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPAUSELAYOUTTAG(X)
+        #undef X
+    }
 }

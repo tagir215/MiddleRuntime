@@ -5,8 +5,16 @@
 	X(text)
 
 namespace components {
-	struct EditorText : public middle::Serializable{
+	struct EditorText {
 		std::string text;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<EditorText>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEEDITORTEXT(X)
+        #undef X
+    }
 }

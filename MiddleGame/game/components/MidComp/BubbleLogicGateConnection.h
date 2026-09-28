@@ -5,8 +5,16 @@
 	X(connectionId)
 
 namespace components {
-	struct BubbleLogicGateConnection : public middle::Serializable{
+	struct BubbleLogicGateConnection {
 		middle::Id connectionId;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleLogicGateConnection>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLELOGICGATECONNECTION(X)
+        #undef X
+    }
 }

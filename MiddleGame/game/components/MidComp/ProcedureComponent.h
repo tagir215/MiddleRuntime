@@ -4,8 +4,16 @@
 #define MIDDLEPROCEDURECOMPONENT(X)
 
 namespace components {
-	struct ProcedureComponent : public middle::Serializable{
+	struct ProcedureComponent {
 
 	};
 }
 
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<ProcedureComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPROCEDURECOMPONENT(X)
+        #undef X
+    }
+}

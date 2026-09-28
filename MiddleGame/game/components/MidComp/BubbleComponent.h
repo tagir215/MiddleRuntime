@@ -5,7 +5,14 @@
 
 
 namespace components {
-	struct BubbleComponent : public middle::Serializable{
+	struct BubbleComponent {
 	};
-}
 
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLECOMPONENT(X)
+        #undef X
+    }
+}

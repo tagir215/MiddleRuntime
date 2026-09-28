@@ -4,7 +4,15 @@
 #define MIDDLENEWBUBBLETAG(X)
 
 namespace components {
-	struct NewBubbleTag : public middle::Serializable{
+	struct NewBubbleTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<NewBubbleTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLENEWBUBBLETAG(X)
+        #undef X
+    }
 }

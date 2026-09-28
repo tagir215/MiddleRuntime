@@ -7,10 +7,18 @@
 	X(posZ) 
 
 namespace components {
-	struct Position : public middle::Serializable{
+	struct Position {
 		float posX;
 		float posY;
 		float posZ;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Position>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPOSITION(X)
+        #undef X
+    }
 }

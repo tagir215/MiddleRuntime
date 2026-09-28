@@ -5,8 +5,16 @@
 	X(value)
 
 namespace components {
-	struct BubbleUnit : public middle::Serializable{
+	struct BubbleUnit {
 		int value = 1;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleUnit>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEUNIT(X)
+        #undef X
+    }
 }

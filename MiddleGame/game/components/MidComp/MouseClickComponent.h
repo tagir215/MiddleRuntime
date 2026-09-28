@@ -4,7 +4,15 @@
 #define MIDDLEMOUSECLICKCOMPONENT(X) 
 
 namespace components {
-	struct MouseClickComponent : public middle::Serializable{
+	struct MouseClickComponent {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<MouseClickComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEMOUSECLICKCOMPONENT(X)
+        #undef X
+    }
 }

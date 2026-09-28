@@ -9,7 +9,7 @@
 	X(targetDistance) 
 
 namespace components {
-	struct Constraint : public middle::Serializable{
+	struct Constraint {
 		middle::Id idA;
 		middle::Id idB;
 		float stiffness = 0.8f;
@@ -17,4 +17,12 @@ namespace components {
 		float targetDistance;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Constraint>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLECONSTRAINT(X)
+        #undef X
+    }
 }

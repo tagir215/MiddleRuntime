@@ -5,7 +5,15 @@
 	
 
 namespace components {
-	struct LoopTag : public middle::Serializable{
+	struct LoopTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<LoopTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLELOOPTAG(X)
+        #undef X
+    }
 }

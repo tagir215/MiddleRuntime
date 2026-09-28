@@ -4,7 +4,15 @@
 #define MIDDLEBUBBLESUMCOMPONENT(X) 
 
 namespace components {
-	struct BubbleSumComponent : public middle::Serializable{
+	struct BubbleSumComponent {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleSumComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLESUMCOMPONENT(X)
+        #undef X
+    }
 }

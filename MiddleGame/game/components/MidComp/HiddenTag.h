@@ -4,7 +4,15 @@
 #define MIDDLEHIDDENTAG(X)
 
 namespace components {
-	struct HiddenTag : public middle::Serializable{
+	struct HiddenTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<HiddenTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEHIDDENTAG(X)
+        #undef X
+    }
 }

@@ -7,10 +7,18 @@
 	X(offsetZ) 
 
 namespace components {
-	struct Offset : public middle::Serializable{
+	struct Offset {
 		float offsetX = 0;
 		float offsetY = 0;
 		float offsetZ = 0;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Offset>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEOFFSET(X)
+        #undef X
+    }
 }

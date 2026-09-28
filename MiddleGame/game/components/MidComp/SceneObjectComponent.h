@@ -4,7 +4,15 @@
 #define MIDDLESCENEOBJECTCOMPONENT(X)
 
 namespace components {
-	struct SceneObjectComponent : public middle::Serializable{
+	struct SceneObjectComponent {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<SceneObjectComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESCENEOBJECTCOMPONENT(X)
+        #undef X
+    }
 }

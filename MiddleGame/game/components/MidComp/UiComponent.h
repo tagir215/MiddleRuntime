@@ -5,7 +5,7 @@
 	X(type)
 
 namespace components {
-	struct UiComponent : public middle::Serializable{
+	struct UiComponent {
 		int type = middle::UNASSIGNED;
 
 	};
@@ -24,4 +24,12 @@ namespace UiElementTypes {
 	static int PROCEDURE_INPUT = 9;
 	static int PROCEDURE_BACKGROUND = 10;
 	static int PROCEDURE_SCOPE = 11;
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<UiComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEUICOMPONENT(X)
+        #undef X
+    }
 }

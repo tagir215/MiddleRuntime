@@ -44,8 +44,8 @@ for item in folder.iterdir():
 
         for line in writeLines:
             print(line)
-        #with open(item, 'w', encoding='utf-8') as file:
-        #    file.writelines(writeLines)
+        with open(item, 'w', encoding='utf-8') as file:
+            file.writelines(writeLines)
 
 
 

@@ -4,7 +4,15 @@
 #define MIDDLEGRIDELEMENT(X)
 
 namespace components {
-	struct GridElement : public middle::Serializable{
+	struct GridElement {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<GridElement>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEGRIDELEMENT(X)
+        #undef X
+    }
 }

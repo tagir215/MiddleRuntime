@@ -9,11 +9,19 @@
 	
 
 namespace components {
-	struct Color : public middle::Serializable{
+	struct Color {
 		float colorR;
 		float colorG;
 		float colorB;
 		float colorA;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Color>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLECOLOR(X)
+        #undef X
+    }
 }

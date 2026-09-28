@@ -4,7 +4,15 @@
 #define MIDDLEPROCEDUREUSEUITAG(X)
 
 namespace components {
-	struct ProcedureUseUiTag : public middle::Serializable{
+	struct ProcedureUseUiTag {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<ProcedureUseUiTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPROCEDUREUSEUITAG(X)
+        #undef X
+    }
 }

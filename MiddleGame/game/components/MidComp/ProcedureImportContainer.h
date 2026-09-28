@@ -5,9 +5,17 @@
 	X(bubbleRef)
 
 namespace components {
-	struct ProcedureImportContainer : public middle::Serializable{
+	struct ProcedureImportContainer {
 		std::string loadedProcedureName = "";
 		middle::Id bubbleRef;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<ProcedureImportContainer>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEPROCEDUREIMPORTCONTAINER(X)
+        #undef X
+    }
 }

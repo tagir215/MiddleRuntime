@@ -6,7 +6,15 @@
 
 
 namespace components {
-	struct Layer : public middle::Serializable{
+	struct Layer {
 		int layer = middle::UNASSIGNED;
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Layer>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLELAYER(X)
+        #undef X
+    }
 }

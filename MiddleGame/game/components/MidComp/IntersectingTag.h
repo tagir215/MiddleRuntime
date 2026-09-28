@@ -4,9 +4,17 @@
 #define MIDDLEINTERSECTINGTAG(X)
 
 namespace components {
-	struct IntersectingTag : public middle::Serializable{
+	struct IntersectingTag {
 		bool intersectingTop = false;
 		int framesIntersected = 0;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<IntersectingTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINTERSECTINGTAG(X)
+        #undef X
+    }
 }

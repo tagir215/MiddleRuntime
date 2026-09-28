@@ -6,8 +6,16 @@
 
 
 namespace components {
-	struct Scale : public middle::Serializable{
+	struct Scale {
 		midMath::Vector3 scale = { 1,1,1 };
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Scale>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESCALE(X)
+        #undef X
+    }
 }

@@ -5,8 +5,16 @@
 	X(type)
 
 namespace components {
-	struct SlotInventoryTag : public middle::Serializable{
+	struct SlotInventoryTag {
 		int type = middle::UNASSIGNED;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<SlotInventoryTag>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESLOTINVENTORYTAG(X)
+        #undef X
+    }
 }

@@ -14,7 +14,7 @@ namespace components {
 		X_OVER_X,
 		X_MINUS_X
 	};
-	struct Inventory : public middle::Serializable{
+	struct Inventory {
 		int maxSize = 5;
 		int activeIndex = 0;
 		bool invert = false;
@@ -24,4 +24,12 @@ namespace components {
 		
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<Inventory>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEINVENTORY(X)
+        #undef X
+    }
 }

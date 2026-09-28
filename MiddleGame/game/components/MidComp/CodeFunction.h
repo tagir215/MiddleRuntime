@@ -6,10 +6,18 @@
 	X(type)
 
 namespace components {
-	struct CodeFunction : public middle::Serializable{
+	struct CodeFunction {
 		int type = middle::UNASSIGNED;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<CodeFunction>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLECODEFUNCTION(X)
+        #undef X
+    }
 }
 
 namespace functionTypes {

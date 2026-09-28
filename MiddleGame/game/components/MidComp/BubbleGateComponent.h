@@ -12,8 +12,16 @@ namespace components {
 		DUMMY
 	};
 
-	struct BubbleGateComponent : public middle::Serializable{
+	struct BubbleGateComponent {
 		int status = BubbleGateStatus::CLOSED;
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<BubbleGateComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEBUBBLEGATECOMPONENT(X)
+        #undef X
+    }
 }

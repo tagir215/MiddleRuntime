@@ -4,7 +4,15 @@
 #define MIDDLESCOPECOMPONENT(X)
 
 namespace components {
-	struct ScopeComponent : public middle::Serializable{
+	struct ScopeComponent {
 
 	};
+
+    template<typename V>
+    static void reflect(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<ScopeComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLESCOPECOMPONENT(X)
+        #undef X
+    }
 }
