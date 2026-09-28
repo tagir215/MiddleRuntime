@@ -10,7 +10,7 @@
 class EditorUiSystem : public middle::MiddleGameplaySystem {
 public:
 	EditorUiSystem() {
-		systemUpdateType = middle::SystemUpdateType::RENDERING;
+		systemUpdateType = middle::SystemUpdateType::POSTFRAME;
 		systemModeType = middle::SystemModeType::ENGINE;
 	}
 

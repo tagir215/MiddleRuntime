@@ -9,7 +9,7 @@ using namespace middleUI;
 class SystemProfilerUiSystem : public middle::MiddleGameplaySystem {
 public:
 	SystemProfilerUiSystem() {
-		systemUpdateType = middle::SystemUpdateType::RENDERING;
+		systemUpdateType = middle::SystemUpdateType::POSTFRAME;
 		systemModeType = middle::SystemModeType::ENGINE;
 	}
 

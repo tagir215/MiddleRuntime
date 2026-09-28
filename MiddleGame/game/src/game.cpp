@@ -276,9 +276,6 @@ extern "C" {
 		gameState->middleInputState = inputState;
 
 		gameState->middleState.renderData.clear();
-		gameState->middleState.uiSetups.clear();
-		gameState->middleState.uiCalls.clear();
-		gameState->resultUiCallIterIndex = -1;
 		gameState->debugInfo.clear();
 
 		updateMouseStuff(gameState.get());
@@ -303,6 +300,12 @@ extern "C" {
 		float frameTime = inputState.frameTime;
 		if (inputState.frameTimeAccumulator >= frameTime)
 		{
+			// CLEAR UIS 
+			gameState->middleState.uiSetups.clear();
+			gameState->middleState.uiCalls.clear();
+			gameState->resultUiCallIterIndex = -1;
+
+
 			gameState->middleState.frameTimeAccumulator = inputState.frameTimeAccumulator - frameTime;
 			if (inputState.frameTimeAccumulator > frameTime * 2) {
 				gameState->middleState.frameTimeAccumulator = 0;
