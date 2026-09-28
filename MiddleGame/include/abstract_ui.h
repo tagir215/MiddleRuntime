@@ -195,12 +195,14 @@ namespace middleUI {
 	}
 #define midguiCombo(lbl, items, currentIndex, size) _midguiCombo(lbl, items, currentIndex, size, builder)
 
-	static inline void _midguiBeginPopup(
+	static inline bool _midguiBeginPopup(
 		const char* label,
 		UiBuilder& builder
 	) {
-		builder.midgui(BeginPopup);
+		size_t id = builder.midgui(BeginPopup);
+		auto result = builder.getResult(id);
 		builder.label(label);
+		return result != nullptr && result->boolVal;
 	}
 #define midguiBeginPopup(lbl) _midguiBeginPopup(lbl, builder)
 

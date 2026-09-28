@@ -37,7 +37,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectPhysicsData(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<PhysicsData>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEPHYSICSDATA(X)

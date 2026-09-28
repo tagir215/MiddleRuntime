@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectNode(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<Node>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLENODE(X)

@@ -64,7 +64,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectProcedureContainer(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<ProcedureContainer>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEPROCEDURECONTAINER(X)

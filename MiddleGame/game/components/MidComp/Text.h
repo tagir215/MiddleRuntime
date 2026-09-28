@@ -29,7 +29,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectText(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<Text>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLETEXT(X)

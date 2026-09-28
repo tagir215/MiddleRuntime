@@ -445,22 +445,20 @@ namespace middle {
 			int copyOffset = componentListMap[typeId]->grow();
 
 			// get og serializable to get fields
-			Serializable* ogSerializable =
-				componentListMap[typeId]->getSerializable(offset);
+			ComponentReflectionMethods& reflectionMethods = getComponentReflectionMethods(typeId);
 
 			// get fields
 			int ogSize = 0;
-			ogSerializable->getFields(ogFields, &ogSize);
+			reflectionMethods.getFields(ogShape, ogFields, &ogSize);
 
 
 			// get copy serializable to get fields
-			auto copySerializable = componentListMap[typeId]->getSerializable(copyOffset);
 
 			// create component ref for the shape
 			setCompOffset(newShape, typeId, copyOffset);
 
 			int copySize = 0;
-			copySerializable->getFields(copyFields, &copySize);
+			reflectionMethods.getFields(newShape, copyFields, &copySize);
 
 			// copy fields to components
 			for (int i = 0; i < ogSize; ++i) {

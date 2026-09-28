@@ -23,7 +23,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectBubbleSwapComponent(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<BubbleSwapComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLESWAPCOMPONENT(X)

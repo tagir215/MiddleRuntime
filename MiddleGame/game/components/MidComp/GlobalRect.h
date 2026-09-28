@@ -8,13 +8,13 @@
 
 namespace components {
 	struct GlobalRect {
-		float width;
-		float height;
+		float width = 0;
+		float height = 0;
 
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectGlobalRect(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<GlobalRect>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEGLOBALRECT(X)

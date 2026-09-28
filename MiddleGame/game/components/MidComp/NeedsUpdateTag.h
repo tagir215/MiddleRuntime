@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectNeedsUpdateTag(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<NeedsUpdateTag>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLENEEDSUPDATETAG(X)

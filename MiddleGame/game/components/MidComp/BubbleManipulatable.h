@@ -9,7 +9,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectBubbleManipulatable(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<BubbleManipulatable>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLEMANIPULATABLE(X)

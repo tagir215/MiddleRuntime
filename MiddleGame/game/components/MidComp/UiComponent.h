@@ -9,6 +9,14 @@ namespace components {
 		int type = middle::UNASSIGNED;
 
 	};
+
+    template<typename V>
+    static void reflectUiComponent(middle::Shape& shape, V& v) {
+        auto comp = middle::getComponent<UiComponent>(shape);
+        #define X(f) v(#f, comp->f);
+            MIDDLEUICOMPONENT(X)
+        #undef X
+    }
 }
 
 namespace UiElementTypes {
@@ -25,11 +33,4 @@ namespace UiElementTypes {
 	static int PROCEDURE_BACKGROUND = 10;
 	static int PROCEDURE_SCOPE = 11;
 
-    template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
-        auto comp = middle::getComponent<UiComponent>(shape);
-        #define X(f) v(#f, comp->f);
-            MIDDLEUICOMPONENT(X)
-        #undef X
-    }
 }

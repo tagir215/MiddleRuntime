@@ -94,12 +94,10 @@ namespace middle {
 	inline T* addComponent(Shape& shape) {
 		int typeId = getTypeId<T>();
 		ComponentVectorContainer<T>* vectorContainer = getComponentVectorContainer<T>();
-		auto& data = vectorContainer->vectorData;
 		int nextIndex = vectorContainer->grow();
-		T t;
-		data[nextIndex] = t;
+		vectorContainer->vectorData[nextIndex] = T();
 		setCompOffset(shape, typeId, nextIndex);
-		return &data[nextIndex];
+		return &vectorContainer->vectorData[nextIndex];
 	}
 
 	template<typename T>

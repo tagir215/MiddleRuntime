@@ -13,7 +13,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectBubblePowerComponent(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<BubblePowerComponent>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEBUBBLEPOWERCOMPONENT(X)

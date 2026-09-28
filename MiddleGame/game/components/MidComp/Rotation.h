@@ -10,16 +10,16 @@ namespace components {
 
 	};
 
-}
-
-namespace middle {
-	const midMath::Vector3 ROTATION_FORWARD = { 0,1,0 };
-
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectRotation(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<Rotation>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLEROTATION(X)
         #undef X
     }
+}
+
+namespace middle {
+	const midMath::Vector3 ROTATION_FORWARD = { 0,1,0 };
+
 }

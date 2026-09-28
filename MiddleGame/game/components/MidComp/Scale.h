@@ -12,7 +12,7 @@ namespace components {
 	};
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectScale(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<Scale>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLESCALE(X)

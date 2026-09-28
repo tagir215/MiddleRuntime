@@ -10,18 +10,10 @@ namespace components {
 	};
 
 	template<typename V>
-	static void reflect(middle::Shape& shape, V& v) {
+	static void reflectSphere(middle::Shape& shape, V& v) {
 		auto comp = middle::getComponent<Sphere>(shape);
 #define X(f) v(#f, comp->f);
 		MIDDLESPHERE(X)
 #undef X
 	}
-
-    template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
-        auto comp = middle::getComponent<Sphere>(shape);
-        #define X(f) v(#f, comp->f);
-            MIDDLESPHERE(X)
-        #undef X
-    }
 }

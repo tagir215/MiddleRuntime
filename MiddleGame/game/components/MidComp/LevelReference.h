@@ -11,16 +11,13 @@ namespace components {
 		bool complete = false;
 
 	};
-}
-
-namespace bubbleLevelConstants {
-	//std::string folder = "../bubbleData/problems/";
 
     template<typename V>
-    static void reflect(middle::Shape& shape, V& v) {
+    static void reflectLevelReference(middle::Shape& shape, V& v) {
         auto comp = middle::getComponent<LevelReference>(shape);
         #define X(f) v(#f, comp->f);
             MIDDLELEVELREFERENCE(X)
         #undef X
     }
 }
+
