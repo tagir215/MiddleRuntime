@@ -255,30 +255,49 @@ namespace middle{
 		// Clear input blockers at the end of physics update
 		gameState->middleState.inputBlockers.clear();
 
+
+		processActionQueues(gameState);
+		cacheUpdate(gameState);
+
+		for (auto& renderSystem : gameState->engineRendererSystems) {
+
+			if (gameState->middleState.applicationMode == middle::ApplicationMode::GAME_MODE
+				&& renderSystem->systemModeType == middle::SystemModeType::EDITOR) {
+				continue;
+			}
+
+			if (gameState->middleState.applicationMode == middle::ApplicationMode::EDITOR_MODE
+				&& renderSystem->systemModeType == middle::SystemModeType::GAMEPLAY) {
+				continue;
+			}
+
+			gameState->activeSystemName = renderSystem->systemName;
+			renderSystem->recordTimeUpdate(gameState);
+		}
+
+
 	}
 }
 
 static bool gameStateInitialized = false;
 std::unique_ptr<middle::GameState>gameState;
+static float frameTimeAccumulator = 0;
 
 extern "C" {
 
 	__declspec(dllexport) void UpdateGame(const middle::MiddleInputState& inputState, middle::MiddleOutputState** outputState)
 	{
+		// GAME INITIALIZATION
 		if (!gameStateInitialized) {
 			gameState = std::make_unique<middle::GameState>();
 			for (auto& shape : gameState->shapes) {
 				shape = middle::createShape(gameState.get());
 			}
 			gameStateInitialized = true;
+			*outputState = &gameState->middleState;
 		}
 
 		gameState->middleInputState = inputState;
-
-		gameState->middleState.renderData.clear();
-		gameState->debugInfo.clear();
-
-		updateMouseStuff(gameState.get());
 
 		if (inputState.closeGame) {
 			closeGame(gameState.get());
@@ -296,45 +315,36 @@ extern "C" {
 		if (!gameState->systemsRegistered) {
 			registerSystems(gameState.get());
 		}
+		// END GAME INITIALIZATIONS
 
-		float frameTime = inputState.frameTime;
-		if (inputState.frameTimeAccumulator >= frameTime)
+
+
+
+		// GAME UPDATE
+		frameTimeAccumulator += inputState.frameTime;
+		if (frameTimeAccumulator >= inputState.targetFrameTime)
 		{
-			// CLEAR UIS 
+			// CLEAR RENDERDATA / UIs 
+			gameState->middleState.renderData.clear();
+			gameState->debugInfo.clear();
 			gameState->middleState.uiSetups.clear();
 			gameState->middleState.uiCalls.clear();
 			gameState->resultUiCallIterIndex = -1;
 
+			updateMouseStuff(gameState.get());
 
-			gameState->middleState.frameTimeAccumulator = inputState.frameTimeAccumulator - frameTime;
-			if (inputState.frameTimeAccumulator > frameTime * 2) {
+			// pause game when accumulated time high
+			frameTimeAccumulator = frameTimeAccumulator - inputState.frameTime;
+			if (frameTimeAccumulator > inputState.frameTime * 4) {
 				gameState->middleState.frameTimeAccumulator = 0;
 			}
+
 			deterministicUpdate(gameState.get());
+
+			// UPDATE OUTPUT FOR FRONT END
+			*outputState = &gameState->middleState;
 		}
 
-		processActionQueues(gameState.get());
-		cacheUpdate(gameState.get());
-
-		for (auto& renderSystem : gameState->engineRendererSystems) {
-
-			if (gameState->middleState.applicationMode == middle::ApplicationMode::GAME_MODE
-				&& renderSystem->systemModeType == middle::SystemModeType::EDITOR) {
-				continue;
-			}
-
-			if (gameState->middleState.applicationMode == middle::ApplicationMode::EDITOR_MODE
-				&& renderSystem->systemModeType == middle::SystemModeType::GAMEPLAY) {
-				continue;
-			}
-
-			gameState->activeSystemName = renderSystem->systemName;
-			renderSystem->recordTimeUpdate(gameState.get());
-		}
-
-
-		// UPDATE OUTPUT FOR FRONT END
-		*outputState = &gameState->middleState;
 	}
 
 }

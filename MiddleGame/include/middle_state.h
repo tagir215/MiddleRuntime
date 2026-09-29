@@ -114,7 +114,7 @@ namespace middle {
 		float screenWidth;
 		float screenHeight;
 		float frameTime;
-		float frameTimeAccumulator = 0;
+		float targetFrameTime;
 		double nearPlaneDistance = 10;
 		double farPlaneDistance = 4000;
 		float cameraFOVY = 45;
@@ -124,9 +124,66 @@ namespace middle {
 		std::vector<middleUI:: UiCall>resultUiCalls;
 	};
 
+	enum RenderObjectState {
+		NONE,
+		LIZARD_WALKING,
+		LIZARD_RUNNING,
+		LIZARD_IDLE,
+		GATE_OPEN,
+		GATE_CLOSED,
+	};
+
+	enum RenderObjectType {
+		MIDDLE_MAN,
+		LIZARD,
+		OCARINA_OF_TIME,
+		ADDITION_RECT,
+		MULTIPLICATION_RECT,
+		POWER_RECT,
+		SUMMATION_RECT,
+		FUNCTION_RECT,
+		VARIABLE_RECT,
+		TEXT_RECT,
+		GATE_RECT,
+		AND_LOGIC_GATE_RECT,
+		EQUALS_RECT,
+		GREATER_RECT,
+		GREATER_OR_EQUALS_RECT,
+	};
+
+	enum RenderObjectText {
+		WORD_PROBLEM_1_TEXT,
+		WORD_PROBELM_2_TEXT,
+		LABEL_VARIABLE,
+		LABEL_INPUT_INDEX,
+		
+	};
+
+	struct RenderData {
+		size_t size = -1;
+		std::vector<RenderObjectType>types;
+		std::vector<RenderObjectState>states;
+		std::vector<RenderObjectText>texts;
+
+		std::vector<float>positionsX;
+		std::vector<float>positionsY;
+		std::vector<float>positionsZ;
+
+		std::vector<float>rotationsX;
+		std::vector<float>rotationsY;
+		std::vector<float>rotationsZ;
+		std::vector<float>rotationsW;
+
+		std::vector<float>scaleX;
+		std::vector<float>scaleY;
+		std::vector<float>scaleZ;
+
+	};
+
 
 	struct MiddleOutputState {
 		std::vector<middle::RenderItem> renderData;
+		RenderData newRenderData;
 		std::vector<std::function<void()>>uiSetups;
 		std::vector<middleUI:: UiCall>uiCalls;
 		midPrimitive::Color backgroundColor = { 188, 144, 181, 255 };
