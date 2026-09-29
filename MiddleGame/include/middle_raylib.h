@@ -38,7 +38,7 @@ static UpdateGameType* updateGamePtr;
 
 class MiddleRaylibEngine {
 
-const int fps = 60;
+const int fps = 240;
 
 public:
 	RayState rayState;
@@ -54,14 +54,13 @@ public:
 		bubbleAssets::loadGlobalFont(rayState.globalFont);
 	}
 
-	middle::MiddleInputState updateInputState() {
+	void updateInputState() {
 		const float fixedTimeStep = 1.0f / (float)fps;
-		inputState.frameTime = fixedTimeStep;
-		inputState.frameTimeAccumulator = frameTimeAccumulator + GetFrameTime();
+		inputState.targetFrameTime = fixedTimeStep;
+		inputState.frameTime = GetFrameTime();
 		inputState.screenWidth = GetScreenWidth();
 		inputState.screenHeight = GetScreenHeight();
 		inputState.closeGame = false;
-		return inputState;
 	}
 
 	void start() {
@@ -74,19 +73,22 @@ public:
 			//----------------------------------------------------------------------------------
 			ReloadGameDLL();
 
-			inputState = updateInputState();
-			InputSystem::update(&inputState, outputState);
+			updateInputState();
+			if (outputState != nullptr) {
+				InputSystem::update(&inputState, outputState);
+			}
 
+			float frametime = GetFrameTime();
 			UpdateGame(inputState, &outputState);
 
 			renderer::RendererSystem::update(outputState, &inputState, rayState.globalFont, rayState.shaders, rayState.textures, false);
 
-			if (outputState->closeGame) {
+			if (outputState != nullptr && outputState->closeGame) {
 				break;
 			}
 		}
 
-		inputState = updateInputState();
+		updateInputState();
 		inputState.closeGame = true;
 		UpdateGame(inputState, &outputState);
 	}

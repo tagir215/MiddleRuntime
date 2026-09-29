@@ -10,7 +10,7 @@
 class EditorUiSystem : public middle::MiddleGameplaySystem {
 public:
 	EditorUiSystem() {
-		systemUpdateType = middle::SystemUpdateType::RENDERING;
+		systemUpdateType = middle::SystemUpdateType::POSTFRAME;
 		systemModeType = middle::SystemModeType::ENGINE;
 	}
 
@@ -72,10 +72,11 @@ public:
 		gameState->editorState.creationMode = static_cast<middle::CreationMode>(currentItem);
 
 
+		midguiEnd();
 
 		//	// SCENE MANAGER
 
-		midguiSeparator();
+		//midguiSeparator();
 
 		//if (gameState->sceneNames.size() > 0) {
 		//	midguiText(("ActiveScene: " + gameState->activeSceneName).c_str());
@@ -276,7 +277,6 @@ public:
 		//	ImGui::End();
 
 		//	};
-		midguiEnd();
 
 		//middle::queueUi(gameState, oldUI);
 	}

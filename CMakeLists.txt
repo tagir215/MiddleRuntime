@@ -66,6 +66,7 @@ add_executable(middle
     ${MIDDLE_RAYLIB_DIR}/middle/src/win32_platform.cpp 
     ${MIDDLE_RAYLIB_DIR}/middle/src/middle_imgui.cpp 
     ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/Renderer.cpp
+    ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/BubbleRenderer.cpp
     ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/InputSystem.cpp
     ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/FileDropSystem.cpp
     ${MIDDLE_RAYLIB_DIR}/middle/middleSystems/MiddleImGuiTranslatorSystem.cpp

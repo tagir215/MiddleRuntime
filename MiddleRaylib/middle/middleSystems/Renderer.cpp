@@ -67,10 +67,10 @@ namespace renderer {
 		DrawLine3D(vertices[3], vertices[0], rcolor);
 	}
 
-	static void draw3D(const middle::MiddleOutputState* const middleState, bool disabledDepthTest, const Camera& const camera, const std::vector<Shader>& shaders, const std::vector<Texture>& textures, int layerPass = 0) {
+	static void draw3D(const middle::MiddleOutputState* const middleState, middle::MiddleInputState* inputState, bool disabledDepthTest, const Camera& const camera, const std::vector<Shader>& shaders, const std::vector<Texture>& textures, int layerPass = 0) {
 
 
-		rlSetClipPlanes(middleState->nearPlaneDistance, middleState->farPlaneDistance);
+		rlSetClipPlanes(inputState->nearPlaneDistance, inputState->farPlaneDistance);
 
 		for (int i = 0; i < middleState->renderData.size(); ++i) {
 			middle::RenderItem item = middleState->renderData[i];
@@ -263,7 +263,7 @@ namespace renderer {
 			Camera camera = toRCam(middleState->activeCamera);
 
 			BeginMode3D(camera);
-			draw3D(middleState, false, camera, shaders, textures);
+			draw3D(middleState, inputState, false, camera, shaders, textures);
 			EndMode3D();
 
 			drawText(middleState, false, font, camera);
@@ -272,7 +272,7 @@ namespace renderer {
 			for (int i = -1; i < maxLayers; ++i) {
 				BeginMode3D(camera);
 				rlDisableDepthTest();
-				draw3D(middleState, true, camera, shaders, textures, i);
+				draw3D(middleState, inputState, true, camera, shaders, textures, i);
 				rlEnableDepthTest();
 				EndMode3D();
 			}
