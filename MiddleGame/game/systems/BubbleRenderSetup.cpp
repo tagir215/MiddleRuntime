@@ -18,7 +18,7 @@
 #include "MidComp/BubbleVariable.h"
 #include "bubble_colors.h"
 #include "MidComp/Layer.h"
-#include "MidComp/Rectangle.h"
+#include "MidComp/GlobalRect.h"
 #include "MidComp/UiComponent.h"
 #include "MidComp/TextureComponent.h"
 #include "MidComp/RuntimeHiddenTag.h"
@@ -80,7 +80,7 @@ public:
 		bubbleCache = middle::newCompCache(gameState, systemName);
 		bubbleCache->addType<components::BubbleComponent>();
 		bubbleCache->addType<components::InViewTag>();
-		bubbleCache->addType<components::Rectangle>();
+		bubbleCache->addType<components::GlobalRect>();
 		bubbleCache->addType<components::Layer>();
 		bubbleCache->addType<components::LoopSociety>();
 		bubbleCache->addType<components::GlobalTransform>();
@@ -104,7 +104,7 @@ public:
 		unitCache->addType<components::InViewTag>();
 		unitCache->addType<components::Layer>();
 		unitCache->addType<components::GlobalTransform>();
-		unitCache->addType<components::Rectangle>();
+		unitCache->addType<components::GlobalRect>();
 		unitCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		unitCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
 		mulCache = middle::newCompCache(gameState, systemName);
@@ -112,7 +112,7 @@ public:
 		mulCache->addType<components::InViewTag>();
 		mulCache->addType<components::LoopSociety>();
 		mulCache->addType<components::GlobalTransform>();
-		mulCache->addType<components::Rectangle>();
+		mulCache->addType<components::GlobalRect>();
 		mulCache->addType<components::Layer>();
 		mulCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		mulCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
@@ -121,7 +121,7 @@ public:
 		variableCache->addType<components::InViewTag>();
 		variableCache->addType<components::Layer>();
 		variableCache->addType<components::BubbleVariable>();
-		variableCache->addType<components::Rectangle>();
+		variableCache->addType<components::GlobalRect>();
 		variableCache->addType<components::GlobalTransform>();
 		variableCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		variableCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
@@ -129,7 +129,7 @@ public:
 		nonManipulatableEqualsCache->addType<components::BubbleEqualsComponent>();
 		nonManipulatableEqualsCache->addType<components::InViewTag>();
 		nonManipulatableEqualsCache->addType<components::Layer>();
-		nonManipulatableEqualsCache->addType<components::Rectangle>();
+		nonManipulatableEqualsCache->addType<components::GlobalRect>();
 		nonManipulatableEqualsCache->addType<components::GlobalTransform>();
 		nonManipulatableEqualsCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		nonManipulatableEqualsCache->addType<components::BubbleManipulatable>(components::NOTINTERESTED);
@@ -138,7 +138,7 @@ public:
 		equalsCache->addType<components::BubbleEqualsComponent>();
 		equalsCache->addType<components::InViewTag>();
 		equalsCache->addType<components::Layer>();
-		equalsCache->addType<components::Rectangle>();
+		equalsCache->addType<components::GlobalRect>();
 		equalsCache->addType<components::GlobalTransform>();
 		equalsCache->addType<components::BubbleManipulatable>();
 		equalsCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
@@ -148,7 +148,7 @@ public:
 		inequCache->addType<components::BubbleInequaltyComponent>();
 		inequCache->addType<components::InViewTag>();
 		inequCache->addType<components::Layer>();
-		inequCache->addType<components::Rectangle>();
+		inequCache->addType<components::GlobalRect>();
 		inequCache->addType<components::GlobalTransform>();
 		inequCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		inequCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
@@ -162,7 +162,7 @@ public:
 		powerCache = middle::newCompCache(gameState, systemName);
 		powerCache->addType<components::BubblePowerComponent>();
 		powerCache->addType<components::InViewTag>();
-		powerCache->addType<components::Rectangle>();
+		powerCache->addType<components::GlobalRect>();
 		powerCache->addType<components::LoopSociety>();
 		powerCache->addType<components::GlobalTransform>();
 		powerCache->addType<components::Layer>();
@@ -173,7 +173,6 @@ public:
 		functionCache->addType<components::InViewTag>();
 		functionCache->addType<components::GlobalTransform>();
 		functionCache->addType<components::Layer>();
-		functionCache->addType<components::Rectangle>();
 		functionCache->addType<components::GlobalRect>();
 		functionCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		functionCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
@@ -181,7 +180,7 @@ public:
 		summationCache->addType<components::BubbleSummationComponent>();
 		summationCache->addType<components::InViewTag>();
 		summationCache->addType<components::Layer>();
-		summationCache->addType<components::Rectangle>();
+		summationCache->addType<components::GlobalRect>();
 		summationCache->addType<components::GlobalTransform>();
 		summationCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		summationCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
@@ -189,7 +188,7 @@ public:
 		textCache->addType<components::BubbleTextComponent>();
 		textCache->addType<components::InViewTag>();
 		textCache->addType<components::GlobalTransform>();
-		textCache->addType<components::Rectangle>();
+		textCache->addType<components::GlobalRect>();
 		textCache->addType<components::Layer>();
 		textCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		textCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
@@ -197,7 +196,7 @@ public:
 		logicCache->addType<components::BubbleLogicComponent>();
 		logicCache->addType<components::InViewTag>();
 		logicCache->addType<components::GlobalTransform>();
-		logicCache->addType<components::Rectangle>();
+		logicCache->addType<components::GlobalRect>();
 		logicCache->addType<components::Layer>();
 		logicCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		logicCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
@@ -205,7 +204,7 @@ public:
 		gateCache->addType<components::BubbleGateComponent>();
 		gateCache->addType<components::InViewTag>();
 		gateCache->addType<components::GlobalTransform>();
-		gateCache->addType<components::Rectangle>();
+		gateCache->addType<components::GlobalRect>();
 		gateCache->addType<components::Layer>();
 		gateCache->addType<components::RuntimeHiddenTag>(components::NOTINTERESTED);
 		gateCache->addType<components::BubbleLockedComponent>(components::NOTINTERESTED);
@@ -315,61 +314,63 @@ public:
 	}
 
 
-	size_t renderBubble(middle::GameState* gameState, middle::RenderObjectType type, int layer, components::GlobalTransform* transform) {
+	size_t renderBubble(middle::GameState* gameState, middle::RenderObjectType type, int layer, components::GlobalTransform* transform, components::GlobalRect* rect) {
 		auto& data = gameState->middleState.newRenderData;
 		size_t bubbleIndex = middle::pushNextRenderObject(gameState);
 		data.types[bubbleIndex] = type;
 		setTransform(data, bubbleIndex, transform);
 		data.positionsY[bubbleIndex] += getLayerYOffset(layer);
+		data.scalesX[bubbleIndex] = rect->width;
+		data.scalesZ[bubbleIndex] = rect->height;
 		return bubbleIndex;
 	}
 
 
 	void update(middle::GameState* gameState) override {
 
-		auto bubbleRectIt = bubbleCache->begin<components::Rectangle>();
+		auto bubbleRectIt = bubbleCache->begin<components::GlobalRect>();
 		auto bubbleLayerIt = bubbleCache->begin<components::Layer>();
 		auto bubbleTransform = bubbleCache->begin<components::GlobalTransform>();
 		for (int i = 0; i < bubbleCache->getSize(); ++i) {
 			auto rect = *bubbleRectIt;
 			auto layer = *bubbleLayerIt;
 			auto transform = *bubbleTransform;
-			renderBubble(gameState, middle::RenderObjectType::ADDITION_RECT, getLayer(gameState, layer), transform);
+			renderBubble(gameState, middle::RenderObjectType::ADDITION_RECT, getLayer(gameState, layer), transform, rect);
 		}
 
 		auto logicLayerIt = logicCache->begin<components::Layer>();
 		auto logicTransformIt = logicCache->begin<components::GlobalTransform>();
-		auto logicRectIt = logicCache->begin<components::Rectangle>();
+		auto logicRectIt = logicCache->begin<components::GlobalRect>();
 		for (middle::Id id : logicCache->relevantIdVector) {
 			auto layer = *logicLayerIt;
 			auto transform = *logicTransformIt;
 			auto rect = *logicRectIt;
-			renderBubble(gameState, middle::RenderObjectType::AND_LOGIC_GATE_RECT, getLayer(gameState, layer), transform);
+			renderBubble(gameState, middle::RenderObjectType::AND_LOGIC_GATE_RECT, getLayer(gameState, layer), transform, rect);
 		}
 
 		auto gateLayerIt = gateCache->begin<components::Layer>();
 		auto gateTransformIt = gateCache->begin<components::GlobalTransform>();
-		auto gateRectIt = gateCache->begin<components::Rectangle>();
+		auto gateRectIt = gateCache->begin<components::GlobalRect>();
 		auto gateIt = gateCache->begin<components::BubbleGateComponent>();
 		for (middle::Id id : gateCache->relevantIdVector) {
 			auto layer = *gateLayerIt;
 			auto transform = *gateTransformIt;
 			auto rect = *gateRectIt;
 			auto gate = *gateIt;
-			renderBubble(gameState, middle::RenderObjectType::GATE_RECT, getLayer(gameState, layer), transform);
+			renderBubble(gameState, middle::RenderObjectType::GATE_RECT, getLayer(gameState, layer), transform, rect);
 		}
 
 		// renderunits
 		auto unitIt = unitCache->begin<components::BubbleUnit>();
 		auto unitLayerIt = unitCache->begin<components::Layer>();
 		auto unitTransformIt = unitCache->begin<components::GlobalTransform>();
-		auto unitRectIt = unitCache->begin<components::Rectangle>();
+		auto unitRectIt = unitCache->begin<components::GlobalRect>();
 		for (middle::Id id : unitCache->relevantIdVector) {
 			auto unit = *unitIt;
 			auto layer = *unitLayerIt;
 			auto transform = *unitTransformIt;
 			auto rect = *unitRectIt;
-			size_t unitIndex =renderBubble(gameState, middle::RenderObjectType::UNIT_RECT, getLayer(gameState, layer), transform);
+			size_t unitIndex =renderBubble(gameState, middle::RenderObjectType::UNIT_RECT, getLayer(gameState, layer), transform, rect);
 			auto& data = gameState->middleState.newRenderData;
 			if (unit->value > 0) {
 				data.texts[unitIndex] = "1";
@@ -405,7 +406,7 @@ public:
 //		// render variables
 //		auto variableIt = variableCache->begin<components::BubbleVariable>();
 //		auto variableBubbleIt = variableCache->begin<components::BubbleComponent>();
-//		auto variableRectIt = variableCache->begin<components::Rectangle>();
+//		auto variableRectIt = variableCache->begin<components::GlobalRect>();
 //		auto layerIt = variableCache->begin<components::Layer>();
 //		auto varTransformIt = variableCache->begin<components::GlobalTransform>();
 //		for (int i = 0; i < variableCache->getSize(); ++i) {
@@ -447,7 +448,7 @@ public:
 //
 //		// render muls
 //		auto mulIt = mulCache->begin<components::BubbleMultiplyComponent>();
-//		auto mulRectIt = mulCache->begin<components::Rectangle>();
+//		auto mulRectIt = mulCache->begin<components::GlobalRect>();
 //		auto mulTransformIt = mulCache->begin<components::GlobalTransform>();
 //		auto mulLayerIt = mulCache->begin<components::Layer>();
 //		for (middle::Id id : mulCache->relevantIdVector) {
@@ -464,7 +465,7 @@ public:
 //
 //		// renderPowers
 //		auto powerLoopIt = powerCache->begin<components::LoopSociety>();
-//		auto powerRectIt = powerCache->begin<components::Rectangle>();
+//		auto powerRectIt = powerCache->begin<components::GlobalRect>();
 //		auto powerTransformIt = powerCache->begin<components::GlobalTransform>();
 //		auto powerLayerIt = powerCache->begin<components::Layer>();
 //		for (middle::Id powerId : powerCache->relevantIdVector) {
@@ -480,7 +481,7 @@ public:
 //		}
 //
 //		auto equTransformIt = equalsCache->begin<components::GlobalTransform>();
-//		auto equCircleIt = equalsCache->begin<components::Rectangle>();
+//		auto equCircleIt = equalsCache->begin<components::GlobalRect>();
 //		auto equLayerIt = equalsCache->begin<components::Layer>();
 //		for (middle::Id id : equalsCache->relevantIdVector) {
 //			auto transform = *equTransformIt;
@@ -493,7 +494,7 @@ public:
 //
 //		// dimmer equals that cant be modified...
 //		auto nonEquTransformIt = nonManipulatableEqualsCache->begin<components::GlobalTransform>();
-//		auto nonEquCircleIt = nonManipulatableEqualsCache->begin<components::Rectangle>();
+//		auto nonEquCircleIt = nonManipulatableEqualsCache->begin<components::GlobalRect>();
 //		auto nonEquLayerIt = nonManipulatableEqualsCache->begin<components::Layer>();
 //		for (middle::Id id : nonManipulatableEqualsCache->relevantIdVector) {
 //			auto transform = *nonEquTransformIt;
@@ -505,7 +506,7 @@ public:
 //		}
 //
 //		auto inequTransformIt = inequCache->begin<components::GlobalTransform>();
-//		auto inequRectIt = inequCache->begin<components::Rectangle>();
+//		auto inequRectIt = inequCache->begin<components::GlobalRect>();
 //		auto inequLayerIt = inequCache->begin<components::Layer>();
 //		for (middle::Id id : inequCache->relevantIdVector) {
 //			auto transform = *inequTransformIt;
@@ -543,7 +544,7 @@ public:
 //
 //		auto functionTransformIt = functionCache->begin<components::GlobalTransform>();
 //		auto functionIt = functionCache->begin<components::BubbleFunctionComponent>();
-//		auto functionRectIt = functionCache->begin<components::Rectangle>();
+//		auto functionRectIt = functionCache->begin<components::GlobalRect>();
 //		auto functionLayerIt = functionCache->begin<components::Layer>();
 //		for (middle::Id id : functionCache->relevantIdVector) {
 //			// render functionlabel
@@ -571,7 +572,7 @@ public:
 //		}
 //
 //		auto summationTransformIt = summationCache->begin<components::GlobalTransform>();
-//		auto summationRectIt = summationCache->begin<components::Rectangle>();
+//		auto summationRectIt = summationCache->begin<components::GlobalRect>();
 //		auto summationLayerIt = summationCache->begin<components::Layer>();
 //		for (middle::Id id : summationCache->relevantIdVector) {
 //			// render functionlabel

@@ -11,7 +11,6 @@
 #include "profiler_helpers.h"
 #include "InputSystem.cpp"
 #include "Renderer.cpp"
-#include "BubbleRenderer.cpp"
 #include "midconfig.h"
 
 
@@ -83,12 +82,7 @@ public:
 			float frametime = GetFrameTime();
 			UpdateGame(inputState, &outputState);
 
-			if (outputState->applicationMode == middle::ApplicationMode::EDITOR_MODE) {
-				renderer::RendererSystem::update(outputState, &inputState, rayState.globalFont, rayState.shaders, rayState.textures, false);
-			}
-			if (outputState->applicationMode == middle::ApplicationMode::GAME_MODE) {
-				middle::BubbleRenderer::update(inputState, outputState, rayState.globalFont, rayState.shaders, rayState.textures);
-			}
+			renderer::RendererSystem::update(outputState, inputState, rayState.globalFont, rayState.shaders, rayState.textures, false);
 
 			if (outputState != nullptr && outputState->closeGame) {
 				break;

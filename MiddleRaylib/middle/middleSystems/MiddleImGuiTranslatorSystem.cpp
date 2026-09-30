@@ -5,7 +5,7 @@
 class MiddleImGuiTranslatorSystem {
 public:
 
-	static void translateCall(int i, const middle::MiddleOutputState* const middleState, middle::MiddleInputState* inputState) {
+	static void translateCall(int i, const middle::MiddleOutputState* const middleState, middle::MiddleInputState& inputState) {
 		auto copyCall = middleState->uiCalls[i];
 		switch (copyCall.type) {
 		case(middleUI::Begin):
@@ -59,12 +59,12 @@ public:
 			break;
 		}
 
-		inputState->resultUiCalls.push_back(copyCall);
+		inputState.resultUiCalls.push_back(copyCall);
 	}
 
 
-	static void Update(const middle::MiddleOutputState* const middleState, middle::MiddleInputState* inputState) {
-		inputState->resultUiCalls.clear();
+	static void Update(const middle::MiddleOutputState* const middleState, middle::MiddleInputState& inputState) {
+		inputState.resultUiCalls.clear();
 		for (int i = 0; i < middleState->uiCalls.size(); ++i) {
 			translateCall(i, middleState, inputState);
 		}

@@ -9,17 +9,18 @@
 #include "middle_state.h"
 #include "middle_math_maping_helper.h"
 #include "MiddleImGuiTranslatorSystem.cpp"
+#include "BubbleRenderer.cpp"
 
 const int fontUnitFactor = 1024;
 
 namespace renderer {
 
 
-	static void draw3D(const middle::MiddleOutputState* const middleState, middle::MiddleInputState* inputState, bool disabledDepthTest, const Camera& const camera, const std::vector<Shader>& shaders, const std::vector<Texture>& textures, int layerPass = 0) {
+	static void draw3D(const middle::MiddleOutputState* const middleState, middle::MiddleInputState& inputState, bool disabledDepthTest, const Camera& const camera, const std::vector<Shader>& shaders, const std::vector<Texture>& textures, int layerPass = 0) {
 
 		const Vector3 middleForward = toRVec(midMath::MIDDLE_FORWARD_VECTOR);
 
-		rlSetClipPlanes(inputState->nearPlaneDistance, inputState->farPlaneDistance);
+		rlSetClipPlanes(inputState.nearPlaneDistance, inputState.farPlaneDistance);
 
 		auto& data = middleState->newRenderData;
 		for (size_t i : data.activeIndexes) {
@@ -63,8 +64,8 @@ namespace renderer {
 	class RendererSystem {
 	public:
 		static void update(
-			const middle::MiddleOutputState* 
-			const middleState, middle::MiddleInputState* inputState, 
+			const middle::MiddleOutputState* const middleState, 
+			middle::MiddleInputState& inputState, 
 			const Font& font, 
 			const std::vector<Shader>& shaders, 
 			const std::vector<Texture>& textures, 
@@ -72,18 +73,23 @@ namespace renderer {
 
 			BeginDrawing();
 
-			// 89, 135, 168
-			ClearBackground(toRColor(middleState->backgroundColor));
+			if (middleState->applicationMode == middle::ApplicationMode::EDITOR_MODE) {
+				// 89, 135, 168
+				ClearBackground(toRColor(middleState->backgroundColor));
 
-			Camera camera = toRCam(middleState->activeCamera);
+				Camera camera = toRCam(middleState->activeCamera);
 
-			BeginMode3D(camera);
-			draw3D(middleState, inputState, false, camera, shaders, textures);
-			EndMode3D();
+				BeginMode3D(camera);
+				draw3D(middleState, inputState, false, camera, shaders, textures);
+				EndMode3D();
 
-			SetTextLineSpacing(0);
+				SetTextLineSpacing(0);
 
-			drawText(middleState, true, font, camera);
+				drawText(middleState, true, font, camera);
+			}
+			else {
+				middle::BubbleRenderer::update(inputState, middleState, font, shaders, textures);
+			}
 
 			// draw imgui
 			if (!releaseBuild) {
