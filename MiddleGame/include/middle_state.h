@@ -133,7 +133,9 @@ namespace middle {
 		GATE_CLOSED,
 		GATE_DUMMY,
 		POSITIVE,
-		NEGATIVE
+		NEGATIVE,
+		EQUALS_MANIPULATABLE,
+		EQUALS_NOT_MANIPULATABLE
 	};
 
 	// OK render objects and game all objects are in one large enum. why is that a problem? write a 

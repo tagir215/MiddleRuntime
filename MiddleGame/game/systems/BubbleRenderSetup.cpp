@@ -382,209 +382,128 @@ public:
 			}
 		}
 
-//		auto textIt = textCache->begin<components::BubbleTextComponent>();
-//		auto textTransformIt = textCache->begin<components::GlobalTransform>();
-//		auto textLayerIt = textCache->begin<components::Layer>();
-//		for (middle::Id id : textCache->relevantIdVector) {
-//			auto text = *textIt;
-//			auto layer = *textLayerIt;
-//			auto transform = *textTransformIt;
-//
-//			middle::RenderItem textItem;
-//			textItem.type = middle::RenderItemType::TEXT;
-//			setTransform(textItem, transform);
-//			textItem.transform.translation.y += getLayerYOffset(layer->layer);
-//			textItem.text = text->text;
-//			textItem.fontSize = text->fontSize;
-//			textItem.color = bubbleColors::UNIT_TEXT_POSITIVE;
-//			middle::queueForRender(gameState, textItem);
-//
-//			Color color = calculateFadedColor(gameState, bubbleColors::BUBBLE, transform, getLayer(gameState, layer));
-//			renderBubble(gameState, getLayer(gameState, layer), color, transform);
-//		}
-//
-//		// render variables
-//		auto variableIt = variableCache->begin<components::BubbleVariable>();
-//		auto variableBubbleIt = variableCache->begin<components::BubbleComponent>();
-//		auto variableRectIt = variableCache->begin<components::GlobalRect>();
-//		auto layerIt = variableCache->begin<components::Layer>();
-//		auto varTransformIt = variableCache->begin<components::GlobalTransform>();
-//		for (int i = 0; i < variableCache->getSize(); ++i) {
-//			auto variable = *variableIt;
-//			auto bubble = *variableBubbleIt;
-//			auto layer = *layerIt;
-//			auto rect = *variableRectIt;
-//			auto transform = *varTransformIt;
-//			auto id = variableCache->relevantIdVector[i];
-//
-//			std::string varText;
-//			Color colorText;
-//			Color colorBackground;
-//			if (!variable->isNegative) {
-//				colorText = bubbleColors::UNIT_TEXT_POSITIVE;
-//				colorBackground = calculateFadedColor(gameState, bubbleColors::POSITIVE_UNIT, transform, getLayer(gameState, layer));
-//			}
-//			else {
-//				varText = "-";
-//				colorText = bubbleColors::UNIT_TEXT_NEGATIVE;
-//				colorBackground = calculateFadedColor(gameState, bubbleColors::NEGATIVE_UNIT, transform, getLayer(gameState, layer));
-//			}
-//			varText += variable->label;
-//
-//			renderBubble(gameState, getLayer(gameState, layer), colorBackground, transform);
-//
-//			middle::RenderItem variableText;
-//			variableText.type = middle::RenderItemType::TEXT;
-//			setTransform(variableText, transform);
-//			variableText.text = varText;
-//			variableText.color = colorText;
-//			variableText.textOffset.x = -rect->width * 0.42f;
-//			variableText.textOffset.z = rect->height * 1.5f;
-//			variableText.fontSize = bubble::bubbleFontSize;
-//			middle::queueForRender(gameState, variableText);
-//
-//		}
-//
-//
-//		// render muls
-//		auto mulIt = mulCache->begin<components::BubbleMultiplyComponent>();
-//		auto mulRectIt = mulCache->begin<components::GlobalRect>();
-//		auto mulTransformIt = mulCache->begin<components::GlobalTransform>();
-//		auto mulLayerIt = mulCache->begin<components::Layer>();
-//		for (middle::Id id : mulCache->relevantIdVector) {
-//			auto multiplyComponent = *mulIt;
-//			auto rect = *mulRectIt;
-//			auto transform = *mulTransformIt;
-//			auto layer = *mulLayerIt;
-//
-//			renderBubble(gameState, getLayer(gameState, layer), calculateFadedColor(gameState, bubbleColors::MULTIPLICATION, transform, getLayer(gameState, layer)), transform);
-//
-//			renderBubbleLabel(gameState, transform, rect->height, u8"\u00D7",
-//				getLayer(gameState, layer), LabelPos::CENTER, bubbleColors::MULTIPLICATION_TEXT);
-//		}
-//
-//		// renderPowers
-//		auto powerLoopIt = powerCache->begin<components::LoopSociety>();
-//		auto powerRectIt = powerCache->begin<components::GlobalRect>();
-//		auto powerTransformIt = powerCache->begin<components::GlobalTransform>();
-//		auto powerLayerIt = powerCache->begin<components::Layer>();
-//		for (middle::Id powerId : powerCache->relevantIdVector) {
-//			auto loop = *powerLoopIt;
-//			auto rect = *powerRectIt;
-//			auto transform = *powerTransformIt;
-//			auto layer = *powerLayerIt;
-//
-//			renderBubble(gameState, getLayer(gameState, layer), calculateFadedColor(gameState, bubbleColors::POWER, transform, getLayer(gameState, layer)), transform);
-//
-//			renderBubbleLabel(gameState, transform, rect->height, "^",
-//				getLayer(gameState, layer), LabelPos::CENTER, bubbleColors::POWER_TEXT);
-//		}
-//
-//		auto equTransformIt = equalsCache->begin<components::GlobalTransform>();
-//		auto equCircleIt = equalsCache->begin<components::GlobalRect>();
-//		auto equLayerIt = equalsCache->begin<components::Layer>();
-//		for (middle::Id id : equalsCache->relevantIdVector) {
-//			auto transform = *equTransformIt;
-//			auto rect = *equCircleIt;;
-//			auto layer = *equLayerIt;
-//			renderBubble(gameState, getLayer(gameState, layer), calculateFadedColor(gameState, bubbleColors::EQUALS, transform, getLayer(gameState, layer)), transform);
-//			renderBubbleLabel(gameState, transform, rect->height, "=",
-//				getLayer(gameState, layer), LabelPos::CENTER, bubbleColors::EQUALS_TEXT);
-//		}
-//
-//		// dimmer equals that cant be modified...
-//		auto nonEquTransformIt = nonManipulatableEqualsCache->begin<components::GlobalTransform>();
-//		auto nonEquCircleIt = nonManipulatableEqualsCache->begin<components::GlobalRect>();
-//		auto nonEquLayerIt = nonManipulatableEqualsCache->begin<components::Layer>();
-//		for (middle::Id id : nonManipulatableEqualsCache->relevantIdVector) {
-//			auto transform = *nonEquTransformIt;
-//			auto rect = *nonEquCircleIt;;
-//			auto layer = *nonEquLayerIt;
-//			renderBubble(gameState, getLayer(gameState, layer), calculateFadedColor(gameState, bubbleColors::DUMMY_GATE, transform, getLayer(gameState, layer)), transform);
-//			renderBubbleLabel(gameState, transform, rect->height, "=",
-//				getLayer(gameState, layer), LabelPos::CENTER, bubbleColors::EQUALS_TEXT);
-//		}
-//
-//		auto inequTransformIt = inequCache->begin<components::GlobalTransform>();
-//		auto inequRectIt = inequCache->begin<components::GlobalRect>();
-//		auto inequLayerIt = inequCache->begin<components::Layer>();
-//		for (middle::Id id : inequCache->relevantIdVector) {
-//			auto transform = *inequTransformIt;
-//			auto rect = *inequRectIt;
-//			auto layer = *inequLayerIt;
-//
-//			renderBubbleLabel(gameState, transform, rect->height, ">",
-//				getLayer(gameState, layer), LabelPos::CENTER, bubbleColors::EQUALS_TEXT);
-//			renderBubble(gameState, getLayer(gameState, layer), calculateFadedColor(gameState, bubbleColors::INEQUALS, transform, getLayer(gameState, layer)), transform);
-//		}
-//
-//		// cross hair or something
-//		middle::RenderItem cameraTarget;
-//		cameraTarget.type = middle::RenderItemType::CIRCLE;
-//		cameraTarget.radius = 1;
-//		cameraTarget.center = gameState->middleState.activeCamera.position + midMath::Vector3{ 0,100,0 };
-//		cameraTarget.color = bubbleColors::WHITE;
-//		middle::queueForRender(gameState, cameraTarget);
-//
-//		// render activity bounding box
-//		auto activeRIt = activeBubbleCache->begin<components::GlobalRect>();
-//		auto activeTransformIt = activeBubbleCache->begin<components::GlobalTransform>();
-//		for (middle::Id& id : activeBubbleCache->relevantIdVector) {
-//			auto globalR = *activeRIt;
-//			auto transform = *activeTransformIt;
-//			middle::RenderItem boundingRect;
-//			boundingRect.type = middle::RenderItemType::RECTANGLE;
-//			const float margin = 10 * transform->scale.x;
-//			boundingRect.width = globalR->width + margin;
-//			boundingRect.height = globalR->height + margin;
-//			boundingRect.center = transform->pos;
-//			boundingRect.color = bubbleColors::WHITE;
-//			middle::queueForRender(gameState, boundingRect);
-//		}
-//
-//		auto functionTransformIt = functionCache->begin<components::GlobalTransform>();
-//		auto functionIt = functionCache->begin<components::BubbleFunctionComponent>();
-//		auto functionRectIt = functionCache->begin<components::GlobalRect>();
-//		auto functionLayerIt = functionCache->begin<components::Layer>();
-//		for (middle::Id id : functionCache->relevantIdVector) {
-//			// render functionlabel
-//			auto transform = *functionTransformIt;
-//			auto rect = *functionRectIt;
-//			auto func = *functionIt;
-//			auto layer = *functionLayerIt;
-//
-//			renderBubbleLabel(gameState, transform, rect->width, func->label + "()",
-//				getLayer(gameState, layer), LabelPos::CENTER, bubbleColors::FUNCTION_TEXT);
-//
-//			renderBubble(gameState, getLayer(gameState, layer), calculateFadedColor(gameState, bubbleColors::FUNCTION, transform, getLayer(gameState, layer)), transform);
-//
-//			// render indexes
-//			std::vector<middle::Id>children;
-//			middle::getChildren(gameState, id, children);
-//			int index = 1;
-//			for (middle::Id childId : children) {
-//				auto transform = middle::getComp<components::GlobalTransform>(gameState, childId);
-//				auto globalRChild = middle::getComp<components::GlobalRect>(gameState, childId);
-//				auto layer = middle::getComp<components::Layer>(gameState, childId);
-//				renderBubbleLabel(gameState, transform, rect->width, std::to_string(index++),
-//					getLayer(gameState, layer), LabelPos::LEFT, bubbleColors::FUNCTION_TEXT);
-//			}
-//		}
-//
-//		auto summationTransformIt = summationCache->begin<components::GlobalTransform>();
-//		auto summationRectIt = summationCache->begin<components::GlobalRect>();
-//		auto summationLayerIt = summationCache->begin<components::Layer>();
-//		for (middle::Id id : summationCache->relevantIdVector) {
-//			// render functionlabel
-//			auto transform = *summationTransformIt;
-//			auto rect = *summationRectIt;
-//			auto layer = *summationLayerIt;
-//
-//			renderBubble(gameState, getLayer(gameState, layer), calculateFadedColor(gameState, bubbleColors::SUMMATION, transform, getLayer(gameState, layer)), transform);
-//
-//			renderBubbleLabel(gameState, transform, rect->width, u8"\u2211",
-//				getLayer(gameState, layer), LabelPos::CENTER, bubbleColors::SUMMATION_TEXT);
-//		}
+		auto textIt = textCache->begin<components::BubbleTextComponent>();
+		auto textTransformIt = textCache->begin<components::GlobalTransform>();
+		auto textLayerIt = textCache->begin<components::Layer>();
+		auto textRectIt = textCache->begin<components::GlobalRect>();
+		for (middle::Id id : textCache->relevantIdVector) {
+			auto text = *textIt;
+			auto layer = *textLayerIt;
+			auto transform = *textTransformIt;
+			auto rect = *textRectIt;
+			size_t index = renderBubble(gameState, middle::RenderObjectType::TEXT_RECT, getLayer(gameState, layer), transform, rect);
+			auto& data = gameState->middleState.newRenderData;
+			data.texts[index] = text->text.c_str();
+		}
+
+		// render variables
+		auto variableIt = variableCache->begin<components::BubbleVariable>();
+		auto variableBubbleIt = variableCache->begin<components::BubbleComponent>();
+		auto variableRectIt = variableCache->begin<components::GlobalRect>();
+		auto layerIt = variableCache->begin<components::Layer>();
+		auto varTransformIt = variableCache->begin<components::GlobalTransform>();
+		for (middle::Id id : variableCache->relevantIdVector) {
+			auto variable = *variableIt;
+			auto layer = *layerIt;
+			auto rect = *variableRectIt;
+			auto transform = *varTransformIt;
+			size_t index = renderBubble(gameState, middle::RenderObjectType::VARIABLE_RECT, getLayer(gameState, layer), transform, rect);
+			auto& data = gameState->middleState.newRenderData;
+			if (variable->isNegative) {
+				data.states[index] = middle::RenderObjectState::NEGATIVE;
+				data.texts[index] = ("-" + variable->label).c_str();
+			}
+			else{
+				data.states[index] = middle::RenderObjectState::POSITIVE;
+				data.texts[index] = variable->label.c_str();
+			}
+		}
+
+
+		// render muls
+		auto mulIt = mulCache->begin<components::BubbleMultiplyComponent>();
+		auto mulRectIt = mulCache->begin<components::GlobalRect>();
+		auto mulTransformIt = mulCache->begin<components::GlobalTransform>();
+		auto mulLayerIt = mulCache->begin<components::Layer>();
+		for (middle::Id id : mulCache->relevantIdVector) {
+			auto multiplyComponent = *mulIt;
+			auto rect = *mulRectIt;
+			auto transform = *mulTransformIt;
+			auto layer = *mulLayerIt;
+			renderBubble(gameState, middle::RenderObjectType::MULTIPLICATION_RECT, getLayer(gameState, layer), transform, rect);
+		}
+
+		// renderPowers
+		auto powerRectIt = powerCache->begin<components::GlobalRect>();
+		auto powerTransformIt = powerCache->begin<components::GlobalTransform>();
+		auto powerLayerIt = powerCache->begin<components::Layer>();
+		for (middle::Id powerId : powerCache->relevantIdVector) {
+			auto rect = *powerRectIt;
+			auto transform = *powerTransformIt;
+			auto layer = *powerLayerIt;
+			renderBubble(gameState, middle::RenderObjectType::POWER_RECT, getLayer(gameState, layer), transform, rect);
+		}
+
+		auto equTransformIt = equalsCache->begin<components::GlobalTransform>();
+		auto equCircleIt = equalsCache->begin<components::GlobalRect>();
+		auto equLayerIt = equalsCache->begin<components::Layer>();
+		for (middle::Id id : equalsCache->relevantIdVector) {
+			auto transform = *equTransformIt;
+			auto rect = *equCircleIt;;
+			auto layer = *equLayerIt;
+			size_t index = renderBubble(gameState, middle::RenderObjectType::EQUALS_RECT, getLayer(gameState, layer), transform, rect);
+			auto& data = gameState->middleState.newRenderData;
+			data.states[index] = middle::RenderObjectState::EQUALS_MANIPULATABLE;
+		}
+
+		// dimmer equals that cant be modified...
+		auto nonEquTransformIt = nonManipulatableEqualsCache->begin<components::GlobalTransform>();
+		auto nonEquCircleIt = nonManipulatableEqualsCache->begin<components::GlobalRect>();
+		auto nonEquLayerIt = nonManipulatableEqualsCache->begin<components::Layer>();
+		for (middle::Id id : nonManipulatableEqualsCache->relevantIdVector) {
+			auto transform = *nonEquTransformIt;
+			auto rect = *nonEquCircleIt;;
+			auto layer = *nonEquLayerIt;
+			size_t index = renderBubble(gameState, middle::RenderObjectType::EQUALS_RECT, getLayer(gameState, layer), transform, rect);
+			auto& data = gameState->middleState.newRenderData;
+			data.states[index] = middle::RenderObjectState::EQUALS_NOT_MANIPULATABLE;
+		}
+
+		auto inequTransformIt = inequCache->begin<components::GlobalTransform>();
+		auto inequRectIt = inequCache->begin<components::GlobalRect>();
+		auto inequLayerIt = inequCache->begin<components::Layer>();
+		for (middle::Id id : inequCache->relevantIdVector) {
+			auto transform = *inequTransformIt;
+			auto rect = *inequRectIt;
+			auto layer = *inequLayerIt;
+			size_t index = renderBubble(gameState, middle::RenderObjectType::GREATER_RECT, getLayer(gameState, layer), transform, rect);
+		}
+
+		auto functionTransformIt = functionCache->begin<components::GlobalTransform>();
+		auto functionIt = functionCache->begin<components::BubbleFunctionComponent>();
+		auto functionRectIt = functionCache->begin<components::GlobalRect>();
+		auto functionLayerIt = functionCache->begin<components::Layer>();
+		for (middle::Id id : functionCache->relevantIdVector) {
+			// render functionlabel
+			auto transform = *functionTransformIt;
+			auto rect = *functionRectIt;
+			auto func = *functionIt;
+			auto layer = *functionLayerIt;
+			size_t index = renderBubble(gameState, middle::RenderObjectType::FUNCTION_RECT, getLayer(gameState, layer), transform, rect);
+			auto& data = gameState->middleState.newRenderData;
+			data.texts[index] = func->label.c_str();
+		}
+
+		auto summationTransformIt = summationCache->begin<components::GlobalTransform>();
+		auto summationRectIt = summationCache->begin<components::GlobalRect>();
+		auto summationLayerIt = summationCache->begin<components::Layer>();
+		for (middle::Id id : summationCache->relevantIdVector) {
+			// render functionlabel
+			auto transform = *summationTransformIt;
+			auto rect = *summationRectIt;
+			auto layer = *summationLayerIt;
+			size_t index = renderBubble(gameState, middle::RenderObjectType::SUMMATION_RECT, getLayer(gameState, layer), transform, rect);
+		}
 
 	}
 
