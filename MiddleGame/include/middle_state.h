@@ -6,6 +6,7 @@
 #include "input.h"
 #include <set>
 #include "asset_enums.h"
+#include <array>
 
 namespace middleUI{
 	enum UiCallType {
@@ -77,7 +78,6 @@ namespace middle {
 		midMath::Vector3 linePointB;
 		midMath::Vector3 textOffset = { 0,0,0 };
 		midPrimitive::Transform transform;
-		int layer = 0;
 		int slices = 20;
 		float radius;
 		float ringRadius;
@@ -131,10 +131,19 @@ namespace middle {
 		LIZARD_IDLE,
 		GATE_OPEN,
 		GATE_CLOSED,
+		GATE_DUMMY,
+		POSITIVE,
+		NEGATIVE
 	};
 
+	// OK render objects and game all objects are in one large enum. why is that a problem? write a 
+	// script that helps you with organization,  but this is how its sent to renderer
 	enum RenderObjectType {
+		// EDITOR OBJECTS
 		MIDDLE_MAN,
+		EDITOR_TEXT,
+
+		// GAME OBJECTS
 		LIZARD,
 		OCARINA_OF_TIME,
 		ADDITION_RECT,
@@ -143,6 +152,7 @@ namespace middle {
 		SUMMATION_RECT,
 		FUNCTION_RECT,
 		VARIABLE_RECT,
+		UNIT_RECT,
 		TEXT_RECT,
 		GATE_RECT,
 		AND_LOGIC_GATE_RECT,
@@ -151,32 +161,25 @@ namespace middle {
 		GREATER_OR_EQUALS_RECT,
 	};
 
-	enum RenderObjectText {
-		WORD_PROBLEM_1_TEXT,
-		WORD_PROBELM_2_TEXT,
-		LABEL_VARIABLE,
-		LABEL_INPUT_INDEX,
-		
-	};
-
+	inline const size_t MAX_RENDER_ITEMS_COUNT = 10000;
 	struct RenderData {
-		size_t size = -1;
-		std::vector<RenderObjectType>types;
-		std::vector<RenderObjectState>states;
-		std::vector<RenderObjectText>texts;
+		std::vector<size_t>activeIndexes;
+		std::array<RenderObjectType, MAX_RENDER_ITEMS_COUNT>types;
+		std::array<RenderObjectState, MAX_RENDER_ITEMS_COUNT>states;
+		std::array<const char*, MAX_RENDER_ITEMS_COUNT>texts;
 
-		std::vector<float>positionsX;
-		std::vector<float>positionsY;
-		std::vector<float>positionsZ;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>positionsX;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>positionsY;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>positionsZ;
 
-		std::vector<float>rotationsX;
-		std::vector<float>rotationsY;
-		std::vector<float>rotationsZ;
-		std::vector<float>rotationsW;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>rotationsX;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>rotationsY;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>rotationsZ;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>rotationsW;
 
-		std::vector<float>scaleX;
-		std::vector<float>scaleY;
-		std::vector<float>scaleZ;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>scalesX;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>scalesY;
+		std::array<float, MAX_RENDER_ITEMS_COUNT>scalesZ;
 
 	};
 

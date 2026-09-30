@@ -135,6 +135,8 @@ namespace middle {
 	void insertInputBlock(middle::GameState* gameState, middle::InputBlockers block);
 	// get Active camera pos
 	midPrimitive::Camera3D getActiveCam(middle::GameState* gameState);
+	// add next RenderObject
+	size_t pushNextRenderObject(middle::GameState* gameState);
 
 	void assertPos(const midMath::Vector3& pos);
 

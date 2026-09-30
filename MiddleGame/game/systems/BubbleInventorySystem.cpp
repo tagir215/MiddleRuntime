@@ -83,11 +83,10 @@ public:
 				item.transform.translation = currentPos;
 				item.transform.scale = itemScale;
 				item.transform.rotation = { 0,0,0,0 };
-				item.layer = 0;
 				item.width = bubble::bubbleAxis * 2 * marginScalar;
 				item.height = item.width;
 				item.length = 0;
-				item.color = bubbleColors::DUMMY_GATE;
+				item.color = { 0,0,0,0 };
 				if (i == inv->activeIndex) {
 					item.color = { 0,0,255,255 };
 				}

@@ -96,6 +96,8 @@ namespace midMath {
 
 	using Quaternion = Vector4;
 
+	inline Vector3 MIDDLE_FORWARD_VECTOR = { 0,-1,0 };
+
 	// Matrix type (OpenGL style 4x4 - right handed, column major)
 	struct Matrix {
 		float m0, m4, m8, m12;      // Matrix first row (4 components)

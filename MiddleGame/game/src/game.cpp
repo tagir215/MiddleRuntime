@@ -326,10 +326,12 @@ extern "C" {
 		{
 			// CLEAR RENDERDATA / UIs 
 			gameState->middleState.renderData.clear();
+			gameState->middleState.newRenderData.activeIndexes.clear();
 			gameState->debugInfo.clear();
 			gameState->middleState.uiSetups.clear();
 			gameState->middleState.uiCalls.clear();
 			gameState->resultUiCallIterIndex = -1;
+			gameState->nextRenderObjectIndex = 0;
 
 			updateMouseStuff(gameState.get());
 

@@ -32,7 +32,7 @@ public:
 				continue;
 			}
 			midMath::Vector3 pos = transform->pos;
-			midMath::Vector3 forward = Vector3RotateByQuaternion(middle::ROTATION_FORWARD, rotation->rotation);
+			midMath::Vector3 forward = Vector3RotateByQuaternion(midMath::MIDDLE_FORWARD_VECTOR, rotation->rotation);
 			middle::RenderItem rotItem;
 			rotItem.type = middle::RenderItemType::VECTOR;
 			rotItem.center = { 0,0,0 };

@@ -19,7 +19,3 @@ namespace components {
     }
 }
 
-namespace middle {
-	const midMath::Vector3 ROTATION_FORWARD = { 0,1,0 };
-
-}

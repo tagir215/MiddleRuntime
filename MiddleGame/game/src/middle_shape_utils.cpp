@@ -988,4 +988,12 @@ namespace middle {
 	{
 		return gameState->middleState.activeCamera;
 	}
+	size_t pushNextRenderObject(middle::GameState* gameState)
+	{
+		size_t nextIndex = gameState->nextRenderObjectIndex;
+		gameState->middleState.newRenderData.activeIndexes.push_back(nextIndex);
+		assert(nextIndex < middle::MAX_RENDER_ITEMS_COUNT);
+		++gameState->nextRenderObjectIndex;
+		return nextIndex;
+	}
 }
